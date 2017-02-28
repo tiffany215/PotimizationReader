@@ -52,14 +52,6 @@ public class ResponseManager {
      */
     private static Map<String, String> addFixedParams() {
         Map<String, String> params = new HashMap<>();
-        params.put("packageame", "com.shuhai.bookos");
-        params.put("sign", "e98a726ae2fd27c229515428de425f59");
-        params.put("source", "shuhai");
-        params.put("username", "wangxu@qq.com");
-        params.put("imei", "356261050497138");
-        params.put("version", "56");
-        params.put("uuid", "00000000-35b8-f815-39da-21960033c587");
-        params.put("ip", "192.168.1.185");
         params.put("siteid", "300");
         params.put("timestamp", "1483074883");
         params.put("uid", "202533");
