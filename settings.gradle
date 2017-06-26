@@ -1,1 +1,1 @@
-include ':app', ':bookOS'
+include ':app'
