@@ -12,18 +12,6 @@ public class ChapterLoader {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
     public String getChapter(String key){
         String content =  null;
         content = MemoryLruCacheManager.getInstance().getString(key);

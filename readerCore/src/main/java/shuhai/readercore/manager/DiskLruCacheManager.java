@@ -23,8 +23,7 @@ import java.io.OutputStreamWriter;
 import java.io.Serializable;
 
 import shuhai.readercore.Constants;
-import shuhai.readercore.Utils.MyAppliaction;
-import shuhai.readercore.Utils.SecretUtil;
+import shuhai.readercore.utils.SecretUtil;
 
 /**
  * Created by 55345364 on 2017/7/3.

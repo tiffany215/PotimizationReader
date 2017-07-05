@@ -1,4 +1,4 @@
-package shuhai.readercore.Utils;
+package shuhai.readercore.utils;
 
 /**
  * Created by 55345364 on 2017/7/4.

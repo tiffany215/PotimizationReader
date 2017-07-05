@@ -11,7 +11,7 @@ import shuhai.readercore.Constants;
 public class MemoryLruCacheManager {
     private LruCache<String,String> mLruCache = null;
     private MemoryLruCacheManager(){
-        mLruCache = new LruCache<String,String>(Constants.MAX_MEMONY_CACHE_SIZE){
+        mLruCache = new LruCache<String,String>(Constants.MAX_MEMORY_CACHE_SIZE){
 
         };
     }
