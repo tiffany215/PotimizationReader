@@ -55,6 +55,8 @@ public abstract class BaseReadView extends View{
      */
     protected abstract void abortAnimation();
 
+
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
@@ -69,8 +71,6 @@ public abstract class BaseReadView extends View{
 
                 break;
         }
-
-
         return super.onTouchEvent(event);
     }
 }
