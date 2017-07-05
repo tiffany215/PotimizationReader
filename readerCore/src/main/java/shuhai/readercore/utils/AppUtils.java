@@ -29,11 +29,6 @@ public class AppUtils {
         return mContext.getResources();
     }
 
-    /**
-     * 获取安装包信息
-     *
-     * @return
-     */
     public static PackageInfo getPackageInfo(){
         try {
             return mContext.getPackageManager().getPackageInfo(mContext.getPackageName(),0);
@@ -45,10 +40,6 @@ public class AppUtils {
     }
 
 
-    /**
-     *  获取版本信息
-     * @return
-     */
     public static int getAppVersion(){
         PackageInfo packageInfo = getPackageInfo();
         if(null != packageInfo){

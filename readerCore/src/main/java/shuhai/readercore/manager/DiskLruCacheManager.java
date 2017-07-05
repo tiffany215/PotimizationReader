@@ -23,6 +23,7 @@ import java.io.OutputStreamWriter;
 import java.io.Serializable;
 
 import shuhai.readercore.Constants;
+import shuhai.readercore.utils.AppUtils;
 import shuhai.readercore.utils.SecretUtil;
 
 /**
@@ -47,7 +48,7 @@ public class DiskLruCacheManager {
         }
         File cacheFile = getCacheFile(context,uniqueName);
         try {
-            mDiskLruCache = DiskLruCache.open(cacheFile, MyAppliaction.getAppVersion(),1, Constants.MAX_DISK_CACHE_SIZE);
+            mDiskLruCache = DiskLruCache.open(cacheFile, AppUtils.getAppVersion(),1, Constants.MAX_DISK_CACHE_SIZE);
         } catch (IOException e) {
             e.printStackTrace();
         }
