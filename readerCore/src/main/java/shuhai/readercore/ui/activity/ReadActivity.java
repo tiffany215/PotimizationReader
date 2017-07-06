@@ -1,5 +1,6 @@
 package shuhai.readercore.ui.activity;
 
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
@@ -7,7 +8,7 @@ import butterknife.Bind;
 import shuhai.readercore.R;
 import shuhai.readercore.base.BaseActivity;
 import shuhai.readercore.ui.contract.BookReadContract;
-import shuhai.readercore.view.readview.BaseReadView;
+import shuhai.readercore.view.readview.BaseReadImpl;
 import shuhai.readercore.view.readview.NoEffectFlipOverWidget;
 
 /**
@@ -22,7 +23,7 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View{
     @Bind(R.id.flReadWidget)
     FrameLayout lsReadWidget;
 
-    private BaseReadView mPageWidget;
+    private BaseReadImpl mPageWidget;
 
 
     @Override
@@ -56,7 +57,7 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View{
     private void initPagerWidget(){
         mPageWidget = new NoEffectFlipOverWidget(this);
         lsReadWidget.removeAllViews();
-        lsReadWidget.addView(mPageWidget);
+        lsReadWidget.addView((View) mPageWidget);
     }
 
 

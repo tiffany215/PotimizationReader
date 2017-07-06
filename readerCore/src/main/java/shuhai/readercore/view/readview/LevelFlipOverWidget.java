@@ -9,7 +9,7 @@ import android.graphics.Canvas;
  * 水平翻页效果组件
  */
 
-public class LevelFlipOverWidget extends BaseReadView{
+public class LevelFlipOverWidget extends HorizontalBaseReadView {
 
     public LevelFlipOverWidget(Context context) {
         super(context);
@@ -30,13 +30,24 @@ public class LevelFlipOverWidget extends BaseReadView{
 
     }
 
+
     @Override
-    protected void startAnimation() {
+    public void startAnimation() {
 
     }
 
     @Override
-    protected void abortAnimation() {
+    public void abortAnimation() {
+
+    }
+
+    @Override
+    public void restoreAnimation() {
+
+    }
+
+    @Override
+    public void init(int theme) {
 
     }
 }

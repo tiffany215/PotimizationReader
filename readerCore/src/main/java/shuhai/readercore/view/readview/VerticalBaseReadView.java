@@ -13,7 +13,7 @@ import shuhai.readercore.utils.ScreenUtils;
  * @date 2017/7/5.
  */
 
-public abstract class BaseReadView extends View{
+public abstract class VerticalBaseReadView extends View implements BaseReadImpl{
 
     protected int mScreenWidth;
     protected int mScreenHeight;
@@ -23,7 +23,7 @@ public abstract class BaseReadView extends View{
 
 
 
-    public BaseReadView(Context context) {
+    public VerticalBaseReadView(Context context) {
         super(context);
 
         mScreenWidth = ScreenUtils.getScreenWidth();
@@ -39,21 +39,11 @@ public abstract class BaseReadView extends View{
     }
 
 
-    protected abstract void drawNextPageAreaAndShadow(Canvas canvas);
-    protected abstract void drawCurrentPageArea(Canvas canvas);
-    protected abstract void drawCurrentPageShadow(Canvas canvas);
+    @Override
+    public void init(int theme) {
 
+    }
 
-    /**
-     * 开启翻页动画
-     */
-    protected abstract void startAnimation();
-
-
-    /**
-     * 终止翻页动画
-     */
-    protected abstract void abortAnimation();
 
 
 

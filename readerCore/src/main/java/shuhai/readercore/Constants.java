@@ -14,6 +14,8 @@ public class Constants {
 
     public static final int MAX_MEMORY_CACHE_SIZE = (int) (Runtime.getRuntime().maxMemory() / 4);
 
+    public static final int  DEFAULT_TIMEOUT = 60;
+
 
 
 

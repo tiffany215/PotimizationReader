@@ -6,13 +6,13 @@ import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-import shuhai.readercore.api.BookApi;
 import shuhai.readercore.base.RxPresenter;
 import shuhai.readercore.bean.ChapterRead;
+import shuhai.readercore.net.api.BookApi;
 import shuhai.readercore.ui.contract.BookReadContract;
 
 /**
- * @author 55345364
+ * @author wangxu
  * @date 2017/7/5.
  */
 

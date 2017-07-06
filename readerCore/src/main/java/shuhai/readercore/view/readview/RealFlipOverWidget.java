@@ -6,12 +6,11 @@ import android.graphics.Canvas;
 /**
  * @author 55345364
  * @date 2017/7/5.
- *
+ * <p>
  * 仿真效果翻页组件
- *
  */
 
-public class RealFlipOverWidget extends BaseReadView{
+public class RealFlipOverWidget extends HorizontalBaseReadView {
 
     public RealFlipOverWidget(Context context) {
         super(context);
@@ -32,13 +31,19 @@ public class RealFlipOverWidget extends BaseReadView{
 
     }
 
+
     @Override
-    protected void startAnimation() {
+    public void startAnimation() {
 
     }
 
     @Override
-    protected void abortAnimation() {
+    public void abortAnimation() {
+
+    }
+
+    @Override
+    public void restoreAnimation() {
 
     }
 }

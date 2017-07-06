@@ -12,7 +12,7 @@ import android.graphics.Canvas;
  */
 
 
-public class NoEffectFlipOverWidget extends BaseReadView{
+public class NoEffectFlipOverWidget extends HorizontalBaseReadView {
 
     public NoEffectFlipOverWidget(Context context) {
         super(context);
@@ -33,13 +33,19 @@ public class NoEffectFlipOverWidget extends BaseReadView{
 
     }
 
+
     @Override
-    protected void startAnimation() {
+    public void startAnimation() {
 
     }
 
     @Override
-    protected void abortAnimation() {
+    public void abortAnimation() {
+
+    }
+
+    @Override
+    public void restoreAnimation() {
 
     }
 }
