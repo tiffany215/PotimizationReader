@@ -1,6 +1,7 @@
 package shuhai.readercore.net.api;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -18,8 +19,11 @@ import shuhai.readercore.Constants;
 import shuhai.readercore.net.callback.ApiCallback;
 import shuhai.readercore.net.func.ApiErrorFunc;
 import shuhai.readercore.net.func.ApiFunc;
+import shuhai.readercore.net.mode.ApiHost;
 import shuhai.readercore.net.subscriber.ApiCallbackSubscriber;
 import shuhai.readercore.utils.ClassUtils;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by 55345364 on 2017/7/4.
@@ -29,25 +33,16 @@ public class BookApi  {
 
     private static Context mContext;
     private static BookApiService apiService;
+
     private static Retrofit retrofit;
     private static Retrofit.Builder retrofitBuild;
+
     private static OkHttpClient okHttpClient;
     private static OkHttpClient.Builder okHttpBuilder;
-
-
-    public BookApi(OkHttpClient okHttpClient){
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(Constants.API_BASE_URL)
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(okHttpClient)
-                .build();
-        apiService = retrofit.create(BookApiService.class);
-    }
 
     private BookApi(){
 
     }
-
 
     /**
      * 普通的post请求，需要传入实体类。
@@ -62,12 +57,37 @@ public class BookApi  {
     }
 
 
+    public <T> Observable<T> get(final String url,final Map<String,String> map,Class<T> clz){
+        return apiService.get(url,map).compose(this.norTransFormer(clz));
+    }
+
+
+
+
+
+
+
+    /**
+     *
+     * @param url
+     * @param map
+     * @param callback
+     * @param <T>
+     * @return
+     */
+    public <T> Subscription get(final String url,final Map<String,String> map,ApiCallback<T> callback){
+        return this.get(url,map,ClassUtils.getTClass(callback)).subscribe(new ApiCallbackSubscriber(mContext,callback));
+    }
+
+
+
+
     /**
      * 普通POST方式请求，无需订阅，只需传入Callback回调
+     * @param <T>
      * @param url
      * @param maps
      * @param callback
-     * @param <T>
      * @return
      */
     public <T> Subscription post(final String url, final Map<String,String> maps, ApiCallback<T> callback){
@@ -93,26 +113,53 @@ public class BookApi  {
     }
 
 
+    private static <T> T checkNotNull(T t,String message){
+        if(null == t){
+            throw new NullPointerException(message);
+        }
+        return t;
+    }
+
+
 
     /**
      * BookApi的所有配置通过构建者模式来创建。
      */
+
     public static final class Builder{
+
         private String baseUrl;
+
+        private GsonConverterFactory gsonConverterFactory;
+        private RxJavaCallAdapterFactory rxJavaCallAdapterFactory;
+
 
         public Builder(Context context){
             mContext = context;
             okHttpBuilder = new OkHttpClient.Builder();
             retrofitBuild = new Retrofit.Builder();
         }
+
+
         /**
-         * 设置连接超时时间
+         * 设置求情baseUrl
+         * @param url
+         * @return
+         */
+        public BookApi.Builder baseUrl(String url){
+            this.baseUrl = checkNotNull(url,"baseUrl == null");
+            return this;
+        }
+
+
+        /**
+         * 设置网络连接超时时间
          * @param timeout
          * @param unit
          * @return
          */
-        public BookApi.Builder connectTimeOut(int timeout, TimeUnit unit){
-            if(timeout > 1){
+        public BookApi.Builder connectionTimeout(int timeout,TimeUnit unit){
+            if(timeout > -1){
                 okHttpBuilder.connectTimeout(timeout,unit);
             }else{
                 okHttpBuilder.connectTimeout(Constants.DEFAULT_TIMEOUT,TimeUnit.SECONDS);
@@ -120,24 +167,59 @@ public class BookApi  {
             return this;
         }
 
-
         /**
-         *  设置访问链接
-         * @param url
+         * 设置读取超时时间
+         * @param timeOut
+         * @param unit
          * @return
          */
-        public BookApi.Builder baseUrl(String url){
-            this.baseUrl = url;
+        public BookApi.Builder readTimeOut(int timeOut,TimeUnit unit){
+            if(timeOut > -1){
+                okHttpBuilder.readTimeout(timeOut,unit);
+            }else{
+                okHttpBuilder.readTimeout(Constants.DEFAULT_TIMEOUT,TimeUnit.SECONDS);
+            }
+            return this;
+        }
+
+
+        /**
+         *  设置写入超时时间
+         * @param timeout
+         * @param unit
+         * @return
+         */
+        public BookApi.Builder writeTimeOut(int timeout,TimeUnit unit){
+            if(timeout > -1){
+                okHttpBuilder.writeTimeout(timeout,unit);
+            }else{
+                okHttpBuilder.writeTimeout(Constants.DEFAULT_TIMEOUT,TimeUnit.SECONDS);
+            }
             return this;
         }
 
 
         public BookApi build(){
+            if(null == baseUrl){
+                baseUrl = ApiHost.getHost();
+            }
+            retrofitBuild.baseUrl(baseUrl);
+
+            if(null == gsonConverterFactory){
+                gsonConverterFactory =  GsonConverterFactory.create();
+            }
+            retrofitBuild.addConverterFactory(gsonConverterFactory);
+
+            if(null == rxJavaCallAdapterFactory){
+                rxJavaCallAdapterFactory = RxJavaCallAdapterFactory.create();
+            }
+            retrofitBuild.addCallAdapterFactory(rxJavaCallAdapterFactory);
+
             okHttpClient = okHttpBuilder.build();
             retrofitBuild.client(okHttpClient);
             retrofit = retrofitBuild.build();
+            apiService = retrofit.create(BookApiService.class);
             return new BookApi();
         }
     }
-
 }

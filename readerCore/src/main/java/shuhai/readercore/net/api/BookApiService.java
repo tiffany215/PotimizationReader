@@ -60,7 +60,6 @@ public interface BookApiService {
     @GET
     Observable<ResponseBody> get(@Url String url, @QueryMap Map<String,String> maps);
 
-
     /**
      * 图片上传服务器
      * @param url

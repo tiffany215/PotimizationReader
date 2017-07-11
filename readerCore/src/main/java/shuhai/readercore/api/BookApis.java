@@ -9,6 +9,7 @@ import shuhai.readercore.Constants;
 import shuhai.readercore.bean.ChapterRead;
 import shuhai.readercore.net.api.BookApi;
 import shuhai.readercore.net.callback.ApiCallback;
+import shuhai.readercore.net.subscriber.ApiCallbackSubscriber;
 import shuhai.readercore.utils.AppUtils;
 
 /**
@@ -18,39 +19,14 @@ import shuhai.readercore.utils.AppUtils;
 
 public class BookApis {
 
-    private Context context;
 
-    /**
-     *
-     * @param callback
-     */
-    public static void getChapterRead(ApiCallback<ChapterRead> callback){
-        Map<String,String> params = initDefaultParams();
-        params.put("","");
-        params.put("","");
-        params.put("","");
-        params.put("","");
-        BookApi bookApi = new BookApi.Builder(AppUtils.getAppContext()).build();
-        bookApi.post(Constants.API_BASE_URL,params, callback);
-    }
-
-
-    /**
-     * 初始化默认参数
-     * @return
-     */
-    public static Map<String,String> initDefaultParams(){
+    public static <T> void getMovie(Context context, ApiCallback<T> callback){
+        BookApi bookApi = new BookApi.Builder(context).build();
         Map<String,String> params = new HashMap<>();
-        params.put("","");
-        params.put("","");
-        params.put("","");
-        params.put("","");
-        return params;
+        params.put("start","0");
+        params.put("count","2");
+        bookApi.get("",params,callback);
     }
-
-
-
-
 
 
 }

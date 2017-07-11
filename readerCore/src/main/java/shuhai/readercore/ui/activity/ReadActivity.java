@@ -40,27 +40,6 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View{
     @Override
     public void initData() {
 
-        BookApis.getChapterRead(new ApiCallback<ChapterRead>() {
-            @Override
-            public void onStart() {
-
-            }
-
-            @Override
-            public void onComplete() {
-
-            }
-
-            @Override
-            public void onError(ApiException e) {
-
-            }
-
-            @Override
-            public void onNext(ChapterRead chapterRead) {
-
-            }
-        });
 
     }
 

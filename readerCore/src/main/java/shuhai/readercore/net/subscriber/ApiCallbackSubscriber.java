@@ -14,7 +14,7 @@ public class ApiCallbackSubscriber<T> extends ApiSubscriber<T> {
 
     protected ApiCallback<T> apiCallback;
 
-    public ApiCallbackSubscriber(Context context,ApiCallback<T> callback) {
+    public ApiCallbackSubscriber(Context context, ApiCallback<T> callback) {
         super(context);
         if(null == callback){
             throw new NullPointerException("this callback is null!");

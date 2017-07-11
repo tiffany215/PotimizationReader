@@ -30,24 +30,6 @@ public class BookReadPresenter extends RxPresenter<BookReadContract.View> implem
 
     @Override
     public void getChapterRead(String url, int chapter) {
-        Subscription rxSubscription = bookApi.getChapterRead(url).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<ChapterRead>() {
-                    @Override
-                    public void onCompleted() {
 
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        mView.netError();
-                    }
-
-                    @Override
-                    public void onNext(ChapterRead chapterRead) {
-                        mView.showChapterRead();
-                    }
-                });
-        addSubscribe(rxSubscription);
     }
 }
