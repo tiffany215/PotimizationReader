@@ -16,7 +16,7 @@ public class AppUtils {
 
 
 
-    public static void init(Context context){
+    public static void init(){
         mContext = context;
     }
 

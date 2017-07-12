@@ -6,12 +6,7 @@ import android.widget.FrameLayout;
 
 import butterknife.Bind;
 import shuhai.readercore.R;
-import shuhai.readercore.api.BookApis;
 import shuhai.readercore.base.BaseActivity;
-import shuhai.readercore.bean.ChapterRead;
-import shuhai.readercore.net.api.BookApi;
-import shuhai.readercore.net.callback.ApiCallback;
-import shuhai.readercore.net.exception.ApiException;
 import shuhai.readercore.ui.contract.BookReadContract;
 import shuhai.readercore.view.readview.BaseReadImpl;
 import shuhai.readercore.view.readview.NoEffectFlipOverWidget;

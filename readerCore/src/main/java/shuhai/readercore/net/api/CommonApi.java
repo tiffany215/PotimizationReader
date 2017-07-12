@@ -1,7 +1,6 @@
 package shuhai.readercore.net.api;
 
 import android.content.Context;
-import android.util.Log;
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -23,16 +22,14 @@ import shuhai.readercore.net.mode.ApiHost;
 import shuhai.readercore.net.subscriber.ApiCallbackSubscriber;
 import shuhai.readercore.utils.ClassUtils;
 
-import static android.content.ContentValues.TAG;
-
 /**
  * Created by 55345364 on 2017/7/4.
  */
 
-public class BookApi  {
+public class CommonApi {
 
     private static Context mContext;
-    private static BookApiService apiService;
+    private static CommonApiService apiService;
 
     private static Retrofit retrofit;
     private static Retrofit.Builder retrofitBuild;
@@ -40,7 +37,7 @@ public class BookApi  {
     private static OkHttpClient okHttpClient;
     private static OkHttpClient.Builder okHttpBuilder;
 
-    private BookApi(){
+    private CommonApi(){
 
     }
 
@@ -53,13 +50,43 @@ public class BookApi  {
      * @return
      */
     public <T> Observable<T> post(final String url, final Map<String,String> map,Class<T> clz){
-        return apiService.post(url,map).compose(this.norTransFormer(clz));
+        return apiService.postForm(url,map).compose(this.norTransFormer(clz));
     }
 
 
+    /**
+     * 普通的支持Multipart格式的post请求
+     * @param entrance
+     * @param params
+     * @param clz
+     * @param <T>
+     * @return
+     */
+    public <T> Observable<T> postMultipart(final String entrance,final Map<String,String> params,Class<T> clz){
+        return apiService.postMultipart(entrance,params).compose(this.norTransFormer(clz));
+    }
+
+
+
+
+
+
+    /**
+     *  普通的get请求，需要传入实体类
+     * @param url
+     * @param map
+     * @param clz
+     * @param <T>
+     * @return
+     */
     public <T> Observable<T> get(final String url,final Map<String,String> map,Class<T> clz){
         return apiService.get(url,map).compose(this.norTransFormer(clz));
     }
+
+
+
+
+
 
 
 
@@ -94,6 +121,18 @@ public class BookApi  {
         return this.post(url,maps, ClassUtils.getTClass(callback)).subscribe(new ApiCallbackSubscriber(mContext,callback));
     }
 
+
+    /**
+     * 支持Multipart类型的POST方式请求，无需订阅，只需传入Callback回调
+     * @param entrance
+     * @param params
+     * @param callback
+     * @param <T>
+     * @return
+     */
+    public <T>Subscription postMultiport(final String entrance,final Map<String,String> params,ApiCallback<T> callback){
+        return this.postMultipart(entrance,params,ClassUtils.getTClass(callback)).subscribe(new ApiCallbackSubscriber(mContext,callback));
+    }
 
 
     /**
@@ -146,7 +185,7 @@ public class BookApi  {
          * @param url
          * @return
          */
-        public BookApi.Builder baseUrl(String url){
+        public CommonApi.Builder baseUrl(String url){
             this.baseUrl = checkNotNull(url,"baseUrl == null");
             return this;
         }
@@ -158,7 +197,7 @@ public class BookApi  {
          * @param unit
          * @return
          */
-        public BookApi.Builder connectionTimeout(int timeout,TimeUnit unit){
+        public CommonApi.Builder connectionTimeout(int timeout, TimeUnit unit){
             if(timeout > -1){
                 okHttpBuilder.connectTimeout(timeout,unit);
             }else{
@@ -173,7 +212,7 @@ public class BookApi  {
          * @param unit
          * @return
          */
-        public BookApi.Builder readTimeOut(int timeOut,TimeUnit unit){
+        public CommonApi.Builder readTimeOut(int timeOut, TimeUnit unit){
             if(timeOut > -1){
                 okHttpBuilder.readTimeout(timeOut,unit);
             }else{
@@ -189,7 +228,7 @@ public class BookApi  {
          * @param unit
          * @return
          */
-        public BookApi.Builder writeTimeOut(int timeout,TimeUnit unit){
+        public CommonApi.Builder writeTimeOut(int timeout, TimeUnit unit){
             if(timeout > -1){
                 okHttpBuilder.writeTimeout(timeout,unit);
             }else{
@@ -199,7 +238,7 @@ public class BookApi  {
         }
 
 
-        public BookApi build(){
+        public CommonApi build(){
             if(null == baseUrl){
                 baseUrl = ApiHost.getHost();
             }
@@ -218,8 +257,8 @@ public class BookApi  {
             okHttpClient = okHttpBuilder.build();
             retrofitBuild.client(okHttpClient);
             retrofit = retrofitBuild.build();
-            apiService = retrofit.create(BookApiService.class);
-            return new BookApi();
+            apiService = retrofit.create(CommonApiService.class);
+            return new CommonApi();
         }
     }
 }

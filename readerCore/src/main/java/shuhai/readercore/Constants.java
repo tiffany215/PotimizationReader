@@ -8,7 +8,11 @@ public class Constants {
 
 
 
-    public static final String API_BASE_URL = "https://api.douban.com/v2/movie/top250/";
+    public static final String API_BASE_URL = "http://appdata.shuhai.com/ishuhai/";
+
+    public static final String API_REST_URL = "servlet/onechapter";
+
+
 
     public static final long MAX_DISK_CACHE_SIZE = 10 * 1024 * 1024;
 
