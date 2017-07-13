@@ -62,9 +62,7 @@ public class HorizantalComposing implements ComposingStrategy{
     private Map<Integer,Vector<String>> pageList = new HashMap<>();
 
 
-
     public HorizantalComposing(int width,int heigth,int fontSize ){
-
         mVisibleHeight = width - marginHeight * 2 - mNumFontSize * 2 - mLineSpace * 2;
         mVisibleWidth = width - marginWidth * 2;
         mLineSpace = mFontSize / 5 * 2;
@@ -72,12 +70,6 @@ public class HorizantalComposing implements ComposingStrategy{
 
 
     }
-
-
-
-
-
-
 
 
     @Override
@@ -107,7 +99,7 @@ public class HorizantalComposing implements ComposingStrategy{
             while(lineCount < mPagelineCount && lineCount > 0){
                 lineCount--;
                 lines.add(paraLines.get(0));
-                paraSpace += mLineSpace + mFontSize;
+                paraSpace += (mLineSpace + mFontSize);
                 mPagelineCount = (mVisibleHeight - paraSpace) / (mFontSize + mLineSpace);
             }
             /**
@@ -120,6 +112,7 @@ public class HorizantalComposing implements ComposingStrategy{
             if(lineCount > mPagelineCount){
                 pageList.put(1,lines);
                 lines.clear();
+                paraSpace = 0;
                 mPagelineCount = mVisibleHeight / (mFontSize + mLineSpace);
             }else{
                 mPagelineCount = (mVisibleHeight - paraSpace - mParagraphSpace) / (mFontSize + mLineSpace);
