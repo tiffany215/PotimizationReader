@@ -102,11 +102,11 @@ public class HorizantalComposing implements ComposingStrategy{
         for (int i = 0; i <= paragraphArr.length; i++)
         {
             String strParagraph = paragraphArr[i];
-            int lineCount = autoSplitLine(strParagraph).size();
-            Vector<String> pageArr = autoSplitLine(strParagraph);
+            Vector<String> paraLines = autoSplitLine(strParagraph);
+            int lineCount = paraLines.size();
             while(lineCount < mPagelineCount && lineCount > 0){
                 lineCount--;
-                lines.add(pageArr.get(0));
+                lines.add(paraLines.get(0));
                 paraSpace += mLineSpace + mFontSize;
                 mPagelineCount = (mVisibleHeight - paraSpace) / (mFontSize + mLineSpace);
             }
