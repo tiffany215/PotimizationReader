@@ -1,4 +1,4 @@
-package shuhai.readercore.view.readview.strategy;
+package shuhai.readercore.views.readview.strategy;
 
 /**
  * @author 55345364

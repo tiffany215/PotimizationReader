@@ -1,4 +1,6 @@
-package shuhai.readercore.view.readview;
+package shuhai.readercore.views.readview.factory;
+
+import shuhai.readercore.views.readview.dataloader.ChapterLoaderImpl;
 
 /**
  * @author 55345364

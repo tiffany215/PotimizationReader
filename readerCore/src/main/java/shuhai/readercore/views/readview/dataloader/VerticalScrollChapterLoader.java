@@ -1,4 +1,6 @@
-package shuhai.readercore.view.readview;
+package shuhai.readercore.views.readview.dataloader;
+
+import shuhai.readercore.views.readview.BookStatus;
 
 /**
  * @author 55345364

@@ -1,4 +1,4 @@
-package shuhai.readercore.view.readview.view;
+package shuhai.readercore.views.readview.displayview;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -7,14 +7,13 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import shuhai.readercore.utils.ScreenUtils;
-import shuhai.readercore.view.readview.BaseReadImpl;
 
 /**
  * @author 55345364
  * @date 2017/7/5.
  */
 
-public abstract class VerticalBaseReadView extends View implements BaseReadImpl {
+public abstract class VerticalBaseReadView extends View implements BaseReadViewImpl {
 
     protected int mScreenWidth;
     protected int mScreenHeight;

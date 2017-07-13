@@ -1,20 +1,22 @@
-package shuhai.readercore.view.readview.pagewidget;
+package shuhai.readercore.views.readview.pagewidget;
 
 import android.content.Context;
 import android.graphics.Canvas;
 
-import shuhai.readercore.view.readview.view.HorizontalBaseReadView;
+import shuhai.readercore.views.readview.displayview.HorizontalBaseReadView;
 
 /**
  * @author 55345364
  * @date 2017/7/5.
- * <p>
- * 仿真效果翻页组件
+ *
+ * 无效果翻页组件
+ *
  */
 
-public class RealFlipOverWidget extends HorizontalBaseReadView {
 
-    public RealFlipOverWidget(Context context) {
+public class NoEffectFlipOverWidget extends HorizontalBaseReadView {
+
+    public NoEffectFlipOverWidget(Context context) {
         super(context);
     }
 

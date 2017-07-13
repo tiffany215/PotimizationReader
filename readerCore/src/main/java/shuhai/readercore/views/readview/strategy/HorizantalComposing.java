@@ -1,4 +1,4 @@
-package shuhai.readercore.view.readview.strategy;
+package shuhai.readercore.views.readview.strategy;
 
 import android.graphics.Paint;
 import android.text.TextUtils;

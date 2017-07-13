@@ -8,8 +8,8 @@ import butterknife.Bind;
 import shuhai.readercore.R;
 import shuhai.readercore.base.BaseActivity;
 import shuhai.readercore.ui.contract.BookReadContract;
-import shuhai.readercore.view.readview.BaseReadImpl;
-import shuhai.readercore.view.readview.pagewidget.NoEffectFlipOverWidget;
+import shuhai.readercore.views.readview.displayview.BaseReadViewImpl;
+import shuhai.readercore.views.readview.pagewidget.NoEffectFlipOverWidget;
 
 /**
  * @author 55345364
@@ -23,7 +23,7 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View{
     @Bind(R.id.flReadWidget)
     FrameLayout lsReadWidget;
 
-    private BaseReadImpl mPageWidget;
+    private BaseReadViewImpl mPageWidget;
 
 
     @Override

@@ -1,4 +1,6 @@
-package shuhai.readercore.view.readview.strategy;
+package shuhai.readercore.views.readview.strategy;
+
+import java.util.Vector;
 
 /**
  * @author 55345364
@@ -19,9 +21,9 @@ public interface ComposingStrategy {
     void pageDown();
 
     //向下翻页
-    void nextPage();
+    Vector<String> nextPage();
 
     //向上翻页
-    void prePage();
+    Vector<String> prePage();
 
 }

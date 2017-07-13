@@ -1,13 +1,11 @@
-package shuhai.readercore.view.readview;
-
-import android.graphics.Bitmap;
+package shuhai.readercore.views.readview.displayview;
 
 /**
  * @author 55345364
  * @date 2017/7/6.
  */
 
-public interface BaseReadImpl {
+public interface BaseReadViewImpl {
     //开始翻页动画
     void startAnimation();
     //终止翻页动画
