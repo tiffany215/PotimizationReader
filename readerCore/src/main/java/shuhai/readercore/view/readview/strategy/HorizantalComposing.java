@@ -85,7 +85,7 @@ public class HorizantalComposing implements ComposingStrategy{
     /**
      * 将段落内容分页
      */
-    public void autoSplitPage(String str){
+    private void autoSplitPage(String str){
         String[] paragraphArr = autoSplitParagraph(str);
         Vector<String> lines = new Vector<>();
         int paraSpace = 0;
@@ -157,12 +157,12 @@ public class HorizantalComposing implements ComposingStrategy{
     }
 
     @Override
-    public void prePage() {
-
+    public Vector<String> prePage() {
+        return pageList.get(0);
     }
 
     @Override
-    public void nextPage() {
-
+    public Vector<String> nextPage() {
+        return null;
     }
 }
