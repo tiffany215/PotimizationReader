@@ -1,7 +1,9 @@
-package shuhai.readercore.view.readview;
+package shuhai.readercore.view.readview.pagewidget;
 
 import android.content.Context;
 import android.graphics.Canvas;
+
+import shuhai.readercore.view.readview.view.HorizontalBaseReadView;
 
 /**
  * @author 55345364

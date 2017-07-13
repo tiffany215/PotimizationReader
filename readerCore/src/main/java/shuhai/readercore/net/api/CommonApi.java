@@ -83,17 +83,6 @@ public class CommonApi {
         return apiService.get(url,map).compose(this.norTransFormer(clz));
     }
 
-
-
-
-
-
-
-
-
-
-
-
     /**
      *
      * @param url
@@ -105,8 +94,6 @@ public class CommonApi {
     public <T> Subscription get(final String url,final Map<String,String> map,ApiCallback<T> callback){
         return this.get(url,map,ClassUtils.getTClass(callback)).subscribe(new ApiCallbackSubscriber(mContext,callback));
     }
-
-
 
 
     /**
@@ -130,7 +117,7 @@ public class CommonApi {
      * @param <T>
      * @return
      */
-    public <T>Subscription postMultiport(final String entrance,final Map<String,String> params,ApiCallback<T> callback){
+    public <T>Subscription postMultipart(final String entrance,final Map<String,String> params,ApiCallback<T> callback){
         return this.postMultipart(entrance,params,ClassUtils.getTClass(callback)).subscribe(new ApiCallbackSubscriber(mContext,callback));
     }
 
@@ -158,8 +145,6 @@ public class CommonApi {
         }
         return t;
     }
-
-
 
     /**
      * BookApi的所有配置通过构建者模式来创建。

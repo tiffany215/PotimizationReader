@@ -9,7 +9,7 @@ import shuhai.readercore.R;
 import shuhai.readercore.base.BaseActivity;
 import shuhai.readercore.ui.contract.BookReadContract;
 import shuhai.readercore.view.readview.BaseReadImpl;
-import shuhai.readercore.view.readview.NoEffectFlipOverWidget;
+import shuhai.readercore.view.readview.pagewidget.NoEffectFlipOverWidget;
 
 /**
  * @author 55345364

@@ -1,6 +1,5 @@
 package shuhai.readercore.api;
 
-import android.content.Context;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,39 +36,29 @@ public class BookApis {
     }
 
 
-
-    public static <T> void getMovie(Context context, ApiCallback<T> callback){
-        CommonApi bookApi = new CommonApi.Builder(context).build();
-        Map<String,String> params = new HashMap<>();
-        params.put("start","0");
-        params.put("count","2");
-        bookApi.get("",params,callback);
-    }
-
-
     /**
      * 获取单章内容
      * @param callback
      * @param <T>
      */
-    public <T> void obtianChapter(ApiCallback<T> callback){
+    public <T> void obtainChapter(ApiCallback<T> callback){
         Map<String,String> params = new HashMap<>();
         params.put("packageame", "com.shuhai.bookos");
-        params.put("order", "3");
-        params.put("sign", "0e7dd35dac1196a3096ad3796652d8dc");
+        params.put("order", "2");
+        params.put("sign", "812e84d3004554fa28da53be24386e7f");
         params.put("source", "shuhai");
         params.put("uuid", "00000000-35b8-f815-39da-21960033c587");
         params.put("siteid", "300");
-        params.put("timestamp", "1499765520");
-        params.put("chapterorder", "6");
+        params.put("timestamp", "1499913428");
+        params.put("chapterorder", "1");
         params.put("username", "wangxu@qq.com");
         params.put("imei", "356261050497138");
         params.put("version", "60");
-        params.put("articleid", "41366");
+        params.put("articleid", "41391");
         params.put("ip", "192.168.1.190");
         params.put("uid", "0");
-        params.put("chapterid", "2642855");
-        commonApi.postMultiport("onechapter",params,callback);
+        params.put("chapterid", "2648720");
+        commonApi.postMultipart("onechapter",params,callback);
     }
 
 
