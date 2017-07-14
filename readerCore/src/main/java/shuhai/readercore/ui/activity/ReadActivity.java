@@ -8,8 +8,8 @@ import butterknife.Bind;
 import shuhai.readercore.R;
 import shuhai.readercore.base.BaseActivity;
 import shuhai.readercore.ui.contract.BookReadContract;
-import shuhai.readercore.views.readview.displayview.BaseReadViewImpl;
-import shuhai.readercore.views.readview.pagewidget.NoEffectFlipOverWidget;
+import shuhai.readercore.view.readview.displayview.BaseReadViewImpl;
+import shuhai.readercore.view.readview.pagewidget.NoEffectFlipOverWidget;
 
 /**
  * @author 55345364

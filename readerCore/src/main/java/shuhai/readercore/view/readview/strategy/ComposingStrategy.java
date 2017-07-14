@@ -1,4 +1,4 @@
-package shuhai.readercore.views.readview.strategy;
+package shuhai.readercore.view.readview.strategy;
 
 import java.util.Vector;
 

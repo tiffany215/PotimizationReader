@@ -1,4 +1,6 @@
-package shuhai.readercore.views.readview.strategy;
+package shuhai.readercore.view.readview.strategy;
+
+import java.util.Vector;
 
 /**
  * @author 55345364
@@ -12,7 +14,7 @@ public class VerticalComposing implements ComposingStrategy{
 
     @Override
     public String[] autoSplitParagraph(String str) {
-        return null;
+        return new String[0];
     }
 
     @Override
@@ -26,12 +28,12 @@ public class VerticalComposing implements ComposingStrategy{
     }
 
     @Override
-    public void nextPage() {
-
+    public Vector<String> nextPage() {
+        return null;
     }
 
     @Override
-    public void prePage() {
-
+    public Vector<String> prePage() {
+        return null;
     }
 }

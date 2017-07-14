@@ -1,4 +1,4 @@
-package shuhai.readercore.views.readview.displayview;
+package shuhai.readercore.view.readview.displayview;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -7,6 +7,9 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import shuhai.readercore.utils.ScreenUtils;
+import shuhai.readercore.view.readview.factory.Factory;
+import shuhai.readercore.view.readview.factory.PageFactroy;
+import shuhai.readercore.view.readview.strategy.HorizantalComposing;
 
 /**
  * @author 55345364
@@ -23,13 +26,13 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
     protected Bitmap mPrePageBitmap,mCurPageBitmap,mNextPageBitmap;
     protected Canvas mPrePageCanvas,mCurPageCanvas,mNextPageCanvas;
 
+    private Factory factory;
 
 
-
-
-
-
-
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+    }
 
     public HorizontalBaseReadView(Context context) {
         super(context);
@@ -45,6 +48,12 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
         mCurPageCanvas =  new Canvas(mCurPageBitmap);
         mNextPageCanvas =  new Canvas(mNextPageBitmap);
 
+        factory = new PageFactroy(context,"1985");
+        ((PageFactroy)factory).setChapterLoader();
+        ((PageFactroy)factory).setComposingStrategy();
+
+
+
 
     }
 
@@ -53,31 +62,13 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
     protected abstract void drawCurrentPageShadow(Canvas canvas);
 
 
-    @Override
-    public void startAnimation() {
-
-    }
-
-    @Override
-    public void abortAnimation() {
-
-    }
-
-    @Override
-    public void restoreAnimation() {
-
-    }
-
-    @Override
-    public void init(int theme) {
-
-    }
-
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()){
             case MotionEvent.ACTION_DOWN:
+
+                factory.onDraw(mCurPageCanvas);
 
                 break;
             case MotionEvent.ACTION_MOVE:

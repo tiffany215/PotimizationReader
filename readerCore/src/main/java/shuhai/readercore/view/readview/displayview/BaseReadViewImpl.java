@@ -1,4 +1,4 @@
-package shuhai.readercore.views.readview.displayview;
+package shuhai.readercore.view.readview.displayview;
 
 /**
  * @author 55345364

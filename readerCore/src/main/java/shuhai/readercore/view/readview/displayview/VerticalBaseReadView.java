@@ -1,4 +1,4 @@
-package shuhai.readercore.views.readview.displayview;
+package shuhai.readercore.view.readview.displayview;
 
 import android.content.Context;
 import android.graphics.Bitmap;
