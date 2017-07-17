@@ -1,5 +1,6 @@
 package shuhai.readercore.view.readview.factory;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
 import shuhai.readercore.view.readview.BookStatus;
@@ -12,14 +13,18 @@ import shuhai.readercore.view.readview.dataloader.ChapterLoaderImpl;
 
 public abstract class Factory {
 
+
+
     public abstract <T extends ChapterLoaderImpl> T createChapterLoader(Class<T> clz);
 
-     abstract BookStatus nextPage();
+    public abstract BookStatus nextPage();
 
-     abstract BookStatus prePage();
+    public abstract BookStatus prePage();
 
-     abstract BookStatus curPage();
+    public abstract BookStatus curPage();
 
     public abstract void onDraw(Canvas canvas);
+
+    public abstract void setBgBitmap(Bitmap bitmap);
 
 }

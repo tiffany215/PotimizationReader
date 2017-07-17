@@ -24,21 +24,6 @@ public class VerticalScrollChapterLoader implements ChapterLoaderImpl{
     }
 
     @Override
-    public BookStatus nextPage() {
-        return null;
-    }
-
-    @Override
-    public BookStatus prePage() {
-        return null;
-    }
-
-    @Override
-    public BookStatus curPage() {
-        return null;
-    }
-
-    @Override
     public void setComposingStrategy(ComposingStrategy composingStrategy) {
 
     }

@@ -15,7 +15,7 @@ import java.util.Vector;
  *
  */
 
-public class HorizantalComposing implements ComposingStrategy{
+public class HorizontalComposing implements ComposingStrategy{
 
     /**
      * 屏幕的高度和宽度
@@ -65,13 +65,16 @@ public class HorizantalComposing implements ComposingStrategy{
 
 
 
-    public HorizantalComposing(int width,int heigth,int fontSize ){
-        mVisibleHeight = width - marginHeight * 2 - mNumFontSize * 2 - mLineSpace * 2;
-        mVisibleWidth = width - marginWidth * 2;
+    public HorizontalComposing(int width, int height, int fontSize,Paint paint,Paint titlePaint){
+        mWidth = width;
+        mHeight = height;
+        mFontSize = fontSize;
+        mVisibleHeight = mWidth - marginHeight * 2 - mNumFontSize * 2 - mLineSpace * 2;
+        mVisibleWidth = mWidth - marginWidth * 2;
         mLineSpace = mFontSize / 5 * 2;
         mPagelineCount = mVisibleHeight / (mFontSize + mLineSpace);
-
-
+        mPaint = paint;
+        mTitlePaint = titlePaint;
     }
 
 

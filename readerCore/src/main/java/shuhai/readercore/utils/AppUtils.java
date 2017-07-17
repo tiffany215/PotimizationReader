@@ -22,7 +22,7 @@ public class AppUtils {
 
 
     public static Context getAppContext(){
-        return mContext.getApplicationContext();
+        return mContext;
     }
 
     public static Resources getResources(){

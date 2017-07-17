@@ -25,6 +25,8 @@ public class LevelFlipOverWidget extends HorizontalBaseReadView {
     @Override
     protected void drawCurrentPageArea(Canvas canvas) {
 
+        canvas.drawBitmap(mCurPageBitmap,0,0,null);
+//        canvas.translate(mTouch.x,mTouch.y);
     }
 
     @Override
@@ -48,8 +50,16 @@ public class LevelFlipOverWidget extends HorizontalBaseReadView {
 
     }
 
+
     @Override
-    public void init(int theme) {
+    public void computeScroll() {
+        super.computeScroll();
+        if(mScroller.computeScrollOffset()){
+            float x = mScroller.getCurrX();
+            float y = mScroller.getCurrY();
+            postInvalidate();
+        }
+
 
     }
 }

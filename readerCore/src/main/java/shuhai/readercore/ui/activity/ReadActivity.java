@@ -7,8 +7,10 @@ import android.widget.FrameLayout;
 import butterknife.Bind;
 import shuhai.readercore.R;
 import shuhai.readercore.base.BaseActivity;
+import shuhai.readercore.manager.ThemeManager;
 import shuhai.readercore.ui.contract.BookReadContract;
 import shuhai.readercore.view.readview.displayview.BaseReadViewImpl;
+import shuhai.readercore.view.readview.pagewidget.LevelFlipOverWidget;
 import shuhai.readercore.view.readview.pagewidget.NoEffectFlipOverWidget;
 
 /**
@@ -29,7 +31,7 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View{
     @Override
     public int getLayoutId() {
         getWindow().setFlags(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.MATCH_PARENT);
-        return R.layout.activity_main;
+        return R.layout.activity_read;
     }
 
     @Override
@@ -56,7 +58,8 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View{
      * 将阅读内容绘制好的View添加到当前容器
      */
     private void initPagerWidget(){
-        mPageWidget = new NoEffectFlipOverWidget(this);
+        mPageWidget = new LevelFlipOverWidget(this);
+        mPageWidget.init(ThemeManager.NORMAL);
         lsReadWidget.removeAllViews();
         lsReadWidget.addView((View) mPageWidget);
     }

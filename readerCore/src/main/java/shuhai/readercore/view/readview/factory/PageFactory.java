@@ -6,8 +6,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.graphics.RectF;
-import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.widget.ProgressBar;
 
@@ -21,14 +19,14 @@ import shuhai.readercore.utils.ScreenUtils;
 import shuhai.readercore.view.readview.BookStatus;
 import shuhai.readercore.view.readview.dataloader.ChapterLoaderImpl;
 import shuhai.readercore.view.readview.dataloader.HorizontalScrollChapterLoader;
-import shuhai.readercore.view.readview.strategy.HorizantalComposing;
+import shuhai.readercore.view.readview.strategy.HorizontalComposing;
 
 /**
  * @author 55345364
  * @date 2017/7/6.
  */
 
-public class PageFactroy extends Factory {
+public class PageFactory extends Factory {
 
     private Context mContext;
 
@@ -84,14 +82,14 @@ public class PageFactroy extends Factory {
     private Bitmap batteryBitmap;
 
 
-    public PageFactroy(Context context,String bookId){
+    public PageFactory(Context context, String bookId){
         this(context,ScreenUtils.getScreenWidth(),ScreenUtils.getScreenHeight(),34,bookId);
 
     }
 
 
 
-    public PageFactroy(Context context,int width,int height,int fontsize,String bookId){
+    public PageFactory(Context context, int width, int height, int fontsize, String bookId){
         mContext = context;
         mWidth = width;
         mHeight = height;
@@ -117,9 +115,9 @@ public class PageFactroy extends Factory {
         /**
          * 设置自定义字体
          */
-        Typeface typeface = Typeface.createFromAsset(context.getAssets(),"");
-        mPaint.setTypeface(typeface);
-        mTitlePaint.setTypeface(typeface);
+//        Typeface typeface = Typeface.createFromAsset(context.getAssets(),"");
+//        mPaint.setTypeface(typeface);
+//        mTitlePaint.setTypeface(typeface);
 
 
     }
@@ -142,7 +140,7 @@ public class PageFactroy extends Factory {
     }
 
     @Override
-    BookStatus nextPage() {
+    public BookStatus nextPage() {
         if(null != chapterLoader.pageDown() && chapterLoader.pageDown().size() > 0){
             mLines = chapterLoader.pageDown();
             return BookStatus.LOAD_SUCCESS;
@@ -151,7 +149,7 @@ public class PageFactroy extends Factory {
     }
 
     @Override
-    BookStatus prePage() {
+    public BookStatus prePage() {
         if(null != chapterLoader.pageUp() && chapterLoader.pageUp().size() > 0){
             mLines = chapterLoader.pageUp();
             return BookStatus.LOAD_SUCCESS;
@@ -160,7 +158,7 @@ public class PageFactroy extends Factory {
     }
 
     @Override
-    BookStatus curPage() {
+    public BookStatus curPage() {
         return null;
     }
 
@@ -176,7 +174,9 @@ public class PageFactroy extends Factory {
      * 设置数据加载类的策略
      */
     public void setComposingStrategy(){
-        this.chapterLoader.setComposingStrategy(new HorizantalComposing(mWidth,mHeight,mFontSize));
+        if(null != chapterLoader){
+            this.chapterLoader.setComposingStrategy(new HorizontalComposing(mWidth,mHeight,mFontSize,mPaint,mTitlePaint));
+        }
     }
 
 
@@ -217,32 +217,10 @@ public class PageFactroy extends Factory {
         }
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    @Override
+    public void setBgBitmap(Bitmap bitmap) {
+        this.mBookPageBg = bitmap;
+    }
 
 
 }
