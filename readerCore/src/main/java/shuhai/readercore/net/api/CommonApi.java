@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -18,6 +19,7 @@ import shuhai.readercore.Constants;
 import shuhai.readercore.net.callback.ApiCallback;
 import shuhai.readercore.net.func.ApiErrorFunc;
 import shuhai.readercore.net.func.ApiFunc;
+import shuhai.readercore.net.interceptor.FixedParameterInterceptor;
 import shuhai.readercore.net.mode.ApiHost;
 import shuhai.readercore.net.subscriber.ApiCallbackSubscriber;
 import shuhai.readercore.utils.ClassUtils;
@@ -156,6 +158,10 @@ public class CommonApi {
 
         private GsonConverterFactory gsonConverterFactory;
         private RxJavaCallAdapterFactory rxJavaCallAdapterFactory;
+        private HttpLoggingInterceptor httpLoggingInterceptor;
+        private FixedParameterInterceptor fixedParameterInterceptor;
+
+
 
 
         public Builder(Context context){
@@ -222,12 +228,33 @@ public class CommonApi {
             return this;
         }
 
+        public CommonApi.Builder addLogInterceptor(boolean flag,HttpLoggingInterceptor.Level level){
+            if(flag){
+                httpLoggingInterceptor = new HttpLoggingInterceptor();
+                httpLoggingInterceptor.setLevel(level);
+            }else{
+                httpLoggingInterceptor = null;
+            }
+            return this;
+
+        }
+
+
 
         public CommonApi build(){
             if(null == baseUrl){
                 baseUrl = ApiHost.getHost();
             }
             retrofitBuild.baseUrl(baseUrl);
+
+            if(null != httpLoggingInterceptor){
+                okHttpBuilder.addInterceptor(httpLoggingInterceptor);
+            }
+
+            if(null == fixedParameterInterceptor){
+                fixedParameterInterceptor = new FixedParameterInterceptor();
+                okHttpBuilder.addInterceptor(fixedParameterInterceptor);
+            }
 
             if(null == gsonConverterFactory){
                 gsonConverterFactory =  GsonConverterFactory.create();

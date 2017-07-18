@@ -1,5 +1,6 @@
 package shuhai.readercore.view.readview.strategy;
 
+
 import java.util.Vector;
 
 /**
@@ -18,22 +19,17 @@ public class VerticalComposing implements ComposingStrategy{
     }
 
     @Override
-    public void pageUp() {
-
-    }
-
-    @Override
-    public void pageDown() {
-
-    }
-
-    @Override
-    public Vector<String> nextPage() {
+    public Vector<String> pageUp(int page, String key) {
         return null;
     }
 
     @Override
-    public Vector<String> prePage() {
+    public Vector<String> pageCurr(int page, String key) {
+        return null;
+    }
+
+    @Override
+    public Vector<String> pageDown(int page, String key) {
         return null;
     }
 }

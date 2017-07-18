@@ -11,9 +11,9 @@ import shuhai.readercore.view.readview.strategy.ComposingStrategy;
 
 public interface ChapterLoaderImpl {
 
-    Vector<String> pageDown();
+    Vector<String> pageDown(int page,String key);
 
-    Vector<String> pageUp();
+    Vector<String> pageUp(int page,String key);
 
     void setComposingStrategy(ComposingStrategy composingStrategy);
 

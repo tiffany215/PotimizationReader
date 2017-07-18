@@ -22,11 +22,11 @@ public class HorizontalScrollChapterLoader implements ChapterLoaderImpl{
      * 获取下一页内容
      */
     @Override
-    public Vector<String> pageDown() {
+    public Vector<String> pageDown(int page,String key) {
         if(null == mComposingStrategy){
             return null;
         }
-        return mComposingStrategy.nextPage();
+        return mComposingStrategy.pageDown(page,key);
     }
 
     /**
@@ -34,8 +34,8 @@ public class HorizontalScrollChapterLoader implements ChapterLoaderImpl{
      * @return
      */
     @Override
-    public Vector<String> pageUp() {
-        return mComposingStrategy.prePage();
+    public Vector<String> pageUp(int page,String key) {
+        return mComposingStrategy.pageUp(page,key);
     }
 
     @Override

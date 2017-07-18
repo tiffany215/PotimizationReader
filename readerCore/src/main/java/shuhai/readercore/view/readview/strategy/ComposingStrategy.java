@@ -15,15 +15,20 @@ public interface ComposingStrategy {
     String[] autoSplitParagraph(String str);
 
     //获取上一页内容
-    void pageUp();
+    Vector<String> pageUp(int page, String key);
+
+
+    //获取当前页内容
+    Vector<String> pageCurr(int page, String key);
+
 
     //获取下一页内容
-    void pageDown();
+    Vector<String> pageDown(int page, String key);
 
-    //向下翻页
-    Vector<String> nextPage();
-
-    //向上翻页
-    Vector<String> prePage();
+//    //向下翻页
+//    Vector<String> nextPage();
+//
+//    //向上翻页
+//    Vector<String> prePage();
 
 }

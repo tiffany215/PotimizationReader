@@ -14,12 +14,12 @@ public class VerticalScrollChapterLoader implements ChapterLoaderImpl{
 
 
     @Override
-    public Vector<String> pageDown() {
+    public Vector<String> pageDown(int page, String key) {
         return null;
     }
 
     @Override
-    public Vector<String> pageUp() {
+    public Vector<String> pageUp(int page, String key) {
         return null;
     }
 

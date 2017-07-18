@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.PointF;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Scroller;
@@ -24,6 +25,7 @@ import shuhai.readercore.view.readview.factory.PageFactory;
 
 public abstract class HorizontalBaseReadView extends View implements BaseReadViewImpl {
 
+    private static final String TAG = "HorizontalBaseReadView";
     protected int mScreenWidth;
     protected int mScreenHeight;
 
@@ -62,7 +64,9 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
     public synchronized void init(int theme){
         if(!isPrepare){
             factory.setBgBitmap(ThemeManager.getThemeDrawable(theme));
-            factory.onDraw(mCurPageCanvas);
+            if(BookStatus.LOAD_SUCCESS ==  factory.curPage()){
+                factory.onDraw(mCurPageCanvas);
+            }
             isPrepare = true;
         }
     }

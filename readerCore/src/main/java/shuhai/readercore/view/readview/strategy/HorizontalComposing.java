@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
+import shuhai.readercore.manager.ChapterLoader;
+
 /**
  * @author 55345364
  * @date 2017/7/13.
@@ -91,7 +93,7 @@ public class HorizontalComposing implements ComposingStrategy{
     /**
      * 将段落内容分页
      */
-    private void autoSplitPage(String str){
+    private Map<Integer,Vector<String>> autoSplitPage(String str){
         String[] paragraphArr = autoSplitParagraph(str);
         Vector<String> lines = new Vector<>();
         int paraSpace = 0;
@@ -124,6 +126,7 @@ public class HorizontalComposing implements ComposingStrategy{
                 mPagelineCount = (mVisibleHeight - paraSpace - mParagraphSpace) / (mFontSize + mLineSpace);
             }
         }
+        return pageList;
     }
 
 
@@ -149,26 +152,29 @@ public class HorizontalComposing implements ComposingStrategy{
 
 
     @Override
-    public void pageUp() {
-
-
-
-
-
+    public Vector<String> pageUp(int page, String key) {
+        Map<Integer,Vector<String>> pageContent = autoSplitPage(ChapterLoader.getChapter(key));
+        if(null != pageContent && pageContent.size() > 0){
+            return pageContent.get(page);
+        }
+        return null;
     }
 
     @Override
-    public void pageDown() {
-
+    public Vector<String> pageCurr(int page, String key) {
+        Map<Integer,Vector<String>> pageContent = autoSplitPage(ChapterLoader.getChapter(key));
+        if(null != pageContent && pageContent.size() > 0){
+            return pageContent.get(page);
+        }
+        return null;
     }
 
     @Override
-    public Vector<String> prePage() {
-        return pageList.get(0);
-    }
-
-    @Override
-    public Vector<String> nextPage() {
+    public Vector<String> pageDown(int page, String key) {
+        Map<Integer,Vector<String>> pageContent = autoSplitPage(ChapterLoader.getChapter(key));
+        if(null != pageContent && pageContent.size() > 0){
+            return pageContent.get(page);
+        }
         return null;
     }
 }

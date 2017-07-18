@@ -7,31 +7,26 @@ import android.text.TextUtils;
  */
 
 public class ChapterLoader {
-
-
-
-
-
-    public String getChapter(String key){
+    public static String getChapter(String key){
         String content =  null;
         content = MemoryLruCacheManager.getInstance().getString(key);
         if(!TextUtils.isEmpty(content)){
             return content;
         }
-        content = DiskLruCacheManager.getInstatnce().getString(key);
+        content = DiskLruCacheManager.getInstance().getString(key);
         if(!TextUtils.isEmpty(content)){
             return content;
         }
         return null;
     }
 
-    public void put(String key,String value){
-        MemoryLruCacheManager.getInstance().put(key,value);
-        DiskLruCacheManager.getInstatnce().put(key,value);
+    public static void put(String key,String value){
+        if(TextUtils.isEmpty(MemoryLruCacheManager.getInstance().getString(key))){
+            MemoryLruCacheManager.getInstance().put(key,value);
+        }
+        if(TextUtils.isEmpty(DiskLruCacheManager.getInstance().getString(key))){
+            DiskLruCacheManager.getInstance().put(key,value);
+        }
     }
-
-
-
-
 
 }

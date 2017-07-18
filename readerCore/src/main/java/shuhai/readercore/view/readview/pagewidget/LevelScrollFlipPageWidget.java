@@ -8,13 +8,12 @@ import shuhai.readercore.view.readview.displayview.HorizontalBaseReadView;
 /**
  * @author 55345364
  * @date 2017/7/5.
- * <p>
- * 仿真效果翻页组件
+ * 水平翻页效果组件
  */
 
-public class RealFlipOverWidget extends HorizontalBaseReadView {
+public class LevelScrollFlipPageWidget extends HorizontalBaseReadView {
 
-    public RealFlipOverWidget(Context context) {
+    public LevelScrollFlipPageWidget(Context context) {
         super(context);
     }
 
@@ -26,6 +25,8 @@ public class RealFlipOverWidget extends HorizontalBaseReadView {
     @Override
     protected void drawCurrentPageArea(Canvas canvas) {
 
+        canvas.drawBitmap(mCurPageBitmap,0,0,null);
+        canvas.translate(40,80);
     }
 
     @Override
@@ -46,6 +47,19 @@ public class RealFlipOverWidget extends HorizontalBaseReadView {
 
     @Override
     public void restoreAnimation() {
+
+    }
+
+
+    @Override
+    public void computeScroll() {
+        super.computeScroll();
+        if(mScroller.computeScrollOffset()){
+            float x = mScroller.getCurrX();
+            float y = mScroller.getCurrY();
+            postInvalidate();
+        }
+
 
     }
 }

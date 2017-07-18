@@ -64,7 +64,7 @@ public class DiskLruCacheManager {
         private static final DiskLruCacheManager mInstance = new DiskLruCacheManager(mContext,mUniqueName);
     }
 
-    public static DiskLruCacheManager  getInstatnce (){
+    public static DiskLruCacheManager  getInstance (){
             return DiskLruCacheManagerHolder.mInstance;
     }
 

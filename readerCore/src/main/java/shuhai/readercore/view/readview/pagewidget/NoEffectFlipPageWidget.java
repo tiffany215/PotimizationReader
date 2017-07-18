@@ -14,9 +14,9 @@ import shuhai.readercore.view.readview.displayview.HorizontalBaseReadView;
  */
 
 
-public class NoEffectFlipOverWidget extends HorizontalBaseReadView {
+public class NoEffectFlipPageWidget extends HorizontalBaseReadView {
 
-    public NoEffectFlipOverWidget(Context context) {
+    public NoEffectFlipPageWidget(Context context) {
         super(context);
     }
 

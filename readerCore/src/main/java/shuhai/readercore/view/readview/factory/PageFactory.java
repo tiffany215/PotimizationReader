@@ -141,8 +141,8 @@ public class PageFactory extends Factory {
 
     @Override
     public BookStatus nextPage() {
-        if(null != chapterLoader.pageDown() && chapterLoader.pageDown().size() > 0){
-            mLines = chapterLoader.pageDown();
+        if(null != chapterLoader.pageDown(1,"") && chapterLoader.pageDown(1,"").size() > 0){
+            mLines = chapterLoader.pageDown(1,"");
             return BookStatus.LOAD_SUCCESS;
         }
         return BookStatus.NO_NEXT_PAGE;
@@ -150,8 +150,8 @@ public class PageFactory extends Factory {
 
     @Override
     public BookStatus prePage() {
-        if(null != chapterLoader.pageUp() && chapterLoader.pageUp().size() > 0){
-            mLines = chapterLoader.pageUp();
+        if(null != chapterLoader.pageUp(1,"") && chapterLoader.pageUp(1,"").size() > 0){
+            mLines = chapterLoader.pageUp(1,"");
             return BookStatus.LOAD_SUCCESS;
         }
         return BookStatus.NO_PRE_PAGE;
@@ -159,7 +159,20 @@ public class PageFactory extends Factory {
 
     @Override
     public BookStatus curPage() {
-        return null;
+//        if(null != chapterLoader.pageDown() && chapterLoader.pageDown().size() > 0){
+
+            mLines.add("asfasfasfasf");
+            mLines.add("asdfasdf");
+            mLines.add("asdfasdf");
+            mLines.add("asfdasdf");
+            mLines.add("asfadf");
+            mLines.add("asdfasdf");
+            mLines.add("hfgjdgfjj");
+
+//            mLines = chapterLoader.pageDown();
+            return BookStatus.LOAD_SUCCESS;
+//        }
+//        return BookStatus.NO_PRE_PAGE;
     }
 
 
@@ -196,7 +209,7 @@ public class PageFactory extends Factory {
                 canvas.drawBitmap(mBookPageBg,null,rectF,null);
             }
 
-            canvas.drawText("",marginWidth,y,mTitlePaint);
+            canvas.drawText("asfasfasfasfasdf",marginWidth,y,mTitlePaint);
             y += mLineSpace + mNumFontSize;
 
             for (String line : mLines)
