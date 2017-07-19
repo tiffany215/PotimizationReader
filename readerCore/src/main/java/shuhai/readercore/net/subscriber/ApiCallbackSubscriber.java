@@ -39,5 +39,7 @@ public class ApiCallbackSubscriber<T> extends ApiSubscriber<T> {
     }
 
     @Override
-    public void onNext(T t) {apiCallback.onNext(t);}
+    public void onNext(T t) {
+        apiCallback.onNext(t);
+    }
 }

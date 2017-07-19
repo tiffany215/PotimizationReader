@@ -9,10 +9,12 @@ import android.view.View;
 import android.widget.Toast;
 
 import butterknife.OnClick;
+import rx.Subscriber;
 import shuhai.readercore.R;
 import shuhai.readercore.api.BookApis;
 import shuhai.readercore.base.BaseActivity;
 import shuhai.readercore.bean.BookChapter;
+import shuhai.readercore.bean.ChapterEntity;
 import shuhai.readercore.net.callback.ApiCallback;
 import shuhai.readercore.net.exception.ApiException;
 
@@ -25,11 +27,7 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         this.mContext = this;
 
-
-
-
-
-        BookApis.getInstance().obtainChapter(new ApiCallback<BookChapter>() {
+        BookApis.getInstance().obtainChapter(new ApiCallback<ChapterEntity>() {
 
             @Override
             public void onStart() {
@@ -44,15 +42,11 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onError(ApiException e) {
                 Toast.makeText(mContext, "ApiException--->"+e.getDisplayMessage(), Toast.LENGTH_SHORT).show();
-
             }
 
             @Override
-            public void onNext(BookChapter bookChapter) {
-
-                Toast.makeText(mContext, "Book--->", Toast.LENGTH_SHORT).show();
-                
-                
+            public void onNext(ChapterEntity bookChapter) {
+                Toast.makeText(mContext, "Book--->"+bookChapter.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 

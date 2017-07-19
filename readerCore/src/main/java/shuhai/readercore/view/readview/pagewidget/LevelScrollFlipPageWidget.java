@@ -24,7 +24,6 @@ public class LevelScrollFlipPageWidget extends HorizontalBaseReadView {
 
     @Override
     protected void drawCurrentPageArea(Canvas canvas) {
-
         canvas.drawBitmap(mCurPageBitmap,0,0,null);
         canvas.translate(40,80);
     }

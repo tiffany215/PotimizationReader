@@ -38,6 +38,19 @@ public class HorizontalScrollChapterLoader implements ChapterLoaderImpl{
         return mComposingStrategy.pageUp(page,key);
     }
 
+
+    /**
+     * 获取当前页内容
+     * @param page
+     * @param key
+     * @return
+     */
+    @Override
+    public Vector<String> pageCur(int page, String key) {
+        return mComposingStrategy.pageCurr(page,key);
+    }
+
+
     @Override
     public void setComposingStrategy(ComposingStrategy composingStrategy) {
         this.mComposingStrategy = composingStrategy;

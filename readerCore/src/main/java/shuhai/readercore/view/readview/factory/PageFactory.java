@@ -159,20 +159,11 @@ public class PageFactory extends Factory {
 
     @Override
     public BookStatus curPage() {
-//        if(null != chapterLoader.pageDown() && chapterLoader.pageDown().size() > 0){
-
-            mLines.add("asfasfasfasf");
-            mLines.add("asdfasdf");
-            mLines.add("asdfasdf");
-            mLines.add("asfdasdf");
-            mLines.add("asfadf");
-            mLines.add("asdfasdf");
-            mLines.add("hfgjdgfjj");
-
-//            mLines = chapterLoader.pageDown();
+        if(null != chapterLoader.pageCur(1,"") && chapterLoader.pageCur(1,"").size() > 0){
+            mLines = chapterLoader.pageCur(1,"");
             return BookStatus.LOAD_SUCCESS;
-//        }
-//        return BookStatus.NO_PRE_PAGE;
+        }
+        return BookStatus.NO_PRE_PAGE;
     }
 
 

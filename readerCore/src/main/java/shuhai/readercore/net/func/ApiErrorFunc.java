@@ -14,7 +14,6 @@ import shuhai.readercore.net.exception.ApiException;
 public class ApiErrorFunc<T> implements Func1<Throwable, Observable<T>> {
     @Override
     public Observable<T> call(Throwable throwable) {
-//        return Observable.error(ApiException.handleException(throwable));
-        return null;
+        return Observable.error(ApiException.handleException(throwable));
     }
 }

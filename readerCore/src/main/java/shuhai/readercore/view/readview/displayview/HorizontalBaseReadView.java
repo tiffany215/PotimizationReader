@@ -79,72 +79,72 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        switch (event.getAction()){
-            case MotionEvent.ACTION_DOWN:
-
-                dx = (int) event.getX();
-                dy = (int) event.getY();
-
-                mTouch.x = dx;
-                mTouch.y = dy;
-
-                actiondownX = dx;
-                actiondownY = dy;
-
-                if(actiondownX >= mScreenWidth / 3 && actiondownX <= mScreenWidth * 2 / 3
-                        && actiondownY >= mScreenHeight / 3 && actiondownY <= mScreenHeight * 2 / 3 ){
-                    center = true;
-                }else{
-                    center = false;
-                    //条件成立为右翻
-                    if(actiondownX < mScreenWidth / 2){
-                        BookStatus bookStatus = factory.prePage();
-                        if(bookStatus == BookStatus.NO_PRE_PAGE){
-                          Toast.makeText(getContext(),"没有上一页了",Toast.LENGTH_LONG).show();
-                            return false;
-                        }else if(bookStatus == BookStatus.LOAD_SUCCESS){
-                            abortAnimation();
-                            factory.onDraw(mPrePageCanvas);
-                        }else{
-                            return false;
-                        }
-                    }else{
-                        BookStatus bookStatus = factory.nextPage();
-                        if(bookStatus == BookStatus.NO_NEXT_PAGE){
-                            return false;
-                        }else if(bookStatus == BookStatus.LOAD_SUCCESS){
-                            abortAnimation();
-                            factory.onDraw(mNextPageCanvas);
-                        }else{
-                            return false;
-                        }
-                    }
-                }
-                break;
-            case MotionEvent.ACTION_MOVE:
-                if(center){
-                    break;
-                }
-                int mx = (int) event.getX();
-                int my = (int) event.getY();
-
-                mTouch.x = mx;
-                mTouch.y = my;
-
-                this.requestLayout();
-                break;
-            case MotionEvent.ACTION_CANCEL:
-
-                if(center){
-
-
-
-                    break;
-                }
-
-
-                break;
-        }
+//        switch (event.getAction()){
+//            case MotionEvent.ACTION_DOWN:
+//
+//                dx = (int) event.getX();
+//                dy = (int) event.getY();
+//
+//                mTouch.x = dx;
+//                mTouch.y = dy;
+//
+//                actiondownX = dx;
+//                actiondownY = dy;
+//
+//                if(actiondownX >= mScreenWidth / 3 && actiondownX <= mScreenWidth * 2 / 3
+//                        && actiondownY >= mScreenHeight / 3 && actiondownY <= mScreenHeight * 2 / 3 ){
+//                    center = true;
+//                }else{
+//                    center = false;
+//                    //条件成立为右翻
+//                    if(actiondownX < mScreenWidth / 2){
+//                        BookStatus bookStatus = factory.prePage();
+//                        if(bookStatus == BookStatus.NO_PRE_PAGE){
+//                          Toast.makeText(getContext(),"没有上一页了",Toast.LENGTH_LONG).show();
+//                            return false;
+//                        }else if(bookStatus == BookStatus.LOAD_SUCCESS){
+//                            abortAnimation();
+//                            factory.onDraw(mPrePageCanvas);
+//                        }else{
+//                            return false;
+//                        }
+//                    }else{
+//                        BookStatus bookStatus = factory.nextPage();
+//                        if(bookStatus == BookStatus.NO_NEXT_PAGE){
+//                            return false;
+//                        }else if(bookStatus == BookStatus.LOAD_SUCCESS){
+//                            abortAnimation();
+//                            factory.onDraw(mNextPageCanvas);
+//                        }else{
+//                            return false;
+//                        }
+//                    }
+//                }
+//                break;
+//            case MotionEvent.ACTION_MOVE:
+//                if(center){
+//                    break;
+//                }
+//                int mx = (int) event.getX();
+//                int my = (int) event.getY();
+//
+//                mTouch.x = mx;
+//                mTouch.y = my;
+//
+//                this.requestLayout();
+//                break;
+//            case MotionEvent.ACTION_CANCEL:
+//
+//                if(center){
+//
+//
+//
+//                    break;
+//                }
+//
+//
+//                break;
+//        }
         return super.onTouchEvent(event);
     }
 

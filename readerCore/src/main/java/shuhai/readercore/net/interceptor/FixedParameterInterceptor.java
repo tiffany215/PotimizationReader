@@ -8,6 +8,7 @@ import com.google.gson.JsonSyntaxException;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import okhttp3.FormBody;
@@ -19,6 +20,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okio.Buffer;
+import shuhai.readercore.Constants;
 import shuhai.readercore.utils.StringUtils;
 
 import static android.content.ContentValues.TAG;
@@ -32,7 +34,6 @@ public class FixedParameterInterceptor implements Interceptor {
 
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private Gson mGson;
-
 
     public FixedParameterInterceptor(){
         mGson = new Gson();
@@ -56,26 +57,30 @@ public class FixedParameterInterceptor implements Interceptor {
             commonParamsMap.put("version", "60");
             commonParamsMap.put("ip", "192.168.1.190");
             commonParamsMap.put("uid", "0");
+            commonParamsMap.put("order", "2");
+            commonParamsMap.put("articleid", "41391");
+            commonParamsMap.put("chapterid", "2648720");
+            commonParamsMap.put("chapterorder", "1");
             if ("GET".equals(method)) {
                 HashMap<String, Object> rootMap = new HashMap<>();
                 HttpUrl mHttpUrl = request.url();
                 Set<String> paramNames = mHttpUrl.queryParameterNames();
-//                for (String key : paramNames) {
-//                    if (Constant.PARAM.equals(key)) {
-//                        String oldParamJson = mHttpUrl.queryParameter(Constant.PARAM);
-//                        //原始参数转hashmap
-//                        if (oldParamJson != null) {
-//                            HashMap<String, Object> p = mGson.fromJson(oldParamJson, HashMap.class);
-//                            if (p != null) {
-//                                for (Map.Entry<String, Object> entry : p.entrySet()) {
-//                                      rootMap.put(entry.getKey(), entry.getValue());
-//                                }
-//                            }
-//                        }
-//                    } else {
-//                        rootMap.put(key, mHttpUrl.queryParameter(key));
-//                    }
-//                }
+                for (String key : paramNames) {
+                    if (Constants.PARAM.equals(key)) {
+                        String oldParamJson = mHttpUrl.queryParameter(Constants.PARAM);
+                        //原始参数转hashmap
+                        if (oldParamJson != null) {
+                            HashMap<String, Object> p = mGson.fromJson(oldParamJson, HashMap.class);
+                            if (p != null) {
+                                for (Map.Entry<String, Object> entry : p.entrySet()) {
+                                      rootMap.put(entry.getKey(), entry.getValue());
+                                }
+                            }
+                        }
+                    } else {
+                        rootMap.put(key, mHttpUrl.queryParameter(key));
+                    }
+                }
                 //加上公共参数 hashmap
                 rootMap.put("publicParams", commonParamsMap);
                 //新的json参数
@@ -85,8 +90,7 @@ public class FixedParameterInterceptor implements Interceptor {
                 if (index > 0) {
                     url = url.substring(0, index);
                 }
-//                url = url + "?" + Constant.PARAM + "=" + newParamJson;
-
+                url = url + "?" + Constants.PARAM + "=" + newParamJson;
                 //重新构建请求
                 request = request.newBuilder().url(url).build();
             } else if ("POST".equals(method)) {
@@ -96,23 +100,27 @@ public class FixedParameterInterceptor implements Interceptor {
                 if (body instanceof FormBody) {
                     for (int i = 0; i < ((FormBody) body).size(); i++) {
                         commonParamsMap.put(((FormBody) body).encodedName(i), ((FormBody) body).encodedValue(i));
+
                     }
+                    newJsonParams = mGson.toJson(commonParamsMap);
+                    request = request.newBuilder().post(RequestBody.create(JSON,newJsonParams)).build();
                 }else if(body instanceof MultipartBody){
-                    for (int i = 0; i <((MultipartBody)body).size() ; i++) {
-                        commonParamsMap.put("" + i,((MultipartBody)body).part(i).toString());
-                    }
+//                    for (int i = 0; i <((MultipartBody)body).size() ; i++) {
+//                        commonParamsMap.put("" + i,  ((MultipartBody)body).part(0).toString());
+//                    }
+
+                    RequestBody requestBody = new MultipartBody.Builder().addPart(body).addFormDataPart("packageame","shuhai").build();
+
+                    request = request.newBuilder().post(requestBody).build();
 
                 }else {
-//                    Buffer buffer = new Buffer();
-//                    body.writeTo(buffer);
-//                    String oldJsonParams = buffer.readUtf8();
-//                    commonParamsMap = mGson.fromJson(oldJsonParams, HashMap.class); // 原始参数
-//                    commonParamsMap.put("publicParams", commonParamsMap); // 重新组装
-//                    String newJsonParams = mGson.toJson(commonParamsMap); // {"page":0,"publicParams":{"imei":'xxxxx',"sdk":14,.....}}
-//                    request = request.newBuilder().post(RequestBody.create(JSON, newJsonParams)).build();
+                    Buffer buffer = new Buffer();
+                    body.writeTo(buffer);
+                    String oldJsonParams = buffer.readUtf8();
+                    commonParamsMap = mGson.fromJson(oldJsonParams, HashMap.class); // 原始参数
+                    commonParamsMap.put("publicParams", commonParamsMap.toString()); // 重新组装
                 }
-                newJsonParams = mGson.toJson(commonParamsMap);
-                request = request.newBuilder().post(RequestBody.create(JSON,newJsonParams)).build();
+
             }
         } catch (JsonSyntaxException e) {
             e.printStackTrace();

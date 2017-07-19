@@ -24,6 +24,11 @@ public class VerticalScrollChapterLoader implements ChapterLoaderImpl{
     }
 
     @Override
+    public Vector<String> pageCur(int page, String key) {
+        return null;
+    }
+
+    @Override
     public void setComposingStrategy(ComposingStrategy composingStrategy) {
 
     }

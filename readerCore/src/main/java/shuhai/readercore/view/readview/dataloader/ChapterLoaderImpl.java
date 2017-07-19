@@ -15,6 +15,9 @@ public interface ChapterLoaderImpl {
 
     Vector<String> pageUp(int page,String key);
 
+    Vector<String> pageCur(int page,String key);
+
+
     void setComposingStrategy(ComposingStrategy composingStrategy);
 
 

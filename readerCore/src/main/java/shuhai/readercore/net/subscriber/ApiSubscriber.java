@@ -8,6 +8,7 @@ import java.lang.ref.WeakReference;
 import rx.Subscriber;
 import shuhai.readercore.net.exception.ApiException;
 import shuhai.readercore.net.mode.ApiCode;
+import shuhai.readercore.utils.NetworkUtils;
 
 /**
  * : API统一订阅者，采用弱引用管理上下文，防止内存泄漏
@@ -36,9 +37,9 @@ public abstract class ApiSubscriber<T> extends Subscriber<T> {
     @Override
     public void onStart() {
         super.onStart();
-//        if (!Network.isConnected(contextWeakReference.get())) {
+        if (!NetworkUtils.isConnected(contextWeakReference.get())) {
             onError(new ApiException(new NetworkErrorException(), ApiCode.Request.NETWORK_ERROR));
-//        }
+        }
 
 
     }

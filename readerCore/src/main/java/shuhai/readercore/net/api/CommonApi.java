@@ -12,10 +12,12 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import rx.Observable;
+import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import shuhai.readercore.Constants;
+import shuhai.readercore.bean.ChapterEntity;
 import shuhai.readercore.net.callback.ApiCallback;
 import shuhai.readercore.net.func.ApiErrorFunc;
 import shuhai.readercore.net.func.ApiFunc;
@@ -124,6 +126,7 @@ public class CommonApi {
     }
 
 
+
     /**
      * Observable 可以利用传入的 Transformer 对象的 call 方法直接对自身进行处理，不用重复性写多余代码。
      * @param clz
@@ -139,6 +142,19 @@ public class CommonApi {
             }
         };
     }
+
+
+    private <T> Observable.Transformer<ResponseBody,T> norTransFormer1(final Class<T> clz){
+        return new Observable.Transformer<ResponseBody, T>() {
+            @Override
+            public Observable<T> call(Observable<ResponseBody> responseBodyObservable) {
+                return responseBodyObservable.subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io()).observeOn(AndroidSchedulers
+                        .mainThread()).map(new ApiFunc<T>(clz)).onErrorResumeNext(new ApiErrorFunc<T>());
+            }
+        };
+    }
+
+
 
 
     private static <T> T checkNotNull(T t,String message){
@@ -239,8 +255,6 @@ public class CommonApi {
 
         }
 
-
-
         public CommonApi build(){
             if(null == baseUrl){
                 baseUrl = ApiHost.getHost();
@@ -251,10 +265,10 @@ public class CommonApi {
                 okHttpBuilder.addInterceptor(httpLoggingInterceptor);
             }
 
-            if(null == fixedParameterInterceptor){
-                fixedParameterInterceptor = new FixedParameterInterceptor();
-                okHttpBuilder.addInterceptor(fixedParameterInterceptor);
-            }
+//            if(null == fixedParameterInterceptor){
+//                fixedParameterInterceptor = new FixedParameterInterceptor();
+//                okHttpBuilder.addInterceptor(fixedParameterInterceptor);
+//            }
 
             if(null == gsonConverterFactory){
                 gsonConverterFactory =  GsonConverterFactory.create();

@@ -21,6 +21,7 @@ import retrofit2.http.QueryMap;
 import retrofit2.http.Url;
 import rx.Observable;
 import shuhai.readercore.bean.BookChapter;
+import shuhai.readercore.bean.ChapterEntity;
 import shuhai.readercore.bean.ChapterRead;
 
 
@@ -113,7 +114,6 @@ public interface CommonApiService {
     @Multipart
     @POST("servlet/onechapter")
     Call<BookChapter> loadChapter(@PartMap Map<String,String> params);
-
 
 
 
