@@ -21,36 +21,36 @@ import shuhai.readercore.net.exception.ApiException;
 public class MainActivity extends BaseActivity {
 
     private Context mContext;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        this.mContext = this;
-
-        BookApis.getInstance().obtainChapter(new ApiCallback<ChapterEntity>() {
-
-            @Override
-            public void onStart() {
-                Toast.makeText(mContext, "onStart--->", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onComplete() {
-                Toast.makeText(mContext, "onComplete--->", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onError(ApiException e) {
-                Toast.makeText(mContext, "ApiException--->"+e.getDisplayMessage(), Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onNext(ChapterEntity bookChapter) {
-                Toast.makeText(mContext, "Book--->"+bookChapter.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-
-    }
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_main);
+//        this.mContext = this;
+//
+//        BookApis.getInstance().obtainChapter(new ApiCallback<ChapterEntity>() {
+//
+//            @Override
+//            public void onStart() {
+//                Toast.makeText(mContext, "onStart--->", Toast.LENGTH_SHORT).show();
+//            }
+//
+//            @Override
+//            public void onComplete() {
+//                Toast.makeText(mContext, "onComplete--->", Toast.LENGTH_SHORT).show();
+//            }
+//
+//            @Override
+//            public void onError(ApiException e) {
+//                Toast.makeText(mContext, "ApiException--->"+e.getDisplayMessage(), Toast.LENGTH_SHORT).show();
+//            }
+//
+//            @Override
+//            public void onNext(ChapterEntity bookChapter) {
+//                Toast.makeText(mContext, "Book--->"+bookChapter.getMessage(), Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//
+//    }
 
     @Override
     public int getLayoutId() {
@@ -76,19 +76,6 @@ public class MainActivity extends BaseActivity {
     public void submit(View view){
         mContext.startActivity(new Intent(mContext,ReadActivity.class));
     }
-
-
-    Handler handler = new Handler(){
-
-        @Override
-        public void dispatchMessage(Message msg) {
-        }
-    };
-
-
-
-
-
 
 }
 

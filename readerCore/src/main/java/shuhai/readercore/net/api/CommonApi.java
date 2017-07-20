@@ -66,12 +66,9 @@ public class CommonApi {
      * @param <T>
      * @return
      */
-    public <T> Observable<T> postMultipart(final String entrance,final Map<String,String> params,Class<T> clz){
+    public <T> Observable<T> postMultipart(final String entrance,final Map<String,Object> params,Class<T> clz){
         return apiService.postMultipart(entrance,params).compose(this.norTransFormer(clz));
     }
-
-
-
 
 
 
@@ -121,7 +118,7 @@ public class CommonApi {
      * @param <T>
      * @return
      */
-    public <T>Subscription postMultipart(final String entrance,final Map<String,String> params,ApiCallback<T> callback){
+    public <T>Subscription postMultipart(final String entrance,final Map<String,Object> params,ApiCallback<T> callback){
         return this.postMultipart(entrance,params,ClassUtils.getTClass(callback)).subscribe(new ApiCallbackSubscriber(mContext,callback));
     }
 

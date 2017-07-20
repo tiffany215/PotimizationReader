@@ -44,22 +44,22 @@ public class BookApis {
      * @param <T>
      */
     public <T> void obtainChapter(ApiCallback<T> callback){
-        Map<String,String> params = new HashMap<>();
+        Map<String,Object> params = new HashMap<>();
         params.put("packageame", "com.shuhai.bookos");
         params.put("sign", "cf647dda9b03998695e8436954eeba2d");
         params.put("source", "shuhai");
         params.put("uuid", "00000000-35b8-f815-39da-21960033c587");
-        params.put("siteid", "300");
-        params.put("timestamp", "1500432469");
-        params.put("chapterorder", "18");
+        params.put("siteid", 300);
+        params.put("timestamp", 1500432469);
+        params.put("chapterorder", 18);
         params.put("username", "wangxu");
-        params.put("imei", "356261050497138");
-        params.put("version", "60");
-        params.put("ip", "192.168.1.190");
-        params.put("uid", "173434");
-        params.put("order", "0");
-        params.put("articleid", "41427");
-        params.put("chapterid", "2668827");
+        params.put("imei", 356261050497138L);
+        params.put("version", 60);
+        params.put("ip", String.valueOf("192.168.1.190"));
+        params.put("uid", 173434);
+        params.put("order", 0);
+        params.put("articleid", 41427);
+        params.put("chapterid", 2668827);
         commonApi.postMultipart("onechapter",params,callback);
     }
 

@@ -50,7 +50,7 @@ public interface CommonApiService {
      */
     @Multipart
     @POST("servlet/{entrance}")
-    Observable<ResponseBody> postMultipart(@Path("entrance") String entrance,@PartMap Map<String,String> params);
+    Observable<ResponseBody> postMultipart(@Path("entrance") String entrance,@PartMap Map<String,Object> params);
 
 
 

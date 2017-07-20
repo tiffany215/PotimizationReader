@@ -1,5 +1,6 @@
 package shuhai.readercore.view.readview.strategy;
 
+import java.util.Map;
 import java.util.Vector;
 
 /**
@@ -25,10 +26,8 @@ public interface ComposingStrategy {
     //获取下一页内容
     Vector<String> pageDown(int page, String key);
 
-//    //向下翻页
-//    Vector<String> nextPage();
-//
-//    //向上翻页
-//    Vector<String> prePage();
+
+    //文字排版
+    boolean characterTypesetting(String key);
 
 }

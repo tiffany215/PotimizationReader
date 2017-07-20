@@ -32,4 +32,9 @@ public class VerticalComposing implements ComposingStrategy{
     public Vector<String> pageDown(int page, String key) {
         return null;
     }
+
+    @Override
+    public boolean characterTypesetting(String key) {
+        return false;
+    }
 }

@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.widget.ProgressBar;
 
@@ -14,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Vector;
 
+import shuhai.readercore.Constants;
 import shuhai.readercore.R;
 import shuhai.readercore.utils.ScreenUtils;
 import shuhai.readercore.view.readview.BookStatus;
@@ -43,7 +45,7 @@ public class PageFactory extends Factory {
     /**
      * 间距
      */
-    private int marginWidth,marginHeight;
+    private int mMarginWidth,mMarginHeight;
 
     /**
      * 文字大小
@@ -83,17 +85,19 @@ public class PageFactory extends Factory {
 
 
     public PageFactory(Context context, String bookId){
-        this(context,ScreenUtils.getScreenWidth(),ScreenUtils.getScreenHeight(),34,bookId);
+        this(context,ScreenUtils.getScreenWidth(),ScreenUtils.getScreenHeight(), Constants.MARGIN_WIDTH,Constants.MARGIN_HEIGTH,34,bookId);
 
     }
 
 
 
-    public PageFactory(Context context, int width, int height, int fontsize, String bookId){
+    public PageFactory(Context context, int width, int height, int marginWidth,int marginHeight,int fontSize, String bookId){
         mContext = context;
         mWidth = width;
         mHeight = height;
-        mFontSize = fontsize;
+        mFontSize = fontSize;
+        mMarginWidth = marginWidth;
+        mMarginHeight = marginHeight;
         mLineSpace = mFontSize / 5 * 2;
         mVisibleHeight = mHeight - marginHeight * 2 + mNumFontSize * 2 - mLineSpace * 2;
         mVisibleWidth = mWidth - marginWidth * 2;
@@ -102,12 +106,11 @@ public class PageFactory extends Factory {
 
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setTextSize(mFontSize);
-        mPaint.setColor(ContextCompat.getColor(context, R.color.colorAccent));
-        mPaint.setColor(Color.BLACK);
+        mPaint.setColor(ContextCompat.getColor(context, R.color.primary_text));
 
         mTitlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mTitlePaint.setTextSize(mNumFontSize);
-        mPaint.setColor(ContextCompat.getColor(context, R.color.colorAccent));
+        mTitlePaint.setColor(ContextCompat.getColor(context, R.color.colorAccent));
 
         timeLen = (int) mTitlePaint.measureText("00:00");
         percentLen = (int) mTitlePaint.measureText("00.00%");
@@ -115,14 +118,12 @@ public class PageFactory extends Factory {
         /**
          * 设置自定义字体
          */
-//        Typeface typeface = Typeface.createFromAsset(context.getAssets(),"");
-//        mPaint.setTypeface(typeface);
-//        mTitlePaint.setTypeface(typeface);
 
+        Typeface typeface = Typeface.createFromAsset(context.getAssets(),"fonts/HYQiHei-45S.otf");
+        mPaint.setTypeface(typeface);
+        mTitlePaint.setTypeface(typeface);
 
     }
-
-
 
     @Override
     public <T extends ChapterLoaderImpl> T createChapterLoader(Class<T> clz) {
@@ -179,7 +180,7 @@ public class PageFactory extends Factory {
      */
     public void setComposingStrategy(){
         if(null != chapterLoader){
-            this.chapterLoader.setComposingStrategy(new HorizontalComposing(mWidth,mHeight,mFontSize,mPaint,mTitlePaint));
+            this.chapterLoader.setComposingStrategy(new HorizontalComposing(mWidth,mHeight,mMarginWidth,mMarginHeight,mFontSize,mPaint,mTitlePaint));
         }
     }
 
@@ -193,31 +194,31 @@ public class PageFactory extends Factory {
     @Override
     public synchronized void onDraw(Canvas canvas){
         if(mLines.size() > 0){
-            int y = marginHeight + (mLineSpace << 1);
+            int y = mMarginHeight + (mLineSpace << 1);
             if(null == mBookPageBg){
                 canvas.drawColor(Color.WHITE);
             }else{
                 canvas.drawBitmap(mBookPageBg,null,rectF,null);
             }
 
-            canvas.drawText("asfasfasfasfasdf",marginWidth,y,mTitlePaint);
+            canvas.drawText("asfasfasfasfasdf",mMarginWidth,y,mTitlePaint);
             y += mLineSpace + mNumFontSize;
 
             for (String line : mLines)
             {
                 y += mLineSpace;
-                canvas.drawText(line,marginWidth,y,mPaint);
+                canvas.drawText(line,mMarginWidth,y,mPaint);
                 y += mFontSize;
             }
 
             if(null != batteryBitmap){
-                canvas.drawBitmap(batteryBitmap,marginWidth + 2, mHeight - marginHeight - ScreenUtils.dpToPxInt(12), mTitlePaint);
+                canvas.drawBitmap(batteryBitmap,mMarginWidth + 2, mHeight - mMarginHeight - ScreenUtils.dpToPxInt(12), mTitlePaint);
             }
 
             float percent = (float) 80.56;
-            canvas.drawText(decimalFormat.format(percent) + "%",(mWidth - percent) / 2,mHeight  - marginHeight, mTitlePaint);
+            canvas.drawText(decimalFormat.format(percent) + "%",(mWidth - percent) / 2,mHeight  - mMarginHeight, mTitlePaint);
             String mTime = simpleDateFormat.format(new Date());
-            canvas.drawText(mTime, mWidth - marginWidth - timeLen, mHeight - marginHeight, mTitlePaint);
+            canvas.drawText(mTime, mWidth - mMarginWidth - timeLen, mHeight - mMarginHeight, mTitlePaint);
         }
     }
 
