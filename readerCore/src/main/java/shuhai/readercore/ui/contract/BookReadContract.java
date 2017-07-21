@@ -10,12 +10,14 @@ import shuhai.readercore.base.BaseContract;
 public interface BookReadContract {
 
     interface View extends BaseContract.BaseView{
+        void showBookToc();
         void showChapterRead();
         void netError();
     }
 
     interface Presenter<T> extends BaseContract.BasePresenter<T>{
-        void getChapterRead(String url, int chapter);
+        void getChapterRead(int articleId, int chapterId);
+        void getBookMixAToc();
     }
 
 }

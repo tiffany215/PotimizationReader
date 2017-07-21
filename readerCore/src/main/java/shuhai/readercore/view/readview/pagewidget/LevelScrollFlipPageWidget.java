@@ -13,8 +13,8 @@ import shuhai.readercore.view.readview.displayview.HorizontalBaseReadView;
 
 public class LevelScrollFlipPageWidget extends HorizontalBaseReadView {
 
-    public LevelScrollFlipPageWidget(Context context) {
-        super(context);
+    public LevelScrollFlipPageWidget(Context context,int bookId,int chapterId) {
+        super(context,bookId,chapterId);
     }
 
     @Override

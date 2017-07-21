@@ -57,4 +57,5 @@ dependencies {
 
 
 
+    compile 'javax.inject:javax.inject:1'
 }

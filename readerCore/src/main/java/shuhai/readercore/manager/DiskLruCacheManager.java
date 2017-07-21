@@ -32,7 +32,8 @@ import shuhai.readercore.utils.SecretUtil;
 
 public class DiskLruCacheManager {
 
-    private static DiskLruCache mDiskLruCache = null;
+    private volatile static DiskLruCache mDiskLruCache;
+    private static DiskLruCacheManager mInstance = null;
     private DiskLruCache.Editor mEditor = null;
     private DiskLruCache.Snapshot mSnapshot = null;
 
@@ -43,29 +44,22 @@ public class DiskLruCacheManager {
                 mDiskLruCache.close();
                 mDiskLruCache = null;
             }
-        }catch (IOException e) {
-            e.printStackTrace();
-        }
-        File cacheFile = getCacheFile(context,uniqueName);
-        try {
+            File cacheFile = getCacheFile(context,uniqueName);
             mDiskLruCache = DiskLruCache.open(cacheFile, AppUtils.getAppVersion(),1, Constants.MAX_DISK_CACHE_SIZE);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private static class DiskLruCacheManagerHolder{
-        private static Context mContext;
-        private static String mUniqueName;
-        private DiskLruCacheManagerHolder(Context context,String uniqueName){
-            mContext = context;
-            mUniqueName = uniqueName;
+    public static DiskLruCacheManager getInstance (Context context,String uniqueName){
+        if(null == mInstance){
+            synchronized (DiskLruCacheManager.class){
+                if(null == mInstance){
+                    return new DiskLruCacheManager(context,uniqueName);
+                }
+            }
         }
-        private static final DiskLruCacheManager mInstance = new DiskLruCacheManager(mContext,mUniqueName);
-    }
-
-    public static DiskLruCacheManager  getInstance (){
-            return DiskLruCacheManagerHolder.mInstance;
+        return mInstance;
     }
 
     /**

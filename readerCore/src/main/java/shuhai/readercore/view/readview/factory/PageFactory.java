@@ -82,16 +82,16 @@ public class PageFactory extends Factory {
     private Rect rectF;
     private ProgressBar batteryView;
     private Bitmap batteryBitmap;
+    private int mBookId;
+    private int mChapterId;
 
-
-    public PageFactory(Context context, String bookId){
-        this(context,ScreenUtils.getScreenWidth(),ScreenUtils.getScreenHeight(), Constants.MARGIN_WIDTH,Constants.MARGIN_HEIGTH,34,bookId);
-
+    public PageFactory(Context context, int bookId ,int chapterId){
+        this(context,ScreenUtils.getScreenWidth(),ScreenUtils.getScreenHeight(), Constants.MARGIN_WIDTH,Constants.MARGIN_HEIGHT,38,bookId,chapterId);
     }
 
-
-
-    public PageFactory(Context context, int width, int height, int marginWidth,int marginHeight,int fontSize, String bookId){
+    public PageFactory(Context context, int width, int height, int marginWidth,int marginHeight,int fontSize, int bookId,int chapterId){
+        this.mBookId = bookId;
+        this.mChapterId = chapterId;
         mContext = context;
         mWidth = width;
         mHeight = height;
@@ -119,9 +119,20 @@ public class PageFactory extends Factory {
          * 设置自定义字体
          */
 
-        Typeface typeface = Typeface.createFromAsset(context.getAssets(),"fonts/HYQiHei-45S.otf");
+        Typeface typeface = Typeface.createFromAsset(context.getAssets(),"fonts/HYQiHei-50S.otf");
         mPaint.setTypeface(typeface);
+        mPaint.setAntiAlias(true);
+        mPaint.setStyle(Paint.Style.FILL);
         mTitlePaint.setTypeface(typeface);
+
+
+//        AssetManager mgr= mContext.getAssets();//得到AssetManager
+//        Typeface tf =Typeface.createFromAsset(mgr, "fonts/HYQiHei-50S.otf");
+//        mPaint.setTypeface(tf);
+//        mPaint.setAntiAlias(true);
+//        mPaint.setColor(0XFF303030);
+//        mPaint.setStyle(Style.STROKE);
+
 
     }
 
@@ -160,7 +171,7 @@ public class PageFactory extends Factory {
 
     @Override
     public BookStatus curPage() {
-        if(null != chapterLoader.pageCur(1,"") && chapterLoader.pageCur(1,"").size() > 0){
+        if(null != chapterLoader.pageCur(1,mBookId+ ""+ mChapterId) && chapterLoader.pageCur(1,mBookId+ ""+ mChapterId).size() > 0){
             mLines = chapterLoader.pageCur(1,"");
             return BookStatus.LOAD_SUCCESS;
         }
@@ -201,7 +212,7 @@ public class PageFactory extends Factory {
                 canvas.drawBitmap(mBookPageBg,null,rectF,null);
             }
 
-            canvas.drawText("asfasfasfasfasdf",mMarginWidth,y,mTitlePaint);
+            canvas.drawText("啥都会发生看机会",mMarginWidth,y,mTitlePaint);
             y += mLineSpace + mNumFontSize;
 
             for (String line : mLines)

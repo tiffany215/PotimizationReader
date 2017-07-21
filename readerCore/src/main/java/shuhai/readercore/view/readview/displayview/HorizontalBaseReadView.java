@@ -40,7 +40,7 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
     public Scroller mScroller;
     public boolean isPrepare;
 
-    public HorizontalBaseReadView(Context context) {
+    public HorizontalBaseReadView(Context context,int bookId,int chapterId) {
         super(context);
         mScreenWidth = ScreenUtils.getScreenWidth();
         mScreenHeight = ScreenUtils.getScreenHeight();
@@ -55,7 +55,7 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
 
         mScroller = new Scroller(getContext());
 
-        factory = new PageFactory(context,"1985");
+        factory = new PageFactory(context,bookId,chapterId);
         ((PageFactory)factory).setChapterLoader();
         ((PageFactory)factory).setComposingStrategy();
     }
@@ -66,6 +66,7 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
             factory.setBgBitmap(ThemeManager.getThemeDrawable(theme));
             if(BookStatus.LOAD_SUCCESS ==  factory.curPage()){
                 factory.onDraw(mCurPageCanvas);
+                postInvalidate();
             }
             isPrepare = true;
         }

@@ -14,8 +14,8 @@ import shuhai.readercore.view.readview.displayview.HorizontalBaseReadView;
 
 public class RealFlipPageWidget extends HorizontalBaseReadView {
 
-    public RealFlipPageWidget(Context context) {
-        super(context);
+    public RealFlipPageWidget(Context context,int bookId,int chapterId) {
+        super(context,bookId,chapterId);
     }
 
     @Override

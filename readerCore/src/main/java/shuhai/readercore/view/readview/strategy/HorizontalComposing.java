@@ -62,7 +62,7 @@ public class HorizontalComposing implements ComposingStrategy{
     private Paint mTitlePaint,mPaint;
 
 
-    private Map<Integer,Vector<String>> pageList = new HashMap<>();
+    private Map<Integer,Vector<String>> pageList;
 
 
     public HorizontalComposing(int width, int height,int marginWidth,int marginHeight,int fontSize,Paint paint,Paint titlePaint){
@@ -77,6 +77,9 @@ public class HorizontalComposing implements ComposingStrategy{
         mPagelineCount = mVisibleHeight / (mFontSize + mLineSpace);
         mPaint = paint;
         mTitlePaint = titlePaint;
+        if(null == pageList){
+            pageList = new HashMap<>();
+        }
     }
 
 
@@ -91,7 +94,7 @@ public class HorizontalComposing implements ComposingStrategy{
         if(TextUtils.isEmpty(str.trim())){
             return null;
         }
-        return str.split("\n\n");
+        return str.split("\r\n");
     }
 
 
@@ -113,6 +116,9 @@ public class HorizontalComposing implements ComposingStrategy{
         for (int i = 0; i < paragraphArr.length; i++)
         {
             String strParagraph = paragraphArr[i];
+            if(TextUtils.isEmpty(strParagraph.trim())){
+                continue;
+            }
             Vector<String> paraLines = autoSplitLine(strParagraph);
             int lineSize = paraLines.size();
             int lineCount = 0;

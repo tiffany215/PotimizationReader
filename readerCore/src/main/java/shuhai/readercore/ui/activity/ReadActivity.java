@@ -1,17 +1,22 @@
 package shuhai.readercore.ui.activity;
 
+import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
+
+import javax.inject.Inject;
+
 import butterknife.Bind;
 import shuhai.readercore.R;
 import shuhai.readercore.base.BaseActivity;
+import shuhai.readercore.manager.ChapterLoader;
 import shuhai.readercore.manager.ThemeManager;
 import shuhai.readercore.ui.contract.BookReadContract;
+import shuhai.readercore.ui.presenter.BookReadPresenter;
 import shuhai.readercore.view.readview.displayview.BaseReadViewImpl;
-import shuhai.readercore.view.readview.pagewidget.LevelCoverFlipPageWidget;
 import shuhai.readercore.view.readview.pagewidget.LevelScrollFlipPageWidget;
 
 /**
@@ -27,6 +32,14 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View{
     FrameLayout lsReadWidget;
 
     private BaseReadViewImpl mPageWidget;
+
+    @Inject
+    BookReadPresenter mPresenter = new BookReadPresenter();
+
+
+    private int mBookId;
+
+    private int mChapterId;
 
 
     @Override
@@ -49,7 +62,17 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View{
 
     @Override
     public void configViews() {
+
+        mBookId = 41427;
+        mChapterId = 2668827;
+
         initPagerWidget();
+
+        mPresenter.attachView(this);
+
+        mPresenter.getBookMixAToc();
+
+
     }
 
 
@@ -60,16 +83,31 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View{
      * 将阅读内容绘制好的View添加到当前容器
      */
     private void initPagerWidget(){
-        mPageWidget = new LevelScrollFlipPageWidget(this);
-        mPageWidget.init(ThemeManager.NORMAL);
+        mPageWidget = new LevelScrollFlipPageWidget(this,mBookId,mChapterId);
+//        mPageWidget.init(ThemeManager.NORMAL);
         lsReadWidget.removeAllViews();
         lsReadWidget.addView((View) mPageWidget);
     }
 
 
+
+    public void readCurrentChapter(){
+        if(!TextUtils.isEmpty(ChapterLoader.getChapter(mBookId+""+mChapterId))){
+            showChapterRead();
+        }else{
+            mPresenter.getChapterRead(mBookId,mChapterId);
+        }
+    }
+
+
+    @Override
+    public void showBookToc() {
+        readCurrentChapter();
+    }
+
     @Override
     public void showChapterRead() {
-
+        mPageWidget.init(0);
     }
 
     @Override
