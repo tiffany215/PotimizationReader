@@ -45,7 +45,7 @@ public class BookApis {
      */
     public <T> void obtainChapter(ApiCallback<T> callback){
         Map<String,Object> params = new HashMap<>();
-        params.put("packageame", "com.shuhai.bookos");
+        params.put("packageame", "");
         params.put("sign", "cf647dda9b03998695e8436954eeba2d");
         params.put("source", "shuhai");
         params.put("uuid", "00000000-35b8-f815-39da-21960033c587");
