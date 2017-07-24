@@ -27,4 +27,7 @@ public abstract class Factory {
 
     public abstract void setBgBitmap(Bitmap bitmap);
 
+    public abstract int openBook(int articleID,int chapterId,int curPage);
+
+
 }

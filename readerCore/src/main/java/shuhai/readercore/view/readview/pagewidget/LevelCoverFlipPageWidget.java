@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 
 import shuhai.readercore.view.readview.displayview.BaseReadViewImpl;
+import shuhai.readercore.view.readview.displayview.HorizontalBaseReadView;
 
 /**
  * @author 55345364
@@ -16,28 +17,11 @@ import shuhai.readercore.view.readview.displayview.BaseReadViewImpl;
  *
  */
 
-public class LevelCoverFlipPageWidget extends View implements BaseReadViewImpl{
-    private static final String TAG = "Lever";
-
-    public LevelCoverFlipPageWidget(Context context) {
-        this(context,null);
-    }
-
-    public LevelCoverFlipPageWidget(Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
-    }
-
-    public LevelCoverFlipPageWidget(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        this(context, attrs);
-    }
+public class LevelCoverFlipPageWidget extends HorizontalBaseReadView {
 
 
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-
-        Log.e(TAG, "onDraw: ------------------------------------>>" );
-
+    public LevelCoverFlipPageWidget(Context context, int bookId, int chapterId) {
+        super(context, bookId, chapterId);
     }
 
     @Override
@@ -56,7 +40,32 @@ public class LevelCoverFlipPageWidget extends View implements BaseReadViewImpl{
     }
 
     @Override
-    public void init(int theme) {
+    protected void drawPrePageArea(Canvas canvas) {
+
+    }
+
+    @Override
+    protected void drawPrePageShadow(Canvas canvas) {
+
+    }
+
+    @Override
+    protected void drawCurPageArea(Canvas canvas) {
+
+    }
+
+    @Override
+    protected void drawCurPageShadow(Canvas canvas) {
+
+    }
+
+    @Override
+    protected void drawNextPageArea(Canvas canvas) {
+
+    }
+
+    @Override
+    protected void drawNextPageShadow(Canvas canvas) {
 
     }
 }

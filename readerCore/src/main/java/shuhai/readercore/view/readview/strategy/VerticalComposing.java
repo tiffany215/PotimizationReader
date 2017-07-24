@@ -24,7 +24,7 @@ public class VerticalComposing implements ComposingStrategy{
     }
 
     @Override
-    public Vector<String> pageCurr(int page, String key) {
+    public Vector<String> pageCur(int page, String key) {
         return null;
     }
 
@@ -36,5 +36,10 @@ public class VerticalComposing implements ComposingStrategy{
     @Override
     public boolean characterTypesetting(String key) {
         return false;
+    }
+
+    @Override
+    public int getCountPage() {
+        return 0;
     }
 }

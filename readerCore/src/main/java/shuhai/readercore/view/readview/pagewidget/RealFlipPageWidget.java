@@ -14,25 +14,9 @@ import shuhai.readercore.view.readview.displayview.HorizontalBaseReadView;
 
 public class RealFlipPageWidget extends HorizontalBaseReadView {
 
-    public RealFlipPageWidget(Context context,int bookId,int chapterId) {
-        super(context,bookId,chapterId);
+    public RealFlipPageWidget(Context context, int bookId, int chapterId) {
+        super(context, bookId, chapterId);
     }
-
-    @Override
-    protected void drawNextPageAreaAndShadow(Canvas canvas) {
-
-    }
-
-    @Override
-    protected void drawCurrentPageArea(Canvas canvas) {
-
-    }
-
-    @Override
-    protected void drawCurrentPageShadow(Canvas canvas) {
-
-    }
-
 
     @Override
     public void startAnimation() {
@@ -46,6 +30,36 @@ public class RealFlipPageWidget extends HorizontalBaseReadView {
 
     @Override
     public void restoreAnimation() {
+
+    }
+
+    @Override
+    protected void drawPrePageArea(Canvas canvas) {
+
+    }
+
+    @Override
+    protected void drawPrePageShadow(Canvas canvas) {
+
+    }
+
+    @Override
+    protected void drawCurPageArea(Canvas canvas) {
+
+    }
+
+    @Override
+    protected void drawCurPageShadow(Canvas canvas) {
+
+    }
+
+    @Override
+    protected void drawNextPageArea(Canvas canvas) {
+
+    }
+
+    @Override
+    protected void drawNextPageShadow(Canvas canvas) {
 
     }
 }

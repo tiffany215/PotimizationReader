@@ -20,7 +20,7 @@ public interface ComposingStrategy {
 
 
     //获取当前页内容
-    Vector<String> pageCurr(int page, String key);
+    Vector<String> pageCur(int page, String key);
 
 
     //获取下一页内容
@@ -29,5 +29,8 @@ public interface ComposingStrategy {
 
     //文字排版
     boolean characterTypesetting(String key);
+
+
+    int getCountPage();
 
 }

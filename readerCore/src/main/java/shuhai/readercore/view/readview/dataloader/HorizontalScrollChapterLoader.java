@@ -47,7 +47,12 @@ public class HorizontalScrollChapterLoader implements ChapterLoaderImpl{
      */
     @Override
     public Vector<String> pageCur(int page, String key) {
-        return mComposingStrategy.pageCurr(page,key);
+        return mComposingStrategy.pageCur(page,key);
+    }
+
+    @Override
+    public int getCountPate() {
+        return mComposingStrategy.getCountPage();
     }
 
 

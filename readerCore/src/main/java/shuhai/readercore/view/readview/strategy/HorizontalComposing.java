@@ -10,6 +10,8 @@ import java.util.Vector;
 
 import shuhai.readercore.manager.ChapterLoader;
 
+import static android.content.ContentValues.TAG;
+
 /**
  * @author 55345364
  * @date 2017/7/13.
@@ -104,7 +106,7 @@ public class HorizontalComposing implements ComposingStrategy{
      * @return
      */
     private Map<Integer,Vector<String>> autoSplitPage(String str){
-        if(TextUtils.isEmpty(str.trim())){
+        if(TextUtils.isEmpty(str)){
             return null;
         }
         String[] paragraphArr = autoSplitParagraph(str.trim());
@@ -113,6 +115,8 @@ public class HorizontalComposing implements ComposingStrategy{
         int pageSize = 0;
         //计算当前屏幕最多放置多少行文字
         mPagelineCount = mVisibleHeight / (mFontSize + mLineSpace);
+
+
         for (int i = 0; i < paragraphArr.length; i++)
         {
             String strParagraph = paragraphArr[i];
@@ -129,7 +133,7 @@ public class HorizontalComposing implements ComposingStrategy{
                     lines.add(paraLines.get(lineCount));
                     lineCount++;
                     lineSize--;
-                    paraSpace += mLineSpace;
+                    paraSpace += mLineSpace + mFontSize;
                     mPagelineCount = (mVisibleHeight - paraSpace) / (mFontSize + mLineSpace);
                 }
                 /**
@@ -218,7 +222,7 @@ public class HorizontalComposing implements ComposingStrategy{
      * @return
      */
     @Override
-    public Vector<String> pageCurr(int page, String key) {
+    public Vector<String> pageCur(int page, String key) {
         if(null == pageList || null == pageList.get(page) || pageList.get(page).size() == 0){
             if(characterTypesetting(key)){
                 return pageList.get(page);
@@ -246,6 +250,10 @@ public class HorizontalComposing implements ComposingStrategy{
         return isComplete;
     }
 
+    @Override
+    public int getCountPage() {
+        return pageList.size();
+    }
 
 
 }

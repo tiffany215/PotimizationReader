@@ -13,26 +13,10 @@ import shuhai.readercore.view.readview.displayview.HorizontalBaseReadView;
 
 public class LevelScrollFlipPageWidget extends HorizontalBaseReadView {
 
-    public LevelScrollFlipPageWidget(Context context,int bookId,int chapterId) {
-        super(context,bookId,chapterId);
+
+    public LevelScrollFlipPageWidget(Context context, int bookId, int chapterId) {
+        super(context, bookId, chapterId);
     }
-
-    @Override
-    protected void drawNextPageAreaAndShadow(Canvas canvas) {
-
-    }
-
-    @Override
-    protected void drawCurrentPageArea(Canvas canvas) {
-        canvas.drawBitmap(mCurPageBitmap,0,0,null);
-        canvas.translate(40,80);
-    }
-
-    @Override
-    protected void drawCurrentPageShadow(Canvas canvas) {
-
-    }
-
 
     @Override
     public void startAnimation() {
@@ -49,16 +33,33 @@ public class LevelScrollFlipPageWidget extends HorizontalBaseReadView {
 
     }
 
+    @Override
+    protected void drawPrePageArea(Canvas canvas) {
+
+    }
 
     @Override
-    public void computeScroll() {
-        super.computeScroll();
-        if(mScroller.computeScrollOffset()){
-            float x = mScroller.getCurrX();
-            float y = mScroller.getCurrY();
-            postInvalidate();
-        }
+    protected void drawPrePageShadow(Canvas canvas) {
 
+    }
+
+    @Override
+    protected void drawCurPageArea(Canvas canvas) {
+
+    }
+
+    @Override
+    protected void drawCurPageShadow(Canvas canvas) {
+
+    }
+
+    @Override
+    protected void drawNextPageArea(Canvas canvas) {
+
+    }
+
+    @Override
+    protected void drawNextPageShadow(Canvas canvas) {
 
     }
 }

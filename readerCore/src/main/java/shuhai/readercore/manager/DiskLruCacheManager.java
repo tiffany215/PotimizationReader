@@ -120,7 +120,7 @@ public class DiskLruCacheManager {
      * @param key
      * @param value
      */
-    private void put(String key,String value){
+    public void put(String key,String value){
         DiskLruCache.Editor editor = null;
         BufferedWriter writer = null;
         try {

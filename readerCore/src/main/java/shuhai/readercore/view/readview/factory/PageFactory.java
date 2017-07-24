@@ -84,21 +84,21 @@ public class PageFactory extends Factory {
     private Bitmap batteryBitmap;
     private int mBookId;
     private int mChapterId;
+    private int currentPage = 1;
 
-    public PageFactory(Context context, int bookId ,int chapterId){
-        this(context,ScreenUtils.getScreenWidth(),ScreenUtils.getScreenHeight(), Constants.MARGIN_WIDTH,Constants.MARGIN_HEIGHT,38,bookId,chapterId);
+    public PageFactory(Context context){
+        this(context,ScreenUtils.getScreenWidth(),ScreenUtils.getScreenHeight(), Constants.MARGIN_WIDTH,Constants.MARGIN_HEIGHT,34);
     }
 
-    public PageFactory(Context context, int width, int height, int marginWidth,int marginHeight,int fontSize, int bookId,int chapterId){
-        this.mBookId = bookId;
-        this.mChapterId = chapterId;
+    public PageFactory(Context context, int width, int height, int marginWidth,int marginHeight,int fontSize){
         mContext = context;
         mWidth = width;
         mHeight = height;
         mFontSize = fontSize;
         mMarginWidth = marginWidth;
         mMarginHeight = marginHeight;
-        mLineSpace = mFontSize / 5 * 2;
+        mLineSpace = mFontSize / 5 * 4
+        ;
         mVisibleHeight = mHeight - marginHeight * 2 + mNumFontSize * 2 - mLineSpace * 2;
         mVisibleWidth = mWidth - marginWidth * 2;
         mPageLineCount = mVisibleHeight / (mFontSize + mLineSpace);
@@ -125,16 +125,28 @@ public class PageFactory extends Factory {
         mPaint.setStyle(Paint.Style.FILL);
         mTitlePaint.setTypeface(typeface);
 
-
-//        AssetManager mgr= mContext.getAssets();//得到AssetManager
-//        Typeface tf =Typeface.createFromAsset(mgr, "fonts/HYQiHei-50S.otf");
-//        mPaint.setTypeface(tf);
-//        mPaint.setAntiAlias(true);
-//        mPaint.setColor(0XFF303030);
-//        mPaint.setStyle(Style.STROKE);
-
-
     }
+
+
+    /**
+     * 打开书籍文件
+     * @param articleId
+     * @param chapterId
+     * @param curPage
+     * @return 0：文件不存在或打开失败  1：打开成功
+     */
+    @Override
+    public int openBook(int articleId,int chapterId,int curPage){
+        this.mBookId = articleId;
+        this.mChapterId = chapterId;
+        this.currentPage = curPage;
+        if(BookStatus.LOAD_SUCCESS == curPage()){
+                return 1;
+        }else{
+                return 0;
+        }
+    }
+
 
     @Override
     public <T extends ChapterLoaderImpl> T createChapterLoader(Class<T> clz) {
@@ -153,8 +165,14 @@ public class PageFactory extends Factory {
 
     @Override
     public BookStatus nextPage() {
-        if(null != chapterLoader.pageDown(1,"") && chapterLoader.pageDown(1,"").size() > 0){
-            mLines = chapterLoader.pageDown(1,"");
+        currentPage++;
+        if(currentPage >= chapterLoader.getCountPate()){
+            currentPage = chapterLoader.getCountPate();
+        }
+
+        Vector<String> lines = chapterLoader.pageDown(currentPage,cacheKeyCreate());
+        if(null != lines && lines.size() > 0){
+            mLines = lines;
             return BookStatus.LOAD_SUCCESS;
         }
         return BookStatus.NO_NEXT_PAGE;
@@ -162,8 +180,13 @@ public class PageFactory extends Factory {
 
     @Override
     public BookStatus prePage() {
-        if(null != chapterLoader.pageUp(1,"") && chapterLoader.pageUp(1,"").size() > 0){
-            mLines = chapterLoader.pageUp(1,"");
+        currentPage--;
+        if(currentPage < 0){
+            currentPage = 0;
+        }
+        Vector<String> lines = chapterLoader.pageUp(currentPage,cacheKeyCreate());
+        if(null != lines && lines.size() > 0){
+            mLines = lines;
             return BookStatus.LOAD_SUCCESS;
         }
         return BookStatus.NO_PRE_PAGE;
@@ -171,8 +194,9 @@ public class PageFactory extends Factory {
 
     @Override
     public BookStatus curPage() {
-        if(null != chapterLoader.pageCur(1,mBookId+ ""+ mChapterId) && chapterLoader.pageCur(1,mBookId+ ""+ mChapterId).size() > 0){
-            mLines = chapterLoader.pageCur(1,"");
+        Vector<String> lines = chapterLoader.pageCur(currentPage,cacheKeyCreate());
+        if(null != lines && lines.size() > 0){
+            mLines = lines;
             return BookStatus.LOAD_SUCCESS;
         }
         return BookStatus.NO_PRE_PAGE;
@@ -237,6 +261,18 @@ public class PageFactory extends Factory {
     public void setBgBitmap(Bitmap bitmap) {
         this.mBookPageBg = bitmap;
     }
+
+
+    /**
+     * 缓存key生成方法
+     * @return
+     */
+    private String cacheKeyCreate(){
+        StringBuffer buffer = new StringBuffer();
+        buffer.append(mBookId).append(mChapterId);
+        return buffer.toString().trim();
+    }
+
 
 
 }

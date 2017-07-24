@@ -29,6 +29,11 @@ public class VerticalScrollChapterLoader implements ChapterLoaderImpl{
     }
 
     @Override
+    public int getCountPate() {
+        return 0;
+    }
+
+    @Override
     public void setComposingStrategy(ComposingStrategy composingStrategy) {
 
     }

@@ -18,6 +18,7 @@ import shuhai.readercore.ui.contract.BookReadContract;
 import shuhai.readercore.ui.presenter.BookReadPresenter;
 import shuhai.readercore.view.readview.displayview.BaseReadViewImpl;
 import shuhai.readercore.view.readview.pagewidget.LevelScrollFlipPageWidget;
+import shuhai.readercore.view.readview.pagewidget.NoEffectFlipPageWidget;
 
 /**
  * @author 55345364
@@ -83,7 +84,7 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View{
      * 将阅读内容绘制好的View添加到当前容器
      */
     private void initPagerWidget(){
-        mPageWidget = new LevelScrollFlipPageWidget(this,mBookId,mChapterId);
+        mPageWidget = new NoEffectFlipPageWidget(this,mBookId,mChapterId);
 //        mPageWidget.init(ThemeManager.NORMAL);
         lsReadWidget.removeAllViews();
         lsReadWidget.addView((View) mPageWidget);
@@ -92,7 +93,8 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View{
 
 
     public void readCurrentChapter(){
-        if(!TextUtils.isEmpty(ChapterLoader.getChapter(mBookId+""+mChapterId))){
+        String str = ChapterLoader.getChapter(mBookId+""+mChapterId);
+        if(!TextUtils.isEmpty(str)){
             showChapterRead();
         }else{
             mPresenter.getChapterRead(mBookId,mChapterId);

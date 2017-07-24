@@ -33,15 +33,24 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
     protected Bitmap mPrePageBitmap,mCurPageBitmap,mNextPageBitmap;
     protected Canvas mPrePageCanvas,mCurPageCanvas,mNextPageCanvas;
 
-    private float actiondownX,actiondownY;
+    public float actiondownX,actiondownY;
 
     private Factory factory;
 
     public Scroller mScroller;
     public boolean isPrepare;
 
+    private int mBookId;
+    private int mChapterId;
+
+
+
     public HorizontalBaseReadView(Context context,int bookId,int chapterId) {
         super(context);
+
+        this.mBookId = bookId;
+        this.mChapterId = chapterId;
+
         mScreenWidth = ScreenUtils.getScreenWidth();
         mScreenHeight = ScreenUtils.getScreenHeight();
 
@@ -55,7 +64,7 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
 
         mScroller = new Scroller(getContext());
 
-        factory = new PageFactory(context,bookId,chapterId);
+        factory = new PageFactory(context);
         ((PageFactory)factory).setChapterLoader();
         ((PageFactory)factory).setComposingStrategy();
     }
@@ -64,11 +73,16 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
     public synchronized void init(int theme){
         if(!isPrepare){
             factory.setBgBitmap(ThemeManager.getThemeDrawable(theme));
-            if(BookStatus.LOAD_SUCCESS ==  factory.curPage()){
-                factory.onDraw(mCurPageCanvas);
-                postInvalidate();
+            int ret =  factory.openBook(mBookId,mChapterId,1);
+            if(ret == 0){
+                Toast.makeText(getContext(),"章节内容打开失败！",Toast.LENGTH_LONG).show();
+                return;
             }
-            isPrepare = true;
+
+              factory.onDraw(mCurPageCanvas);
+              isPrepare = true;
+
+                postInvalidate();
         }
     }
 
@@ -80,72 +94,74 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-//        switch (event.getAction()){
-//            case MotionEvent.ACTION_DOWN:
-//
-//                dx = (int) event.getX();
-//                dy = (int) event.getY();
-//
-//                mTouch.x = dx;
-//                mTouch.y = dy;
-//
-//                actiondownX = dx;
-//                actiondownY = dy;
-//
-//                if(actiondownX >= mScreenWidth / 3 && actiondownX <= mScreenWidth * 2 / 3
-//                        && actiondownY >= mScreenHeight / 3 && actiondownY <= mScreenHeight * 2 / 3 ){
-//                    center = true;
-//                }else{
-//                    center = false;
-//                    //条件成立为右翻
-//                    if(actiondownX < mScreenWidth / 2){
-//                        BookStatus bookStatus = factory.prePage();
-//                        if(bookStatus == BookStatus.NO_PRE_PAGE){
-//                          Toast.makeText(getContext(),"没有上一页了",Toast.LENGTH_LONG).show();
-//                            return false;
-//                        }else if(bookStatus == BookStatus.LOAD_SUCCESS){
-//                            abortAnimation();
-//                            factory.onDraw(mPrePageCanvas);
-//                        }else{
-//                            return false;
-//                        }
-//                    }else{
-//                        BookStatus bookStatus = factory.nextPage();
-//                        if(bookStatus == BookStatus.NO_NEXT_PAGE){
-//                            return false;
-//                        }else if(bookStatus == BookStatus.LOAD_SUCCESS){
-//                            abortAnimation();
-//                            factory.onDraw(mNextPageCanvas);
-//                        }else{
-//                            return false;
-//                        }
-//                    }
-//                }
-//                break;
-//            case MotionEvent.ACTION_MOVE:
-//                if(center){
-//                    break;
-//                }
-//                int mx = (int) event.getX();
-//                int my = (int) event.getY();
-//
-//                mTouch.x = mx;
-//                mTouch.y = my;
-//
-//                this.requestLayout();
-//                break;
-//            case MotionEvent.ACTION_CANCEL:
-//
-//                if(center){
-//
-//
-//
-//                    break;
-//                }
-//
-//
-//                break;
-//        }
+        switch (event.getAction()){
+            case MotionEvent.ACTION_DOWN:
+
+                dx = (int) event.getX();
+                dy = (int) event.getY();
+
+                mTouch.x = dx;
+                mTouch.y = dy;
+
+                actiondownX = dx;
+                actiondownY = dy;
+
+                if(actiondownX >= mScreenWidth / 3 && actiondownX <= mScreenWidth * 2 / 3
+                        && actiondownY >= mScreenHeight / 3 && actiondownY <= mScreenHeight * 2 / 3 ){
+                    center = true;
+                }else{
+                    center = false;
+                    //条件成立为右翻
+                    if(actiondownX < mScreenWidth / 2){
+                        BookStatus bookStatus = factory.prePage();
+                        if(bookStatus == BookStatus.NO_PRE_PAGE){
+                          Toast.makeText(getContext(),"没有上一页了",Toast.LENGTH_LONG).show();
+                            return false;
+                        }else if(bookStatus == BookStatus.LOAD_SUCCESS){
+                            abortAnimation();
+                            factory.onDraw(mPrePageCanvas);
+                        }else{
+                            return false;
+                        }
+                    }else{
+                        BookStatus bookStatus = factory.nextPage();
+                        if(bookStatus == BookStatus.NO_NEXT_PAGE){
+                            Toast.makeText(getContext(),"没有下一页了",Toast.LENGTH_LONG).show();
+                            return false;
+                        }else if(bookStatus == BookStatus.LOAD_SUCCESS){
+                            abortAnimation();
+                            factory.onDraw(mNextPageCanvas);
+                        }else{
+                            return false;
+                        }
+                    }
+                        postInvalidate();
+                }
+                break;
+            case MotionEvent.ACTION_MOVE:
+                if(center){
+                    break;
+                }
+                int mx = (int) event.getX();
+                int my = (int) event.getY();
+
+                mTouch.x = mx;
+                mTouch.y = my;
+
+                this.requestLayout();
+                break;
+            case MotionEvent.ACTION_CANCEL:
+
+                if(center){
+
+
+
+                    break;
+                }
+
+
+                break;
+        }
         return super.onTouchEvent(event);
     }
 
@@ -153,17 +169,27 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
 
     @Override
     protected void onDraw(Canvas canvas) {
-          drawCurrentPageArea(canvas);
-//        drawCurrentPageShadow(canvas);
-//        drawNextPageAreaAndShadow(canvas);
+        drawPrePageArea(canvas);
+        drawPrePageShadow(canvas);
+
+        drawCurPageArea(canvas);
+        drawCurPageShadow(canvas);
+
+        drawNextPageArea(canvas);
+        drawNextPageShadow(canvas);
     }
 
 
 
 
-    protected abstract void drawNextPageAreaAndShadow(Canvas canvas);
-    protected abstract void drawCurrentPageArea(Canvas canvas);
-    protected abstract void drawCurrentPageShadow(Canvas canvas);
+    protected abstract void drawPrePageArea(Canvas canvas);
+    protected abstract void drawPrePageShadow(Canvas canvas);
+
+    protected abstract void drawCurPageArea(Canvas canvas);
+    protected abstract void drawCurPageShadow(Canvas canvas);
+
+    protected abstract void drawNextPageArea(Canvas canvas);
+    protected abstract void drawNextPageShadow(Canvas canvas);
 
 
 }

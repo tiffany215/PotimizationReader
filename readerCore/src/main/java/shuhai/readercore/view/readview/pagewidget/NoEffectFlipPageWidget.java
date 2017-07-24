@@ -1,8 +1,11 @@
 package shuhai.readercore.view.readview.pagewidget;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.util.Log;
 
+import shuhai.readercore.utils.ScreenUtils;
 import shuhai.readercore.view.readview.displayview.HorizontalBaseReadView;
 
 /**
@@ -16,25 +19,12 @@ import shuhai.readercore.view.readview.displayview.HorizontalBaseReadView;
 
 public class NoEffectFlipPageWidget extends HorizontalBaseReadView {
 
-    public NoEffectFlipPageWidget(Context context,int bookId,int chapterId) {
-        super(context,bookId,chapterId);
+
+    private static final String TAG = "NoEffectFlipPageWidget";
+
+    public NoEffectFlipPageWidget(Context context, int bookId, int chapterId) {
+        super(context, bookId, chapterId);
     }
-
-    @Override
-    protected void drawNextPageAreaAndShadow(Canvas canvas) {
-
-    }
-
-    @Override
-    protected void drawCurrentPageArea(Canvas canvas) {
-
-    }
-
-    @Override
-    protected void drawCurrentPageShadow(Canvas canvas) {
-
-    }
-
 
     @Override
     public void startAnimation() {
@@ -48,6 +38,52 @@ public class NoEffectFlipPageWidget extends HorizontalBaseReadView {
 
     @Override
     public void restoreAnimation() {
+
+    }
+
+    @Override
+    protected void drawPrePageArea(Canvas canvas) {
+        if(actiondownX < mScreenWidth / 2){
+            canvas.drawBitmap(mPrePageBitmap,0,0,null);
+        }
+    }
+
+    @Override
+    protected void drawPrePageShadow(Canvas canvas) {
+
+    }
+
+    @Override
+    protected void drawCurPageArea(Canvas canvas) {
+        if(actiondownX == 0){
+            canvas.drawBitmap(mCurPageBitmap,0,0,null);
+        }
+    }
+
+    @Override
+    protected void drawCurPageShadow(Canvas canvas) {
+
+    }
+
+    @Override
+    protected void drawNextPageArea(Canvas canvas) {
+        if(actiondownX > mScreenWidth / 2){
+            canvas.drawBitmap(mNextPageBitmap,0,0,null);
+        }
+    }
+
+    @Override
+    protected void drawNextPageShadow(Canvas canvas) {
+
+    }
+
+
+    @Override
+    public void computeScroll() {
+        super.computeScroll();
+        if(mScroller.computeScrollOffset()){
+
+        }
 
     }
 }
