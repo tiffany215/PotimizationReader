@@ -166,10 +166,11 @@ public class PageFactory extends Factory {
     @Override
     public BookStatus nextPage() {
         currentPage++;
-        if(currentPage >= chapterLoader.getCountPate()){
-            currentPage = chapterLoader.getCountPate();
+        if(currentPage == 1){
+            currentPage = 2;
+        }else if(currentPage > chapterLoader.getCountPate()){
+            currentPage = chapterLoader.getCountPate() + 1;
         }
-
         Vector<String> lines = chapterLoader.pageDown(currentPage,cacheKeyCreate());
         if(null != lines && lines.size() > 0){
             mLines = lines;
@@ -181,9 +182,13 @@ public class PageFactory extends Factory {
     @Override
     public BookStatus prePage() {
         currentPage--;
-        if(currentPage < 0){
+        if(currentPage <= 0 ){
             currentPage = 0;
+        }else if(currentPage == chapterLoader.getCountPate()){
+            currentPage = chapterLoader.getCountPate() - 1;
         }
+
+
         Vector<String> lines = chapterLoader.pageUp(currentPage,cacheKeyCreate());
         if(null != lines && lines.size() > 0){
             mLines = lines;

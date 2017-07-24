@@ -115,7 +115,7 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
                     if(actiondownX < mScreenWidth / 2){
                         BookStatus bookStatus = factory.prePage();
                         if(bookStatus == BookStatus.NO_PRE_PAGE){
-                          Toast.makeText(getContext(),"没有上一页了",Toast.LENGTH_LONG).show();
+                          Toast.makeText(getContext(),"没有上一页了",Toast.LENGTH_SHORT).show();
                             return false;
                         }else if(bookStatus == BookStatus.LOAD_SUCCESS){
                             abortAnimation();
@@ -126,7 +126,7 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
                     }else{
                         BookStatus bookStatus = factory.nextPage();
                         if(bookStatus == BookStatus.NO_NEXT_PAGE){
-                            Toast.makeText(getContext(),"没有下一页了",Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(),"没有下一页了",Toast.LENGTH_SHORT).show();
                             return false;
                         }else if(bookStatus == BookStatus.LOAD_SUCCESS){
                             abortAnimation();
