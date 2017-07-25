@@ -1,6 +1,7 @@
 package shuhai.readercore.ui.presenter;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import javax.inject.Inject;
 
@@ -11,6 +12,8 @@ import shuhai.readercore.manager.ChapterLoader;
 import shuhai.readercore.net.callback.ApiCallback;
 import shuhai.readercore.net.exception.ApiException;
 import shuhai.readercore.ui.contract.BookReadContract;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * @author wangxu
@@ -50,6 +53,7 @@ public class BookReadPresenter extends RxPresenter<BookReadContract.View> implem
             public void onNext(ChapterEntity entity) {
                if(null != entity && null != entity.getMessage() && null != mView){
                    String chapterStr = entity.getMessage().get(0).getContent();
+                   Log.e(TAG, "onNext: "+ chapterStr );
                    if(!TextUtils.isEmpty(chapterStr)){
                        ChapterLoader.put(articleId,chapterId,chapterStr);
                    }

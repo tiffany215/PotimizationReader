@@ -73,11 +73,14 @@ public class HorizontalComposing implements ComposingStrategy{
         mMarginWidth = marginWidth;
         mMarginHeight = marginHeight;
         mFontSize = fontSize;
-        mVisibleHeight = mHeight - marginHeight * 2 - mNumFontSize * 2 - mLineSpace * 2;
-        mVisibleWidth = mWidth - marginWidth * 2;
-        mLineSpace = mFontSize / 5 * 2;
-        mPagelineCount = mVisibleHeight / (mFontSize + mLineSpace);
+        mNumFontSize = 28;
+        mLineSpace = mFontSize / 5 * 4;
+
+        mVisibleHeight = mHeight - (mMarginHeight * 2 + mNumFontSize * 2 + mLineSpace * 2);
+        mVisibleWidth = mWidth - mMarginWidth * 2;
+
         mPaint = paint;
+
         mTitlePaint = titlePaint;
         if(null == pageList){
             pageList = new HashMap<>();
@@ -116,8 +119,9 @@ public class HorizontalComposing implements ComposingStrategy{
         //计算当前屏幕最多放置多少行文字
         mPagelineCount = mVisibleHeight / (mFontSize + mLineSpace);
 
+        int paragraphArrCount =  paragraphArr.length;
 
-        for (int i = 0; i < paragraphArr.length; i++)
+        for (int i = 0; i < paragraphArrCount; i++)
         {
             String strParagraph = paragraphArr[i];
             if(TextUtils.isEmpty(strParagraph.trim())){
@@ -143,7 +147,7 @@ public class HorizontalComposing implements ComposingStrategy{
                  * 如果条件为假，则证明当前段落绘制完成，但还有剩余绘制区域，此时加入段
                  * 间距，并从新计算剩余区域还可以绘制多少行。
                  */
-                if(lineSize > mPagelineCount){
+                if(lineSize > mPagelineCount || paragraphArrCount - 1 == i){
                     pageSize++;
                     pageList.put(pageSize,lines);
                     lines = new Vector<>();

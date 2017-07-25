@@ -38,11 +38,6 @@ public class PageFactory extends Factory {
     private int mHeight,mWidth;
 
     /**
-     * 可绘制区域的高度和宽度
-     */
-    private int mVisibleHeight,mVisibleWidth;
-
-    /**
      * 间距
      */
     private int mMarginWidth,mMarginHeight;
@@ -52,10 +47,6 @@ public class PageFactory extends Factory {
      */
     private int mFontSize,mNumFontSize;
 
-    /**
-     * 每页行数
-     */
-    private int mPageLineCount;
 
     /**
      * 行间距
@@ -97,11 +88,9 @@ public class PageFactory extends Factory {
         mFontSize = fontSize;
         mMarginWidth = marginWidth;
         mMarginHeight = marginHeight;
-        mLineSpace = mFontSize / 5 * 4
-        ;
-        mVisibleHeight = mHeight - marginHeight * 2 + mNumFontSize * 2 - mLineSpace * 2;
-        mVisibleWidth = mWidth - marginWidth * 2;
-        mPageLineCount = mVisibleHeight / (mFontSize + mLineSpace);
+        mLineSpace = mFontSize / 5 * 4;
+        mNumFontSize = 28;
+
         rectF = new Rect(0,0,mWidth,mHeight);
 
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -110,7 +99,9 @@ public class PageFactory extends Factory {
 
         mTitlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mTitlePaint.setTextSize(mNumFontSize);
-        mTitlePaint.setColor(ContextCompat.getColor(context, R.color.colorAccent));
+        mTitlePaint.setStyle(Paint.Style.FILL);//设置填充样式
+        mTitlePaint.setStrokeWidth(1);//设置画笔宽度
+        mTitlePaint.setColor(ContextCompat.getColor(context, R.color.secondary_text));
 
         timeLen = (int) mTitlePaint.measureText("00:00");
         percentLen = (int) mTitlePaint.measureText("00.00%");
@@ -234,16 +225,16 @@ public class PageFactory extends Factory {
     @Override
     public synchronized void onDraw(Canvas canvas){
         if(mLines.size() > 0){
-            int y = mMarginHeight + (mLineSpace << 1);
+            int y = mMarginHeight + mNumFontSize;
             if(null == mBookPageBg){
                 canvas.drawColor(Color.WHITE);
             }else{
                 canvas.drawBitmap(mBookPageBg,null,rectF,null);
             }
-
-            canvas.drawText("啥都会发生看机会",mMarginWidth,y,mTitlePaint);
-            y += mLineSpace + mNumFontSize;
-
+            canvas.drawText("第十八章：徐美惠的眼线无孔不入。",mMarginWidth,y,mTitlePaint);
+            y += mLineSpace;
+            canvas.drawLine(mMarginWidth, y, mWidth - mMarginWidth, y, mTitlePaint);
+            y += mFontSize;
             for (String line : mLines)
             {
                 y += mLineSpace;
@@ -256,7 +247,7 @@ public class PageFactory extends Factory {
             }
 
             float percent = (float) 80.56;
-            canvas.drawText(decimalFormat.format(percent) + "%",(mWidth - percent) / 2,mHeight  - mMarginHeight, mTitlePaint);
+            canvas.drawText(decimalFormat.format(percent) + "%",mMarginWidth, mHeight  - mMarginHeight, mTitlePaint);
             String mTime = simpleDateFormat.format(new Date());
             canvas.drawText(mTime, mWidth - mMarginWidth - timeLen, mHeight - mMarginHeight, mTitlePaint);
         }
