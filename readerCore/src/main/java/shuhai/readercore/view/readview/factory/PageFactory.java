@@ -47,7 +47,6 @@ public class PageFactory extends Factory {
      */
     private int mFontSize,mNumFontSize;
 
-
     /**
      * 行间距
      */
@@ -58,11 +57,9 @@ public class PageFactory extends Factory {
     private Vector<String> mLines = new Vector<>();
 
     private Paint mPaint;
-
     private Paint mTitlePaint;
 
     private Bitmap mBookPageBg;
-
 
     private DecimalFormat decimalFormat = new DecimalFormat("0.00");
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
@@ -76,6 +73,7 @@ public class PageFactory extends Factory {
     private int mBookId;
     private int mChapterId;
     private int currentPage = 1;
+    private int pageCount = 1;
 
     public PageFactory(Context context){
         this(context,ScreenUtils.getScreenWidth(),ScreenUtils.getScreenHeight(), Constants.MARGIN_WIDTH,Constants.MARGIN_HEIGHT,34);
@@ -132,6 +130,9 @@ public class PageFactory extends Factory {
         this.mChapterId = chapterId;
         this.currentPage = curPage;
         if(BookStatus.LOAD_SUCCESS == curPage()){
+            if(null != chapterLoader){
+                pageCount = chapterLoader.getCountPate();
+            }
                 return 1;
         }else{
                 return 0;
@@ -211,11 +212,9 @@ public class PageFactory extends Factory {
      */
     public void setComposingStrategy(){
         if(null != chapterLoader){
-            this.chapterLoader.setComposingStrategy(new HorizontalComposing(mWidth,mHeight,mMarginWidth,mMarginHeight,mFontSize,mPaint,mTitlePaint));
+            this.chapterLoader.setComposingStrategy(new HorizontalComposing(mWidth,mHeight,mMarginWidth,mMarginHeight,mFontSize,mNumFontSize,mLineSpace,mPaint));
         }
     }
-
-
 
 
     /**
@@ -246,8 +245,8 @@ public class PageFactory extends Factory {
                 canvas.drawBitmap(batteryBitmap,mMarginWidth + 2, mHeight - mMarginHeight - ScreenUtils.dpToPxInt(12), mTitlePaint);
             }
 
-            float percent = (float) 80.56;
-            canvas.drawText(decimalFormat.format(percent) + "%",mMarginWidth, mHeight  - mMarginHeight, mTitlePaint);
+            float percent = (float) currentPage / pageCount;
+            canvas.drawText(decimalFormat.format(percent * 100) + "%",mMarginWidth, mHeight  - mMarginHeight, mTitlePaint);
             String mTime = simpleDateFormat.format(new Date());
             canvas.drawText(mTime, mWidth - mMarginWidth - timeLen, mHeight - mMarginHeight, mTitlePaint);
         }

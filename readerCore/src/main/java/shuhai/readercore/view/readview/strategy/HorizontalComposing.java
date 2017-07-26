@@ -45,7 +45,7 @@ public class HorizontalComposing implements ComposingStrategy{
     /**
      * 每页的行数
      */
-    private int mPagelineCount;
+    private int mPageLineCount;
 
     /**
      * 行间距
@@ -61,27 +61,36 @@ public class HorizontalComposing implements ComposingStrategy{
     /**
      * 标题画笔和文字内容画笔
      */
-    private Paint mTitlePaint,mPaint;
+    private Paint mPaint;
 
 
     private Map<Integer,Vector<String>> pageList;
 
 
-    public HorizontalComposing(int width, int height,int marginWidth,int marginHeight,int fontSize,Paint paint,Paint titlePaint){
+    /**
+     *  初始化绘制文本参数
+     * @param width 手机屏幕宽度
+     * @param height 手机屏幕高度
+     * @param marginWidth 文字左右间距
+     * @param marginHeight 文字上下间距
+     * @param fontSize 文字大小
+     * @param numFontSize 标题文字大小
+     * @param lineSpace 行间距
+     * @param paint 文字画笔
+     */
+    public HorizontalComposing(int width, int height,int marginWidth,int marginHeight,int fontSize,int numFontSize,int lineSpace,Paint paint){
         mWidth = width;
         mHeight = height;
         mMarginWidth = marginWidth;
         mMarginHeight = marginHeight;
         mFontSize = fontSize;
-        mNumFontSize = 28;
-        mLineSpace = mFontSize / 5 * 4;
+        mNumFontSize = numFontSize;
+        mLineSpace = lineSpace;
 
         mVisibleHeight = mHeight - (mMarginHeight * 2 + mNumFontSize * 2 + mLineSpace * 2);
         mVisibleWidth = mWidth - mMarginWidth * 2;
 
         mPaint = paint;
-
-        mTitlePaint = titlePaint;
         if(null == pageList){
             pageList = new HashMap<>();
         }
@@ -117,7 +126,7 @@ public class HorizontalComposing implements ComposingStrategy{
         int paraSpace = 0;
         int pageSize = 0;
         //计算当前屏幕最多放置多少行文字
-        mPagelineCount = mVisibleHeight / (mFontSize + mLineSpace);
+        mPageLineCount = mVisibleHeight / (mFontSize + mLineSpace);
 
         int paragraphArrCount =  paragraphArr.length;
 
@@ -132,13 +141,13 @@ public class HorizontalComposing implements ComposingStrategy{
             int lineCount = 0;
             while (lineSize > 0 )
             {
-                while (mPagelineCount > 0 && lineSize > 0)
+                while (mPageLineCount > 0 && lineSize > 0)
                 {
                     lines.add(paraLines.get(lineCount));
                     lineCount++;
                     lineSize--;
                     paraSpace += mLineSpace + mFontSize;
-                    mPagelineCount = (mVisibleHeight - paraSpace) / (mFontSize + mLineSpace);
+                    mPageLineCount = (mVisibleHeight - paraSpace) / (mFontSize + mLineSpace);
                 }
                 /**
                  * 如果条件为真，则证明当前段落超出绘制区域，所以当前页绘制完成存入集合，
@@ -147,14 +156,14 @@ public class HorizontalComposing implements ComposingStrategy{
                  * 如果条件为假，则证明当前段落绘制完成，但还有剩余绘制区域，此时加入段
                  * 间距，并从新计算剩余区域还可以绘制多少行。
                  */
-                if(lineSize > mPagelineCount || paragraphArrCount - 1 == i){
+                if(lineSize > mPageLineCount || paragraphArrCount - 1 == i){
                     pageSize++;
                     pageList.put(pageSize,lines);
                     lines = new Vector<>();
                     paraSpace = 0;
-                    mPagelineCount = mVisibleHeight / (mFontSize + mLineSpace);
+                    mPageLineCount = mVisibleHeight / (mFontSize + mLineSpace);
                 }else{
-                    mPagelineCount = (mVisibleHeight - paraSpace - mParagraphSpace) / (mFontSize + mLineSpace);
+                    mPageLineCount = (mVisibleHeight - paraSpace - mParagraphSpace) / (mFontSize + mLineSpace);
                 }
             }
         }
