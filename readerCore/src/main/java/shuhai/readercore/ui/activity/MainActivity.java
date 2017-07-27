@@ -72,7 +72,6 @@ public class MainActivity extends BaseActivity {
         this.mContext = this;
     }
 
-    @OnClick(R.id.button)
     public void submit(View view){
         mContext.startActivity(new Intent(mContext,ReadActivity.class));
     }

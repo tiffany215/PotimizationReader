@@ -20,5 +20,10 @@
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
+    <style name="AppTheme.NoActionBar.FullScreen.WindowBackground" parent="AppTheme.NoActionBar.FullScreen">
+        <item name="android:windowBackground">@drawable/theme_leather_bg</item>
+    </style>
+
+
 
 </resources>
