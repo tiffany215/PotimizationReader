@@ -21,7 +21,7 @@
     </style>
 
     <style name="AppTheme.NoActionBar.FullScreen.WindowBackground" parent="AppTheme.NoActionBar.FullScreen">
-        <item name="android:windowBackground">@drawable/theme_leather_bg</item>
+        <item name="android:windowBackground">@drawable/loading_date_bg_01</item>
     </style>
 
 

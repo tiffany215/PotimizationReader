@@ -17,8 +17,9 @@ import shuhai.readercore.R;
  */
 
 public class WelcomeActivity extends AppCompatActivity {
+
     @Bind(R.id.tv_skip)
-    private TextView tvSkip;
+    public TextView tvSkip;
 
     private Runnable runnable;
 
@@ -27,7 +28,7 @@ public class WelcomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
+        setContentView(R.layout.activity_welcome);
         ButterKnife.bind(this);
 
         runnable = new Runnable() {
