@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/item_recommend"
+        android:icon="@drawable/splash_04"
+        android:title="@string/app_name"
+        />
+    <item
+        android:id="@+id/item_serial"
+        android:icon="@drawable/splash_04"
+        android:title="@string/app_name"
+        />
+    <item
+        android:id="@+id/item_fans"
+        android:icon="@drawable/splash_04"
+        android:title="@string/app_name"
+        />
+    <item
+        android:id="@+id/item_person"
+        android:icon="@drawable/splash_04"
+        android:title="@string/app_name"
+        />
+</menu>

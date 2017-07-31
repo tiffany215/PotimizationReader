@@ -57,13 +57,13 @@ public class SplashActivity extends AppCompatActivity implements View.OnClickLis
     private void initView(){
 
         ImageView imageView01 = new ImageView(this);
-        imageView01.setBackgroundResource(R.drawable.loading_date_bg_01);
+        imageView01.setBackgroundResource(R.drawable.splash_01);
 
         ImageView imageView02 = new ImageView(this);
-        imageView02.setBackgroundResource(R.drawable.loading_date_bg_01);
+        imageView02.setBackgroundResource(R.drawable.splash_02);
 
         ImageView imageView03 = new ImageView(this);
-        imageView03.setBackgroundResource(R.drawable.loading_date_bg_01);
+        imageView03.setBackgroundResource(R.drawable.splash_03);
 
         View view = mLayoutInflater.inflate(R.layout.activity_landing_page,null);
         recommendBoy = (Button) view.findViewById(R.id.recommend_boy);

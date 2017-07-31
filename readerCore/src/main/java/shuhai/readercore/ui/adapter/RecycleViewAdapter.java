@@ -36,6 +36,9 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<NormalViewHolder>{
     @Override
     public void onBindViewHolder(NormalViewHolder holder, int position) {
 
+
+
+
     }
 
     @Override

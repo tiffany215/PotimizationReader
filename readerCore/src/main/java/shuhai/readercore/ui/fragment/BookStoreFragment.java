@@ -1,5 +1,6 @@
 package shuhai.readercore.ui.fragment;
 
+import butterknife.Bind;
 import shuhai.readercore.R;
 import shuhai.readercore.base.BaseRVFragment;
 import shuhai.readercore.bean.base.BookInfo;
@@ -8,6 +9,12 @@ import shuhai.readercore.ui.contract.BookStoreContract;
 import shuhai.readercore.ui.presenter.BookStorePresenter;
 
 public class BookStoreFragment extends BaseRVFragment<BookStorePresenter,BookInfo> implements BookStoreContract.View{
+
+
+
+    @Bind(R.id.book_store_list_recycler_view)
+    RecycleViewAdapter recycleViewAdapter;
+
 
     @Override
     protected void setupActivityComponent() {
@@ -21,6 +28,7 @@ public class BookStoreFragment extends BaseRVFragment<BookStorePresenter,BookInf
 
     @Override
     public void initData() {
+
 
     }
 
