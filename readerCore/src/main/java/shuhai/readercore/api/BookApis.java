@@ -64,7 +64,7 @@ public class BookApis {
     }
 
 
-    public <T> void obtainRecommendBook(ApiCallback<T> callback){
+    public <T> void obtainRecommendBook(int sex,int pagesize,ApiCallback<T> callback){
         Map<String,Object> params = new HashMap<>();
         params.put("packageame", "");
         params.put("sign", "cf647dda9b03998695e8436954eeba2d");
@@ -78,9 +78,8 @@ public class BookApis {
         params.put("version", 60);
         params.put("ip", String.valueOf("192.168.1.190"));
         params.put("uid", 173434);
-        params.put("order", 0);
-        params.put("articleid", 41427);
-        params.put("chapterid", 2668827);
+        params.put("sex", sex);
+        params.put("pagesize", pagesize);
         commonApi.postMultipart("bookcasebooks",params,callback);
     }
 

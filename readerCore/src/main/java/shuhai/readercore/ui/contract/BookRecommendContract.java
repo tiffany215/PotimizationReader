@@ -17,7 +17,7 @@ public interface BookRecommendContract {
 
 
     interface Presenter<T> extends BaseContract.BasePresenter<T>{
-        void getRecommendBook(int sex);
+        void getRecommendBook(int sex,int pageSize);
     }
 
 

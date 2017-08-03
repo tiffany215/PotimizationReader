@@ -20,6 +20,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import shuhai.readercore.R;
 import shuhai.readercore.ui.adapter.ViewPagerAdapter;
+import shuhai.readercore.ui.presenter.BookReadPresenter;
+import shuhai.readercore.ui.presenter.BookRecommendPresenter;
 
 /**
  * @author 55345364
@@ -42,7 +44,7 @@ public class SplashActivity extends AppCompatActivity implements View.OnClickLis
     Button recommendBoy;
     Button recommendGrid;
 
-    private
+    private BookRecommendPresenter recommendPresenter;
 
 
 
@@ -59,6 +61,9 @@ public class SplashActivity extends AppCompatActivity implements View.OnClickLis
 
 
     private void initView(){
+
+
+        recommendPresenter = new BookRecommendPresenter();
 
         ImageView imageView01 = new ImageView(this);
         imageView01.setBackgroundResource(R.drawable.splash_01);
@@ -89,6 +94,7 @@ public class SplashActivity extends AppCompatActivity implements View.OnClickLis
 
 
     private void GoMain() {
+        recommendPresenter.getRecommendBook(2,5);
         startActivity(new Intent(this,MainActivity.class));
         finish();
     }
