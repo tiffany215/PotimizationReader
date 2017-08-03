@@ -42,6 +42,10 @@ public class SplashActivity extends AppCompatActivity implements View.OnClickLis
     Button recommendBoy;
     Button recommendGrid;
 
+    private
+
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

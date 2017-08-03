@@ -24,6 +24,7 @@ public class MainActivity extends BaseActivity {
     public void initData() {
         ViewPagerFragmentAdapter adapter = new ViewPagerFragmentAdapter(getSupportFragmentManager());
         adapter.addFragment(new BookStoreFragment());
+        adapter.addFragment(new BookStoreFragment());
         viewPager.setAdapter(adapter);
     }
 
