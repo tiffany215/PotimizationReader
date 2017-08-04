@@ -12,39 +12,39 @@ public class MyClass {
         Schema schema = new Schema(1,"shuhai.readercore.dao");
 
 
-        Entity bkbaseinfo = schema.addEntity("Bkbaseinfo");
-        bkbaseinfo.addIntProperty("articleid").getProperty();
-        bkbaseinfo.addStringProperty("articlename");
-        bkbaseinfo.addStringProperty("author");
-        bkbaseinfo.addStringProperty("bkbmurl");
-        bkbaseinfo.addIntProperty("endtype");
-        bkbaseinfo.addIntProperty("newchpname");
-        bkbaseinfo.addStringProperty("owner");
-        bkbaseinfo.addDateProperty("readtime");
-        bkbaseinfo.addDateProperty("lastreadchporder");
-        bkbaseinfo.addIntProperty("bktype");
-        bkbaseinfo.addIntProperty("newchporder");
+        Entity bookInfoEntity = schema.addEntity("BookInfoEntity");
+        bookInfoEntity.addIntProperty("articleid");
+        bookInfoEntity.addStringProperty("articlename");
+        bookInfoEntity.addStringProperty("author");
+        bookInfoEntity.addStringProperty("bkbmurl");
+        bookInfoEntity.addIntProperty("endtype");
+        bookInfoEntity.addStringProperty("newchpname");
+        bookInfoEntity.addStringProperty("owner");
+        bookInfoEntity.addIntProperty("readtime");
+        bookInfoEntity.addIntProperty("lastreadchporder");
+        bookInfoEntity.addIntProperty("bktype");
+        bookInfoEntity.addIntProperty("newchporder");
         
 
-        Entity bkchpinfo = schema.addEntity("Bkchpinfo");
-        bkchpinfo.addIntProperty("articleid");
-        bkchpinfo.addIntProperty("chpid");
-        bkchpinfo.addStringProperty("chpnamme");
-        bkchpinfo.addIntProperty("chptype");
-        bkchpinfo.addIntProperty("chiporder");
+        Entity chapterEntity = schema.addEntity("ChapterEntity");
+        chapterEntity.addIntProperty("articleid");
+        chapterEntity.addIntProperty("chpid");
+        chapterEntity.addStringProperty("chpnamme");
+        chapterEntity.addIntProperty("chptype");
+        chapterEntity.addIntProperty("chiporder");
 
 
 
-        Entity bkmark = schema.addEntity("Bkmark");
-        bkmark.addIntProperty("articleid");
-        bkmark.addIntProperty("chpid");
-        bkmark.addIntProperty("begin");
-        bkmark.addStringProperty("word");
-        bkmark.addDateProperty("time");
-        bkmark.addIntProperty("chporder");
-        bkmark.addIntProperty("isfree");
-        bkmark.addStringProperty("owner");
-        bkmark.addStringProperty("chpname");
+        Entity markEntity = schema.addEntity("MarkEntity");
+        markEntity.addIntProperty("articleid");
+        markEntity.addIntProperty("chpid");
+        markEntity.addIntProperty("begin");
+        markEntity.addStringProperty("word");
+        markEntity.addIntProperty("time");
+        markEntity.addIntProperty("chporder");
+        markEntity.addIntProperty("isfree");
+        markEntity.addStringProperty("owner");
+        markEntity.addStringProperty("chpname");
         
 
         
