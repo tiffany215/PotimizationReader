@@ -52,7 +52,9 @@ public abstract  class BaseVPFragment extends BaseFragment implements SwipeRefre
 
     @Override
     public void onRefresh() {
-        pagerAdapter.notifyDataSetChanged();
+        if(null != pagerAdapter){
+            pagerAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override

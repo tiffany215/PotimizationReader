@@ -28,7 +28,7 @@ public class BookShopFragment extends BaseVPFragment {
     @Override
     public void configView() {
         initAdapter(ViewPagerAdapter.class);
-//        onRefresh();
+        onRefresh();
     }
 
 
