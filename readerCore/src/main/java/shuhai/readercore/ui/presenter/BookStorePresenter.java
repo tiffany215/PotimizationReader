@@ -1,6 +1,10 @@
 package shuhai.readercore.ui.presenter;
 
+import java.util.List;
+
 import shuhai.readercore.base.RxPresenter;
+import shuhai.readercore.dao.BookInfoEntity;
+import shuhai.readercore.manager.DataBaseManager;
 import shuhai.readercore.ui.contract.BookStoreContract;
 
 /**
@@ -11,11 +15,8 @@ import shuhai.readercore.ui.contract.BookStoreContract;
 public class BookStorePresenter extends RxPresenter<BookStoreContract.View> implements BookStoreContract.Presenter<BookStoreContract.View>{
 
 
-
-
-
     @Override
-    public void getShelfBookList() {
-
+    public List<BookInfoEntity> getShelfBookList() {
+        return DataBaseManager.getInstance().queryBookInfoList();
     }
 }

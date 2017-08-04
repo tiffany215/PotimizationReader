@@ -1,12 +1,17 @@
 package shuhai.readercore.base;
 
 import android.content.Context;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.GridLayoutManager;
+import com.jude.easyrecyclerview.EasyRecyclerView;
+import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
+import com.jude.easyrecyclerview.swipe.SwipeRefreshLayout;
 
 import java.lang.reflect.Constructor;
 
-import shuhai.readercore.ui.adapter.RecycleViewAdapter;
+import javax.inject.Inject;
+
+import butterknife.Bind;
+import shuhai.readercore.R;
 
 
 /**
@@ -14,49 +19,36 @@ import shuhai.readercore.ui.adapter.RecycleViewAdapter;
  * @date 2017/7/27.
  */
 
-public abstract class BaseRVFragment<T1 extends BaseContract.BasePresenter,T2> extends BaseFragment {
+public abstract class BaseRVFragment<T1 extends BaseContract.BasePresenter,T2> extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener, RecyclerArrayAdapter.OnItemClickListener{
 
+    @Inject
     protected T1 mPresenter;
 
-    protected RecyclerView recyclerView;
+    @Bind(R.id.recycler_view)
+    protected EasyRecyclerView recyclerView;
 
-    protected RecycleViewAdapter mAdapter;
-
-
-    private void initAdapter(boolean refreshable,boolean loadmoreable){
-
-        if(null != recyclerView){
-            recyclerView.setLayoutManager(new LinearLayoutManager(getSupportActivity()));
-            recyclerView.setAdapter(mAdapter);
-        }
+    protected RecyclerArrayAdapter<T2> mAdapter;
 
 
-        if(null != mAdapter){
-
-        }
-
-        if(loadmoreable){
-
-        }
-
-
-        //是否刷新了adapter
-        if(refreshable && null != mAdapter){
-
-
-
-        }
-
+    protected void initAdapter(Class<? extends RecyclerArrayAdapter> cls,boolean refreshable,boolean loadmoreable){
+        mAdapter = (RecyclerArrayAdapter<T2>) createAdapter(cls);
+        initAdapter(refreshable,loadmoreable);
     }
 
+    protected void initAdapter(boolean refreshable,boolean loadmoreable){
+        if(null != recyclerView){
+            recyclerView.setLayoutManager(new GridLayoutManager(getSupportActivity(),3));
+            recyclerView.setAdapterWithProgress(mAdapter);
+        }
 
-    protected void initAdapter(Class<? extends RecycleViewAdapter> cls,boolean refreshable,boolean loadmoreable){
-        mAdapter = (RecycleViewAdapter) createAdapter(cls);
-        initAdapter(refreshable,loadmoreable);
+        if(null != mAdapter){
+            mAdapter.setOnItemClickListener(this);
+        }
     }
 
 
     private Object createAdapter(Class<?> cls){
+
         Object obj;
         try {
             Constructor constructor = cls.getDeclaredConstructor(Context.class);
@@ -68,6 +60,11 @@ public abstract class BaseRVFragment<T1 extends BaseContract.BasePresenter,T2> e
         return obj;
     }
 
+
+    @Override
+    public void onRefresh() {
+        recyclerView.setRefreshing(true);
+    }
 
     @Override
     public void attachView() {

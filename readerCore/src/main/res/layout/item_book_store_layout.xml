@@ -10,6 +10,7 @@
     card_view:cardCornerRadius="2dp"
     card_view:cardElevation="4dp"
     card_view:cardBackgroundColor="#fff"
+
     >
 
     <LinearLayout

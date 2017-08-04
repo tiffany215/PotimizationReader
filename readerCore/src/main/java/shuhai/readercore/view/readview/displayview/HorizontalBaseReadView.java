@@ -82,7 +82,7 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
               factory.onDraw(mCurPageCanvas);
               isPrepare = true;
 
-                postInvalidate();
+              postInvalidate();
         }
     }
 

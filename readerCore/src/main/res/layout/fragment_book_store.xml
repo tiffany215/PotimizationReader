@@ -3,14 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="shuhai.readercore.ui.fragment.BookStoreFragment">
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="fragment"
-        />
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/book_store_list_recycler_view"
+    <com.jude.easyrecyclerview.EasyRecyclerView
+        android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 </FrameLayout>

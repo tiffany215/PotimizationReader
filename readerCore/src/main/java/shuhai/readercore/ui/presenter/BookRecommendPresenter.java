@@ -42,7 +42,22 @@ public class BookRecommendPresenter extends RxPresenter<BookRecommendContract.Vi
                 //将推荐书籍存入库中
                 if(null != bookInfoEntity && null != bookInfoEntity.getMessage()){
                     for (int i = 0; i < bookInfoEntity.getMessage().size(); i++) {
-                        DataBaseManager.getInstance().insertBookInfo(bookInfoEntity.getMessage().get(i));
+
+                        shuhai.readercore.dao.BookInfoEntity bkbaseinfo = new shuhai.readercore.dao.BookInfoEntity();
+                        bkbaseinfo.setArticleid(Integer.valueOf(bookInfoEntity.getMessage().get(i).getArticleid()));
+                        bkbaseinfo.setArticlename(bookInfoEntity.getMessage().get(i).getArticlename());
+                        bkbaseinfo.setAuthor(bookInfoEntity.getMessage().get(i).getAuthor());
+                        bkbaseinfo.setBkbmurl(bookInfoEntity.getMessage().get(i).getCover());
+                        bkbaseinfo.setEndtype(1);
+                        bkbaseinfo.setNewchpname(bookInfoEntity.getMessage().get(i).getChapters());
+                        bkbaseinfo.setOwner(bookInfoEntity.getMessage().get(i).getAuthor());
+                        bkbaseinfo.setReadtime(Integer.valueOf(bookInfoEntity.getMessage().get(i).getLastupdate()));
+                        bkbaseinfo.setLastreadchporder(0);
+                        bkbaseinfo.setBktype(2);
+                        bkbaseinfo.setNewchporder(Integer.valueOf(bookInfoEntity.getMessage().get(i).getLastchapterid()));
+
+
+                        DataBaseManager.getInstance().insertBookInfo(bkbaseinfo);
                     }
                 }
             }

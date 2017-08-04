@@ -14,10 +14,9 @@ public class ViewPagerAdapter extends PagerAdapter {
 
     private List<View> mData;
 
-    public ViewPagerAdapter (List<View> list){
-        this.mData = list;
+    public void setData(List<View> list){
+        this.mData  = list;
     }
-
     @Override
     public int getCount() {
         return mData.size();

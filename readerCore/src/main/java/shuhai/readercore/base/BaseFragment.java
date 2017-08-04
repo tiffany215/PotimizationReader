@@ -25,8 +25,6 @@ public  abstract  class BaseFragment extends Fragment {
 
     public Context mContext;
 
-    private LayoutInflater mLayoutInflater;
-
     protected abstract void setupActivityComponent();
 
     @Nullable
@@ -35,7 +33,6 @@ public  abstract  class BaseFragment extends Fragment {
         parentView = inflater.inflate(getLayoutResId(),container,false);
         fragmentActivity = getSupportActivity();
         mContext = fragmentActivity;
-        mLayoutInflater = inflater;
         return parentView;
     }
 

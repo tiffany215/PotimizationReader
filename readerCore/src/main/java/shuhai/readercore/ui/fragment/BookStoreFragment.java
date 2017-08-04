@@ -1,18 +1,18 @@
 package shuhai.readercore.ui.fragment;
+import android.content.Intent;
 
 import shuhai.readercore.R;
 import shuhai.readercore.base.BaseRVFragment;
-import shuhai.readercore.bean.BookInfoEntity;
-import shuhai.readercore.ui.adapter.RecycleViewAdapter;
+import shuhai.readercore.dao.BookInfoEntity;
+import shuhai.readercore.ui.activity.ReadActivity;
+import shuhai.readercore.ui.adapter.BookStoreAdapter;
 import shuhai.readercore.ui.contract.BookStoreContract;
 import shuhai.readercore.ui.presenter.BookStorePresenter;
 
 public class BookStoreFragment extends BaseRVFragment<BookStorePresenter,BookInfoEntity> implements BookStoreContract.View{
 
 
-
-//    @Bind(R.id.book_store_list_recycler_view)
-//    RecycleViewAdapter recycleViewAdapter;
+    private BookStorePresenter presenter = new BookStorePresenter();
 
 
     @Override
@@ -33,7 +33,8 @@ public class BookStoreFragment extends BaseRVFragment<BookStorePresenter,BookInf
 
     @Override
     public void configView() {
-        initAdapter(RecycleViewAdapter.class,true,false);
+        initAdapter(BookStoreAdapter.class,false,false);
+        onRefresh();
 
     }
 
@@ -49,6 +50,25 @@ public class BookStoreFragment extends BaseRVFragment<BookStorePresenter,BookInf
 
     @Override
     public void complete() {
+
+    }
+
+    @Override
+    public void onItemClick(int position) {
+
+        startActivity(new Intent(getActivity(), ReadActivity.class));
+
+
+    }
+
+
+    @Override
+    public void onRefresh() {
+        super.onRefresh();
+        mAdapter.clear();
+        mAdapter.addAll(presenter.getShelfBookList());
+        mAdapter.notifyDataSetChanged();
+        recyclerView.setRefreshing(false);
 
     }
 }
