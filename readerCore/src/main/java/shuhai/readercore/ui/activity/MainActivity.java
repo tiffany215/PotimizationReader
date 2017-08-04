@@ -6,6 +6,7 @@ import butterknife.Bind;
 import shuhai.readercore.R;
 import shuhai.readercore.base.BaseActivity;
 import shuhai.readercore.ui.adapter.ViewPagerFragmentAdapter;
+import shuhai.readercore.ui.fragment.BookShopFragment;
 import shuhai.readercore.ui.fragment.BookStoreFragment;
 
 public class MainActivity extends BaseActivity {
@@ -24,7 +25,7 @@ public class MainActivity extends BaseActivity {
     public void initData() {
         ViewPagerFragmentAdapter adapter = new ViewPagerFragmentAdapter(getSupportFragmentManager());
         adapter.addFragment(new BookStoreFragment());
-        adapter.addFragment(new BookStoreFragment());
+        adapter.addFragment(new BookShopFragment());
         viewPager.setAdapter(adapter);
     }
 

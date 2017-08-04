@@ -88,7 +88,8 @@ public class SplashActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void initData(){
-        adapter = new ViewPagerAdapter(viewList);
+        adapter = new ViewPagerAdapter();
+        adapter.setData(viewList);
         viewPager.setAdapter(adapter);
     }
 

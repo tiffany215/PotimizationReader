@@ -9,6 +9,7 @@ import java.lang.reflect.Constructor;
 
 import butterknife.Bind;
 import shuhai.readercore.R;
+import shuhai.readercore.ui.adapter.ViewPagerAdapter;
 
 /**
  * @author 55345364
@@ -18,9 +19,9 @@ import shuhai.readercore.R;
 public abstract  class BaseVPFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener{
 
 
-    @Bind(R.id.viewpager_book_store)
+    @Bind(R.id.view_pager)
     protected ViewPager viewPager;
-    protected PagerAdapter pagerAdapter;
+    protected ViewPagerAdapter pagerAdapter;
 
 
     @Override
@@ -29,7 +30,7 @@ public abstract  class BaseVPFragment extends BaseFragment implements SwipeRefre
     }
 
     protected void initAdapter(Class<? extends PagerAdapter> clz){
-        pagerAdapter = (PagerAdapter) createAdapter(clz);
+        pagerAdapter = (ViewPagerAdapter)createAdapter(clz);
         if(null != viewPager){
             viewPager.setAdapter(pagerAdapter);
         }
