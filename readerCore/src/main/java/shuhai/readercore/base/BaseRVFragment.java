@@ -48,7 +48,6 @@ public abstract class BaseRVFragment<T1 extends BaseContract.BasePresenter,T2> e
 
 
     private Object createAdapter(Class<?> cls){
-
         Object obj;
         try {
             Constructor constructor = cls.getDeclaredConstructor(Context.class);

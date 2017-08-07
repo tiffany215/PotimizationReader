@@ -19,9 +19,9 @@ import butterknife.ButterKnife;
 public  abstract  class BaseFragment extends Fragment {
 
 
-    private View parentView;
+    public View parentView;
 
-    private FragmentActivity fragmentActivity;
+    public FragmentActivity fragmentActivity;
 
     public Context mContext;
 

@@ -1,5 +1,6 @@
 package shuhai.readercore.ui.fragment;
 
+
 import shuhai.readercore.R;
 import shuhai.readercore.base.BaseVPFragment;
 import shuhai.readercore.ui.adapter.ViewPagerAdapter;
@@ -13,7 +14,6 @@ import shuhai.readercore.ui.presenter.BookShopPresenter;
 public class BookShopFragment extends BaseVPFragment {
 
     BookShopPresenter presenter = new BookShopPresenter();
-
 
     @Override
     public int getLayoutResId() {
@@ -35,6 +35,8 @@ public class BookShopFragment extends BaseVPFragment {
     @Override
     public void onRefresh() {
         super.onRefresh();
-        pagerAdapter.setData(presenter.obtainView(mContext));
+        if(null != pagerAdapter){
+            pagerAdapter.setData(presenter.obtainView(mContext));
+        }
     }
 }

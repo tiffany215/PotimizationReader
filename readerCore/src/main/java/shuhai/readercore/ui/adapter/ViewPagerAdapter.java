@@ -3,6 +3,8 @@ package shuhai.readercore.ui.adapter;
 import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,10 +14,16 @@ import java.util.List;
 
 public class ViewPagerAdapter extends PagerAdapter {
 
-    private List<View> mData;
+    public ViewPagerAdapter(){
+        super();
+    }
+
+
+    private List<View> mData = new ArrayList<>();
 
     public void setData(List<View> list){
         this.mData  = list;
+        this.notifyDataSetChanged();
     }
     @Override
     public int getCount() {

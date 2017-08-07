@@ -49,7 +49,18 @@ public class AppUtils {
     }
 
 
-
+    public static String makeWebUrl(String vstr) {
+        String url = "";
+        try {
+            url = vstr
+                    + "&version=" + AppUtils.getAppVersion()
+                    + "&source=shuhai&packagename=" + AppUtils.getPackageInfo().packageName;
+        } catch (Exception e) {
+            url = vstr + "&version=" + AppUtils.getAppVersion()
+                    + "&source=shuhai&packagename=" + AppUtils.getPackageInfo().packageName;
+        }
+        return url;
+    }
 
 
 
