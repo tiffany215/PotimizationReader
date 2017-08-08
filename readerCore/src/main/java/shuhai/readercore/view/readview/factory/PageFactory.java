@@ -107,12 +107,12 @@ public class PageFactory extends Factory {
         /**
          * 设置自定义字体
          */
-
         Typeface typeface = Typeface.createFromAsset(context.getAssets(),"fonts/HYQiHei-50S.otf");
         mPaint.setTypeface(typeface);
         mPaint.setAntiAlias(true);
         mPaint.setStyle(Paint.Style.FILL);
         mTitlePaint.setTypeface(typeface);
+
 
     }
 

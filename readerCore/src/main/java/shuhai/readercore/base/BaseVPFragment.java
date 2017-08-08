@@ -2,21 +2,14 @@ package shuhai.readercore.base;
 
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
+
+import com.jude.easyrecyclerview.swipe.SwipeRefreshLayout;
 
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.Bind;
 import shuhai.readercore.R;
 import shuhai.readercore.ui.adapter.ViewPagerAdapter;
-import shuhai.readercore.ui.adapter.ViewPagerFragmentAdapter;
-import shuhai.readercore.ui.presenter.BookRecommendPresenter;
 
 /**
  * @author 55345364
@@ -27,11 +20,8 @@ public abstract  class BaseVPFragment extends BaseFragment implements SwipeRefre
 
 
     @Bind(R.id.view_pager)
-    protected ViewPager viewPager;
-    protected ViewPagerAdapter pagerAdapter;
-
-
-
+    public ViewPager viewPager;
+    public ViewPagerAdapter pagerAdapter;
 
     @Override
     protected void setupActivityComponent() {
@@ -61,12 +51,39 @@ public abstract  class BaseVPFragment extends BaseFragment implements SwipeRefre
 
     @Override
     public void onRefresh() {
-
-
+//        viewPager.setOnPageChangeListener(mOnPageChangeListener);
+        pagerAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void attachView() {
 
     }
+
+
+    private ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            setSelectedItemId(position);
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+
+        }
+    };
+
+
+    public void setCurrentItem(int position){
+        viewPager.setCurrentItem(position);
+    }
+
+
+    public abstract void setSelectedItemId(int position);
+
 }

@@ -1,6 +1,13 @@
 package shuhai.readercore.ui.fragment;
 
 
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
+import android.support.v4.view.ViewPager;
+import android.view.MenuItem;
+import android.widget.Toast;
+
+import butterknife.Bind;
 import shuhai.readercore.R;
 import shuhai.readercore.base.BaseVPFragment;
 import shuhai.readercore.ui.adapter.ViewPagerAdapter;
@@ -13,6 +20,8 @@ import shuhai.readercore.ui.presenter.BookShopPresenter;
 
 public class BookShopFragment extends BaseVPFragment {
 
+    @Bind(R.id.navigation)
+    public BottomNavigationView bottomNavigationView;
     BookShopPresenter presenter = new BookShopPresenter();
 
     @Override
@@ -29,6 +38,7 @@ public class BookShopFragment extends BaseVPFragment {
     public void configView() {
         initAdapter(ViewPagerAdapter.class);
         onRefresh();
+        bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
 
@@ -39,4 +49,33 @@ public class BookShopFragment extends BaseVPFragment {
             pagerAdapter.setData(presenter.obtainView(mContext));
         }
     }
+
+    @Override
+    public void setSelectedItemId(int position) {
+
+    }
+
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.navigation_home:
+                    setCurrentItem(0);
+                    return true;
+                case R.id.navigation_serial:
+                    setCurrentItem(1);
+                    return true;
+                case R.id.navigation_fans:
+                    setCurrentItem(2);
+                    return true;
+                case R.id.navigation_person:
+                    setCurrentItem(3);
+                    return true;
+            }
+            return false;
+        }
+    };
+
+
 }

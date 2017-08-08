@@ -3,4 +3,13 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    <string name="bookstore_recommend_view">推荐</string>
+    <string name="bookstore_serial_view">精品</string>
+    <string name="bookstore_classification_view">分类</string>
+    <string name="bookstore_ranking_view">排行</string>
+    <string name="bookstore_fans_view">粉丝</string>
+    <string name="bookstore_person_view">我的</string>
+
 </resources>
