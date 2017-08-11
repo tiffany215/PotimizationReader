@@ -1,28 +1,25 @@
-package shuhai.readercore.ui.activity;
+package shuhai.readercore.view.webview;
 
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
 import android.view.View;
 import android.webkit.JavascriptInterface;
-import android.webkit.WebView;
 import android.widget.Toast;
 
-import butterknife.InjectView;
 import shuhai.readercore.R;
-import shuhai.readercore.base.BaseWBActivity;
+import shuhai.readercore.ui.activity.ReadActivity;
 
 /**
  * @author 55345364
  * @date 2017/8/7.
  */
 
-public class ComponentsActivity extends BaseWBActivity {
+public class ComponentsWebView extends BaseWbView {
 
     private String mUrl;
-    public ComponentsActivity(Context context, String url) {
+    public ComponentsWebView(Context context, String url) {
         super(context, url);
         this.mUrl = url;
         loadWeb();

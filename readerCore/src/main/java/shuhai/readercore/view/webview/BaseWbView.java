@@ -1,4 +1,4 @@
-package shuhai.readercore.base;
+package shuhai.readercore.view.webview;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -25,7 +25,7 @@ import shuhai.readercore.utils.NetworkUtils;
  * @date 2017/8/7.
  */
 @SuppressLint({ "SetJavaScriptEnabled", "Instantiatable", "NewApi" })
-public abstract class BaseWBActivity {
+public abstract class BaseWbView {
 
 
     public Context mContext;
@@ -44,7 +44,7 @@ public abstract class BaseWBActivity {
 
 
     @SuppressLint({ "Instantiatable", "InflateParams" })
-    public BaseWBActivity(Context context,String url) {
+    public BaseWbView(Context context, String url) {
         this.mContext = context;
         mLayoutInflater = LayoutInflater.from(mContext);
         layout = mLayoutInflater.inflate(getLayoutId(),null);
