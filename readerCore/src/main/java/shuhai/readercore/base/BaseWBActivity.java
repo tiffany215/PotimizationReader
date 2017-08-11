@@ -1,5 +1,4 @@
 package shuhai.readercore.base;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -7,6 +6,7 @@ import android.net.http.SslError;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.SslErrorHandler;
@@ -14,7 +14,11 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+
 import shuhai.readercore.R;
+import shuhai.readercore.utils.NetworkUtils;
 
 /**
  * @author 55345364
@@ -32,6 +36,13 @@ public abstract class BaseWBActivity {
     private String URL;
     private LayoutInflater mLayoutInflater;
 
+    public SwipeRefreshLayout swipeRefreshLayout;
+
+    private ProgressBar progressBar;
+    private LinearLayout errorLayout;
+
+
+
     @SuppressLint({ "Instantiatable", "InflateParams" })
     public BaseWBActivity(Context context,String url) {
         this.mContext = context;
@@ -46,6 +57,16 @@ public abstract class BaseWBActivity {
     public abstract int getLayoutId();
 
     private void initView() {
+        swipeRefreshLayout = layout.findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadWeb();
+
+            }
+        });
+        progressBar = layout.findViewById(R.id.web_progressbar);
+        errorLayout = layout.findViewById(R.id.view_load_fail);
         mWebView = layout.findViewById(R.id.web_view);
         webSetting();
         mWebView.setWebViewClient(new MyWebViewClient());
@@ -82,13 +103,18 @@ public abstract class BaseWBActivity {
         }
 
         public void onPageFinished(WebView view, String url) {
+//            errorLayout.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
+
             if (null == mWebView || null == mWebView.getTitle()) {
                 return;
             }
             if (!mWebView.getTitle().equals("")
                     && mWebView.getTitle().length() > 20) {
             } else {
+
             }
+            swipeRefreshLayout.setRefreshing(false);
         }
 
         @SuppressWarnings("deprecation")
@@ -118,6 +144,8 @@ public abstract class BaseWBActivity {
         @Override
         public void onProgressChanged(WebView view, int newProgress) {
             super.onProgressChanged(view, newProgress);
+            progressBar.setProgress(newProgress);
+//            progressBar.postInvalidate();
         }
 
         @Override
@@ -136,6 +164,12 @@ public abstract class BaseWBActivity {
 
     @SuppressLint("SetJavaScriptEnabled")
     public void loadWeb() {
+        if (!NetworkUtils.isAvailable(mContext)) {
+            errorLayout.setVisibility(View.VISIBLE);
+            return;
+        }
+
         mWebView.loadUrl(URL);
     }
+
 }

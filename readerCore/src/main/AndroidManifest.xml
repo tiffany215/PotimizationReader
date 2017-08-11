@@ -3,7 +3,6 @@
     package="shuhai.readercore">
 
 
-    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -23,14 +22,6 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
 
-    <!-- 获取用户设备的IMEI，通过IMEI和mac来唯一的标识用户 ,友盟统计需要 -->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-
-    <!-- 建立桌面快捷方式权限 -->
-    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
-    <uses-permission android:name="com.android.launcher.permission.UNINSTALL_SHORTCUT" />
-    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
-
     <!-- 联网权限 -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -46,57 +37,6 @@
     <!-- 改变wifi状态 -->
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 
-    <!-- 桌面图标适配权限 start -->
-    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
-    <uses-permission android:name="com.android.launcher.permission.WRITE_SETTINGS" />
-    <uses-permission android:name="com.android.launcher2.permission.READ_SETTINGS" />
-    <uses-permission android:name="com.android.launcher2.permission.WRITE_SETTINGS" />
-    <uses-permission android:name="com.android.launcher3.permission.READ_SETTINGS" />
-    <uses-permission android:name="com.android.launcher3.permission.WRITE_SETTINGS" />
-    <uses-permission android:name="org.adw.launcher.permission.READ_SETTINGS" />
-    <uses-permission android:name="org.adw.launcher.permission.WRITE_SETTINGS" />
-    <uses-permission android:name="com.htc.launcher.permission.READ_SETTINGS" />
-    <uses-permission android:name="com.htc.launcher.permission.WRITE_SETTINGS" />
-    <uses-permission android:name="com.qihoo360.launcher.permission.READ_SETTINGS" />
-    <uses-permission android:name="com.qihoo360.launcher.permission.WRITE_SETTINGS" />
-    <uses-permission android:name="com.lge.launcher.permission.READ_SETTINGS" />
-    <uses-permission android:name="com.lge.launcher.permission.WRITE_SETTINGS" />
-    <uses-permission android:name="net.qihoo.launcher.permission.READ_SETTINGS" />
-    <uses-permission android:name="net.qihoo.launcher.permission.WRITE_SETTINGS" />
-    <uses-permission android:name="org.adwfreak.launcher.permission.READ_SETTINGS" />
-    <uses-permission android:name="org.adwfreak.launcher.permission.WRITE_SETTINGS" />
-    <uses-permission android:name="org.adw.launcher_donut.permission.READ_SETTINGS" />
-    <uses-permission android:name="org.adw.launcher_donut.permission.WRITE_SETTINGS" />
-    <uses-permission android:name="com.huawei.launcher3.permission.READ_SETTINGS" />
-    <uses-permission android:name="com.huawei.launcher3.permission.WRITE_SETTINGS" />
-    <uses-permission android:name="com.fede.launcher.permission.READ_SETTINGS" />
-    <uses-permission android:name="com.fede.launcher.permission.WRITE_SETTINGS" />
-    <uses-permission android:name="com.sec.android.app.twlauncher.settings.READ_SETTINGS" />
-    <uses-permission android:name="com.sec.android.app.twlauncher.settings.WRITE_SETTINGS" />
-    <uses-permission android:name="com.anddoes.launcher.permission.READ_SETTINGS" />
-    <uses-permission android:name="com.anddoes.launcher.permission.WRITE_SETTINGS" />
-    <uses-permission android:name="com.tencent.qqlauncher.permission.READ_SETTINGS" />
-    <uses-permission android:name="com.tencent.qqlauncher.permission.WRITE_SETTINGS" />
-    <uses-permission android:name="com.huawei.launcher2.permission.READ_SETTINGS" />
-    <uses-permission android:name="com.huawei.launcher2.permission.WRITE_SETTINGS" />
-    <uses-permission android:name="com.android.mylauncher.permission.READ_SETTINGS" />
-    <uses-permission android:name="com.android.mylauncher.permission.WRITE_SETTINGS" />
-    <uses-permission android:name="com.ebproductions.android.launcher.permission.READ_SETTINGS" />
-    <uses-permission android:name="com.ebproductions.android.launcher.permission.WRITE_SETTINGS" />
-    <uses-permission android:name="com.oppo.launcher.permission.READ_SETTINGS" />
-    <uses-permission android:name="com.oppo.launcher.permission.WRITE_SETTINGS" />
-    <uses-permission android:name="com.huawei.android.launcher.permission.READ_SETTINGS" />
-    <uses-permission android:name="com.huawei.android.launcher.permission.WRITE_SETTINGS" />
-    <uses-permission android:name="telecom.mdesk.permission.READ_SETTINGS" />
-    <uses-permission android:name="telecom.mdesk.permission.WRITE_SETTINGS" />
-    <uses-permission android:name="dianxin.permission.ACCESS_LAUNCHER_DATA" />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
-    <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
-
-    <!-- <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" /> -->
-
-
-    <!-- 桌面图标适配权限 end -->
 
 
     <!-- 获取网络状态 -->

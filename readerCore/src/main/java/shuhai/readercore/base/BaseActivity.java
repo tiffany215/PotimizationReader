@@ -25,7 +25,7 @@ public abstract class BaseActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(getLayoutId());
         this.mContext = this;
-        ButterKnife.bind(this);
+        ButterKnife.inject(this);
         initData();
         configViews();
     }
@@ -34,7 +34,6 @@ public abstract class BaseActivity extends AppCompatActivity{
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
     }
 
     public abstract int getLayoutId();

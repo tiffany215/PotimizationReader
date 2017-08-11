@@ -18,7 +18,6 @@ import butterknife.ButterKnife;
 
 public  abstract  class BaseFragment extends Fragment {
 
-
     public View parentView;
 
     public FragmentActivity fragmentActivity;
@@ -27,10 +26,11 @@ public  abstract  class BaseFragment extends Fragment {
 
     protected abstract void setupActivityComponent();
 
-    @Nullable
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         parentView = inflater.inflate(getLayoutResId(),container,false);
+        ButterKnife.inject(this,parentView);
         fragmentActivity = getSupportActivity();
         mContext = fragmentActivity;
         return parentView;
@@ -40,7 +40,6 @@ public  abstract  class BaseFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this,view);
         setupActivityComponent();
         attachView();
         initData();
@@ -52,7 +51,6 @@ public  abstract  class BaseFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
     }
 
     public FragmentActivity getSupportActivity(){

@@ -2,22 +2,18 @@ package shuhai.readercore.ui.activity;
 
 import android.text.TextUtils;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.InjectView;
 import shuhai.readercore.R;
 import shuhai.readercore.base.BaseActivity;
 import shuhai.readercore.manager.ChapterLoader;
-import shuhai.readercore.manager.ThemeManager;
 import shuhai.readercore.ui.contract.BookReadContract;
 import shuhai.readercore.ui.presenter.BookReadPresenter;
 import shuhai.readercore.view.readview.displayview.BaseReadViewImpl;
-import shuhai.readercore.view.readview.pagewidget.LevelScrollFlipPageWidget;
 import shuhai.readercore.view.readview.pagewidget.NoEffectFlipPageWidget;
 
 /**
@@ -29,7 +25,7 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View{
 
 
 
-    @Bind(R.id.flReadWidget)
+    @InjectView(R.id.flReadWidget)
     FrameLayout lsReadWidget;
 
     private BaseReadViewImpl mPageWidget;

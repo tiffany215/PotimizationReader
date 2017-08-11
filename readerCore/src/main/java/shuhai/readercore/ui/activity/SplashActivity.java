@@ -10,17 +10,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
+import butterknife.InjectView;
 import shuhai.readercore.R;
 import shuhai.readercore.ui.adapter.ViewPagerAdapter;
-import shuhai.readercore.ui.presenter.BookReadPresenter;
 import shuhai.readercore.ui.presenter.BookRecommendPresenter;
 
 /**
@@ -38,7 +35,7 @@ public class SplashActivity extends AppCompatActivity implements View.OnClickLis
 
     private ViewPagerAdapter adapter;
 
-    @Bind(R.id.splash_viewpager)
+    @InjectView(R.id.splash_viewpager)
     ViewPager viewPager;
 
     Button recommendBoy;
@@ -52,7 +49,7 @@ public class SplashActivity extends AppCompatActivity implements View.OnClickLis
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        ButterKnife.bind(this);
+        ButterKnife.inject(this);
         this.mContext = this;
         mLayoutInflater = LayoutInflater.from(mContext);
         initView();
@@ -105,7 +102,6 @@ public class SplashActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
     }
 
     @Override

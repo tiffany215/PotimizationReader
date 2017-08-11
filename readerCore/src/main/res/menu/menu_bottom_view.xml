@@ -5,7 +5,7 @@
           android:title="@string/bookstore_recommend_view" />
 
     <item android:id="@+id/navigation_serial"
-        android:icon="@drawable/ic_home_black_24dp"
+        android:icon="@drawable/ic_favorite_black_24dp"
         android:title="@string/bookstore_serial_view" />
 
     <item android:id="@+id/navigation_fans"

@@ -2,7 +2,7 @@ package shuhai.readercore.ui.activity;
 
 import android.support.v4.view.ViewPager;
 
-import butterknife.Bind;
+import butterknife.InjectView;
 import shuhai.readercore.R;
 import shuhai.readercore.base.BaseActivity;
 import shuhai.readercore.ui.adapter.ViewPagerFragmentAdapter;
@@ -12,7 +12,7 @@ import shuhai.readercore.ui.fragment.BookStoreFragment;
 public class MainActivity extends BaseActivity {
 
 
-    @Bind(R.id.viewpager_book_store)
+    @InjectView(R.id.viewpager_book_store)
     ViewPager viewPager;
 
 

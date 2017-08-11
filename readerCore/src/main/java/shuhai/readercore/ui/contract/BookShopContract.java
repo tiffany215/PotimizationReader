@@ -23,7 +23,7 @@ public interface BookShopContract {
 
 
     interface Presents<T> extends BaseContract.BasePresenter<T>{
-        List<android.view.View> obtainView(Context context);
+        List<T> obtainView(Context context);
     }
 
 

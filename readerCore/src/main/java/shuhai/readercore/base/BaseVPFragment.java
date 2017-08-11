@@ -7,7 +7,8 @@ import com.jude.easyrecyclerview.swipe.SwipeRefreshLayout;
 
 import java.lang.reflect.Constructor;
 
-import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import shuhai.readercore.R;
 import shuhai.readercore.ui.adapter.ViewPagerAdapter;
 
@@ -19,7 +20,7 @@ import shuhai.readercore.ui.adapter.ViewPagerAdapter;
 public abstract  class BaseVPFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener{
 
 
-    @Bind(R.id.view_pager)
+    @InjectView(R.id.view_pager)
     public ViewPager viewPager;
     public ViewPagerAdapter pagerAdapter;
 
@@ -30,8 +31,12 @@ public abstract  class BaseVPFragment extends BaseFragment implements SwipeRefre
 
     protected void initAdapter(Class<? extends PagerAdapter> clz){
         pagerAdapter = (ViewPagerAdapter)createAdapter(clz);
+        if(null == viewPager){
+            viewPager = ButterKnife.findById(parentView,R.id.view_pager);
+        }
         if(null != viewPager){
             viewPager.setAdapter(pagerAdapter);
+            viewPager.setOnPageChangeListener(onPageChangeListener);
         }
     }
 
@@ -51,7 +56,6 @@ public abstract  class BaseVPFragment extends BaseFragment implements SwipeRefre
 
     @Override
     public void onRefresh() {
-//        viewPager.setOnPageChangeListener(mOnPageChangeListener);
         pagerAdapter.notifyDataSetChanged();
     }
 
@@ -61,7 +65,14 @@ public abstract  class BaseVPFragment extends BaseFragment implements SwipeRefre
     }
 
 
-    private ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
+    public void setCurrentItem(int position){
+        if(null != viewPager){
+            viewPager.setCurrentItem(position);
+        }
+    }
+
+    ViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.OnPageChangeListener() {
+
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -69,7 +80,7 @@ public abstract  class BaseVPFragment extends BaseFragment implements SwipeRefre
 
         @Override
         public void onPageSelected(int position) {
-            setSelectedItemId(position);
+            onPageSelectedPage(position);
         }
 
         @Override
@@ -79,11 +90,7 @@ public abstract  class BaseVPFragment extends BaseFragment implements SwipeRefre
     };
 
 
-    public void setCurrentItem(int position){
-        viewPager.setCurrentItem(position);
-    }
+    public abstract void onPageSelectedPage(int position);
 
-
-    public abstract void setSelectedItemId(int position);
 
 }

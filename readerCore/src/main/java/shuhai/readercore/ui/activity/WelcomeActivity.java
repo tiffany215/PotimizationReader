@@ -7,8 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
-import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.InjectView;
 import shuhai.readercore.R;
 
 /**
@@ -18,7 +18,7 @@ import shuhai.readercore.R;
 
 public class WelcomeActivity extends AppCompatActivity {
 
-    @Bind(R.id.tv_skip)
+    @InjectView(R.id.tv_skip)
     public TextView tvSkip;
 
     private Runnable runnable;
@@ -29,7 +29,7 @@ public class WelcomeActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
-        ButterKnife.bind(this);
+        ButterKnife.inject(this);
 
         runnable = new Runnable() {
             @Override
@@ -50,7 +50,7 @@ public class WelcomeActivity extends AppCompatActivity {
     private synchronized void GoHome(){
         if(!flag){
             flag = true;
-            startActivity(new Intent(this,SplashActivity.class));
+            startActivity(new Intent(this,MainActivity.class));
             finish();
         }
     }
@@ -60,6 +60,5 @@ public class WelcomeActivity extends AppCompatActivity {
         super.onDestroy();
         flag = true;
         tvSkip.removeCallbacks(runnable);
-        ButterKnife.unbind(this);
     }
 }

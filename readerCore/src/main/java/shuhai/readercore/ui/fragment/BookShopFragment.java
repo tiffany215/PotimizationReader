@@ -3,11 +3,14 @@ package shuhai.readercore.ui.fragment;
 
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
-import butterknife.Bind;
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.InjectView;
 import shuhai.readercore.R;
 import shuhai.readercore.base.BaseVPFragment;
 import shuhai.readercore.ui.adapter.ViewPagerAdapter;
@@ -20,7 +23,7 @@ import shuhai.readercore.ui.presenter.BookShopPresenter;
 
 public class BookShopFragment extends BaseVPFragment {
 
-    @Bind(R.id.navigation)
+    @InjectView(R.id.navigation)
     public BottomNavigationView bottomNavigationView;
     BookShopPresenter presenter = new BookShopPresenter();
 
@@ -31,12 +34,11 @@ public class BookShopFragment extends BaseVPFragment {
 
     @Override
     public void initData() {
-
+        initAdapter(ViewPagerAdapter.class);
     }
 
     @Override
     public void configView() {
-        initAdapter(ViewPagerAdapter.class);
         onRefresh();
         bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
@@ -51,8 +53,8 @@ public class BookShopFragment extends BaseVPFragment {
     }
 
     @Override
-    public void setSelectedItemId(int position) {
-
+    public void onPageSelectedPage(int position) {
+        bottomNavigationView.getMenu().getItem(position).setChecked(true);
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener

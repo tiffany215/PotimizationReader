@@ -10,7 +10,7 @@ import java.lang.reflect.Constructor;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.InjectView;
 import shuhai.readercore.R;
 
 
@@ -24,7 +24,7 @@ public abstract class BaseRVFragment<T1 extends BaseContract.BasePresenter,T2> e
     @Inject
     protected T1 mPresenter;
 
-    @Bind(R.id.recycler_view)
+    @InjectView(R.id.recycler_view)
     protected EasyRecyclerView recyclerView;
 
     protected RecyclerArrayAdapter<T2> mAdapter;
