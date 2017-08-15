@@ -2,8 +2,10 @@ package shuhai.readercore.base;
 
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.http.SslError;
 import android.os.Build;
+import android.os.Handler;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
@@ -12,8 +14,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
+
 
 import butterknife.InjectView;
 import shuhai.readercore.R;
@@ -23,7 +24,7 @@ import shuhai.readercore.utils.NetworkUtils;
  * @author 55345364
  * @date 2017/8/11.
  */
-
+@SuppressLint({ "SetJavaScriptEnabled", "Instantiatable", "NewApi" })
 public abstract  class BaseWVActivity extends BaseActivity {
 
 
@@ -34,30 +35,42 @@ public abstract  class BaseWVActivity extends BaseActivity {
     public SwipeRefreshLayout swipeRefreshLayout;
 
 
-    @InjectView(R.id.web_progressbar)
-    public ProgressBar progressBar;
-
-    @InjectView(R.id.view_load_fail)
-    private LinearLayout errorLayout;
+//    @InjectView(R.id.web_progressbar)
+//    public ProgressBar progressBar;
+//
+//    @InjectView(R.id.view_load_fail)
+//    public LinearLayout errorLayout;
 
     public WebSettings webSettings;
 
+    public Handler mHandler;
+
+    public String mURl;
 
     @Override
     public void initData() {
-
+        mURl = getIntent().getStringExtra("url");
     }
 
     @Override
     public void initToolBar() {
-
+        mCommonToolbar.setTitleTextColor(Color.WHITE);
     }
 
     @Override
     public void configViews() {
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadWeb();
+            }
+        });
+        mHandler = new Handler();
         webSetting();
         webView.setWebViewClient(new MyWebViewClient());
         webView.setWebChromeClient(new MyChromeClient());
+        loadWeb();
     }
 
     private void webSetting() {
@@ -89,13 +102,13 @@ public abstract  class BaseWVActivity extends BaseActivity {
         }
 
         public void onPageFinished(WebView view, String url) {
-            errorLayout.setVisibility(View.GONE);
-            progressBar.setVisibility(View.GONE);
+//            errorLayout.setVisibility(View.GONE);
+//            progressBar.setVisibility(View.GONE);
             if (null == webView || null == webView.getTitle()) {
                 return;
             }
-            if (!webView.getTitle().equals("")
-                    && webView.getTitle().length() > 20) {
+            if (!webView.getTitle().equals("") && webView.getTitle().length() > 20) {
+                mCommonToolbar.setTitle(webView.getTitle());
             } else {
 
             }
@@ -129,8 +142,8 @@ public abstract  class BaseWVActivity extends BaseActivity {
         @Override
         public void onProgressChanged(WebView view, int newProgress) {
             super.onProgressChanged(view, newProgress);
-            progressBar.setProgress(newProgress);
-            progressBar.postInvalidate();
+//            progressBar.setProgress(newProgress);
+//            progressBar.postInvalidate();
         }
 
         @Override
@@ -147,14 +160,14 @@ public abstract  class BaseWVActivity extends BaseActivity {
 
     }
 
-//    @SuppressLint("SetJavaScriptEnabled")
-//    public void loadWeb() {
-//        if (!NetworkUtils.isAvailable(mContext)) {
-////            errorLayout.setVisibility(View.VISIBLE);
-//            return;
-//        }
-//
-//        webView.loadUrl(URL);
-//    }
+    @SuppressLint("SetJavaScriptEnabled")
+    public void loadWeb() {
+        if (!NetworkUtils.isAvailable(mContext)) {
+//            errorLayout.setVisibility(View.VISIBLE);
+            return;
+        }
+
+        webView.loadUrl(mURl);
+    }
 
 }

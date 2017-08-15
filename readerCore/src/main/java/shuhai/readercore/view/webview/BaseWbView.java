@@ -104,7 +104,7 @@ public abstract class BaseWbView {
 
         public void onPageFinished(WebView view, String url) {
 //            errorLayout.setVisibility(View.GONE);
-            progressBar.setVisibility(View.GONE);
+//            progressBar.setVisibility(View.GONE);
 
             if (null == mWebView || null == mWebView.getTitle()) {
                 return;
@@ -144,7 +144,7 @@ public abstract class BaseWbView {
         @Override
         public void onProgressChanged(WebView view, int newProgress) {
             super.onProgressChanged(view, newProgress);
-            progressBar.setProgress(newProgress);
+//            progressBar.setProgress(newProgress);
 //            progressBar.postInvalidate();
         }
 
@@ -165,7 +165,7 @@ public abstract class BaseWbView {
     @SuppressLint("SetJavaScriptEnabled")
     public void loadWeb() {
         if (!NetworkUtils.isAvailable(mContext)) {
-            errorLayout.setVisibility(View.VISIBLE);
+//            errorLayout.setVisibility(View.VISIBLE);
             return;
         }
 

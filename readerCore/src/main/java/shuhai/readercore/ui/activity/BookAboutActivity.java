@@ -1,53 +1,48 @@
-package shuhai.readercore.view.webview;
+package shuhai.readercore.ui.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
 import android.text.TextUtils;
-import android.view.View;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.webkit.JavascriptInterface;
 import android.widget.Toast;
 
+import shuhai.readercore.Constants;
 import shuhai.readercore.R;
-import shuhai.readercore.ui.activity.BookAboutActivity;
-import shuhai.readercore.ui.activity.ReadActivity;
+import shuhai.readercore.base.BaseWVActivity;
 import shuhai.readercore.utils.AppUtils;
 
 /**
  * @author 55345364
- * @date 2017/8/7.
+ * @date 2017/8/14.
  */
 
-public class ComponentsWebView extends BaseWbView {
-
-    private String mUrl;
-    public ComponentsWebView(Context context, String url) {
-        super(context, url);
-        this.mUrl = url;
-        loadWeb();
-    }
+public class BookAboutActivity extends BaseWVActivity {
 
 
     @Override
     public int getLayoutId() {
-        return R.layout.activity_bookshop_webview;
+        return R.layout.activity_webview;
     }
 
     @Override
     public void addJavaScriptInterface() {
-        mWebView.addJavascriptInterface(new Object() {
+
+        webView.addJavascriptInterface(new Object() {
 
             /**
              * 1、 加载json文件件,加载固定参数
              */
             @JavascriptInterface
             public void loadData() {
-                myHandler.post(new Runnable() {
+                mHandler.post(new Runnable() {
                     public void run() {
                         try {
-                            mWebView.loadUrl("javascript:waves("
-                                    + AppUtils
-                                    .makeJsonText()
+                            webView.loadUrl("javascript:waves("
+                                    + AppUtils.makeJsonText()
                                     + ")");
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -61,7 +56,7 @@ public class ComponentsWebView extends BaseWbView {
              */
             @JavascriptInterface
             public void addStore(final String articleid) {
-                myHandler.post(new Runnable() {
+                mHandler.post(new Runnable() {
                     public void run() {
 //                        try {
 //                            if (!bkbaseInfo.checkBook(articleid)) {
@@ -84,7 +79,7 @@ public class ComponentsWebView extends BaseWbView {
              */
             @JavascriptInterface
             public void readBook(final String articleid) {
-                myHandler.post(new Runnable() {
+                mHandler.post(new Runnable() {
                     public void run() {
                         // 处理免费阅读业务
                         // 处理免费阅读业务
@@ -112,7 +107,7 @@ public class ComponentsWebView extends BaseWbView {
             public void readBookFromChp(final String articleid,
                                         final String chaptered, final String chapterorder,
                                         final String isvip) {
-                myHandler.post(new Runnable() {
+                mHandler.post(new Runnable() {
                     public void run() {
                         // 处理从目录等位置进入的 具体章节阅读
                         Toast.makeText(mContext, "阅读", Toast.LENGTH_SHORT).show();
@@ -125,9 +120,9 @@ public class ComponentsWebView extends BaseWbView {
              */
             @JavascriptInterface
             public void refresh() {
-                myHandler.post(new Runnable() {
+                mHandler.post(new Runnable() {
                     public void run() {
-                        mWebView.reload();
+                        webView.reload();
                     }
                 });
             }
@@ -137,7 +132,7 @@ public class ComponentsWebView extends BaseWbView {
              */
             @JavascriptInterface
             public void alert(final String message) {
-                myHandler.post(new Runnable() {
+                mHandler.post(new Runnable() {
                     public void run() {
 //                        UIHelper.ToastMessage(mContext, message);
                     }
@@ -150,11 +145,11 @@ public class ComponentsWebView extends BaseWbView {
 
             @JavascriptInterface
             public void gotobookdetail(final String vurl) {
-                myHandler.post(new Runnable() {
+                mHandler.post(new Runnable() {
                     public void run() {
                         // 跳转书籍activity
                         Intent intent = new Intent(mContext,
-                                BookAboutActivity.class);
+                                ReadActivity.class);
                         intent.putExtra("url", vurl);
                         mContext.startActivity(intent);
                     }
@@ -167,7 +162,7 @@ public class ComponentsWebView extends BaseWbView {
 
             @JavascriptInterface
             public void gotoperson(final String vurl) {
-                myHandler.post(new Runnable() {
+                mHandler.post(new Runnable() {
                     public void run() {
 
                         // 跳转个人activity
@@ -186,7 +181,7 @@ public class ComponentsWebView extends BaseWbView {
 
             @JavascriptInterface
             public void gotopay(final String vurl) {
-                myHandler.post(new Runnable() {
+                mHandler.post(new Runnable() {
                     public void run() {
 
                         // 跳转支付activity
@@ -205,7 +200,7 @@ public class ComponentsWebView extends BaseWbView {
              */
             @JavascriptInterface
             public void gotoBrowserOut(final String vurl) {
-                myHandler.post(new Runnable() {
+                mHandler.post(new Runnable() {
 
                     @Override
                     public void run() {
@@ -228,26 +223,51 @@ public class ComponentsWebView extends BaseWbView {
              */
             @JavascriptInterface
             public void gotoCommunity() {
-                myHandler.post(new Runnable() {
+                mHandler.post(new Runnable() {
                     @Override
                     public void run() {
 
                     }
                 });
             }
-
-
         }, "demo");
     }
 
-
-    public View getLayout() {
-        return layout;
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_common,menu);
+        return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_search:
+                Intent intent = new Intent(mContext, BookAboutActivity.class);
+                intent.putExtra(
+                        "url",
+                        AppUtils.makeUserUrl(Constants.BASE_WEB_URL
+                                + "bookstore?op=search"));
+                mContext.startActivity(intent);
+                break;
+            case R.id.action_home:
 
-    public void loadWeb() {
-        mWebView.loadUrl(mUrl);
+                break;
+
+            case android.R.id.home:
+                finish();
+//                Intent upIntent = NavUtils.getParentActivityIntent(this);
+//                if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
+//                    TaskStackBuilder.create(this)
+//                            .addNextIntentWithParentStack(upIntent)
+//                            .startActivities();
+//                } else {
+//                    upIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                    NavUtils.navigateUpTo(this, upIntent);
+//                }
+                break;
+
+        }
+        return super.onOptionsItemSelected(item);
     }
-
 }

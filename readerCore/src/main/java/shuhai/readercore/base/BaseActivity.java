@@ -4,11 +4,13 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
 import butterknife.ButterKnife;
+import shuhai.readercore.R;
 
 /**
  * @author 55345364
@@ -19,6 +21,8 @@ public abstract class BaseActivity extends AppCompatActivity{
 
     public Context mContext;
 
+    public Toolbar mCommonToolbar;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -26,6 +30,12 @@ public abstract class BaseActivity extends AppCompatActivity{
         setContentView(getLayoutId());
         this.mContext = this;
         ButterKnife.inject(this);
+
+        mCommonToolbar = ButterKnife.findById(this, R.id.common_toolbar);
+        if(null != mCommonToolbar){
+            initToolBar();
+            setSupportActionBar(mCommonToolbar);
+        }
         initData();
         configViews();
     }

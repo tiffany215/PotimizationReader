@@ -30,4 +30,9 @@ public class Constants {
 
 
 
+
+    public final static String SITEID  = "300";//ADNROID 300；单本（302）；winPhone 304；winphone单本 305
+
+
+
 }

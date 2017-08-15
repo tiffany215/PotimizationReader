@@ -1,6 +1,9 @@
 package shuhai.readercore.ui.activity;
 
+import android.graphics.Color;
 import android.support.v4.view.ViewPager;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import butterknife.InjectView;
 import shuhai.readercore.R;
@@ -31,7 +34,9 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void initToolBar() {
-
+        mCommonToolbar.setLogo(R.drawable.ic_favorite_black_24dp);
+        mCommonToolbar.setTitle(R.string.app_name);
+        mCommonToolbar.setTitleTextColor(Color.WHITE);
     }
 
     @Override
@@ -41,6 +46,23 @@ public class MainActivity extends BaseActivity {
 
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+        }
+
+
+        return super.onOptionsItemSelected(item);
+    }
 }
 
 
