@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/primary_text"
+    >
+
+    <Button
+        android:id="@+id/bookstore_menu_night_model"
+        style="@style/bookstore_menu_button"
+        android:drawableTop="@drawable/bookstore_menu_night_model_24dp"
+        android:text="@string/bookstore_menu_night_model" />
+
+    <Button
+        android:id="@+id/bookstore_menu_local_reading"
+        style="@style/bookstore_menu_button"
+        android:drawableTop="@drawable/bookstore_menu_local_reading_24dp"
+        android:text="@string/bookstore_menu_local_reading" />
+
+    <Button
+        android:id="@+id/bookstore_menu_cloud_bookshelf"
+        style="@style/bookstore_menu_button"
+        android:drawableTop="@drawable/bookstore_menu_cloud_bookshelf_24dp"
+        android:text="@string/bookstore_menu_cloud_bookshelf" />
+
+    <Button
+        android:id="@+id/bookstore_menu_about_ours"
+        style="@style/bookstore_menu_button"
+        android:drawableTop="@drawable/bookstore_menu_about_ours_24dp"
+        android:text="@string/bookstore_menu_more_setting" />
+
+</LinearLayout>

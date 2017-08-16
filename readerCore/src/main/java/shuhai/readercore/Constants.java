@@ -28,7 +28,7 @@ public class Constants {
 
     public static final String SHUHAIREAD_KEY = "shuhaiCache";
 
-
+    public final static String KEY_SIGN = "yqP6SZMMRCchJAjPg0WtvOSxlpu0Hy"; // 系统秘钥
 
 
     public final static String SITEID  = "300";//ADNROID 300；单本（302）；winPhone 304；winphone单本 305

@@ -7,6 +7,8 @@
     android:orientation="vertical"
     tools:context="shuhai.readercore.ui.fragment.BookStoreFragment">
 
+
+
     <ProgressBar
         android:id="@+id/web_progressbar"
         style="@style/ProgressBar_Mini"

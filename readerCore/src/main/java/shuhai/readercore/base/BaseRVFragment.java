@@ -10,6 +10,7 @@ import java.lang.reflect.Constructor;
 
 import javax.inject.Inject;
 
+import butterknife.ButterKnife;
 import butterknife.InjectView;
 import shuhai.readercore.R;
 
@@ -36,6 +37,11 @@ public abstract class BaseRVFragment<T1 extends BaseContract.BasePresenter,T2> e
     }
 
     protected void initAdapter(boolean refreshable,boolean loadmoreable){
+
+        if(null == recyclerView){
+            recyclerView = ButterKnife.findById(parentView,R.id.recycler_view);
+        }
+
         if(null != recyclerView){
             recyclerView.setLayoutManager(new GridLayoutManager(getSupportActivity(),3));
             recyclerView.setAdapterWithProgress(mAdapter);

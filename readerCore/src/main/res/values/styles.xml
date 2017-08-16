@@ -38,4 +38,31 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 
+    <!-- 书架菜单栏 -->
+    <style name="bookstore_menu_button">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@null</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">12dp</item>
+        <item name="android:drawablePadding">5dp</item>
+        <item name="android:textColor">@color/primary_light</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+
+    <!-- 阅读设置 布局样式-->
+    <style name="app_setting_content">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">16sp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textColor">#000000</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:layout_margin">5dp</item>
+    </style>
+
+
+
 </resources>

@@ -19,7 +19,6 @@
     <string name="reload">重试</string>
 
 
-
     <!--主页菜单-->
     <string name="menu_main_please_login">请登录</string>
     <string name="menu_main_my_message">我的消息</string>
@@ -30,6 +29,101 @@
     <string name="menu_main_settings">设置</string>
     <string name="menu_main_scan_local_book">扫描本地书籍</string>
 
+
+    <!-- 书架 -->
+    <string name="bookstore_menu_night_model">护眼模式</string>
+    <string name="bookstore_menu_local_reading">本地阅读</string>
+    <string name="bookstore_menu_cloud_bookshelf">云端书架</string>
+    <string name="bookstore_menu_about_ours">关于我们</string>
+    <string name="bookstore_menu_more_setting">更多设置</string>
+    <string name="title_activity_app_settings">Settings</string>
+
+
+
+    <string name="settings_rd">阅读设置</string>
+    <string name="settings_te">主题设置</string>
+    <string name="settings_sm">订阅管理</string>
+    <string name="settings_crc">清除阅读缓存</string>
+    <string name="settings_ctc">清除主题缓存</string>
+    <string name="settings_dn">夜间模式</string>
+    <string name="settings_cf">用户反馈</string>
+    <string name="settings_sp">系统评分</string>
+    <string name="settings_vu">版本更新</string>
+    <string name="settings_hc">帮助中心</string>
+    <string name="settings_as">关于书海</string>
+
+
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">General</string>
+
+    <string name="pref_title_social_recommendations">Enable social recommendations</string>
+    <string name="pref_description_social_recommendations">Recommendations for people to contact
+        based on your message history
+    </string>
+
+    <string name="pref_title_display_name">Display name</string>
+    <string name="pref_default_display_name">John Smith</string>
+
+    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
+    <string-array name="pref_example_list_titles">
+        <item>Always</item>
+        <item>When possible</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_example_list_values">
+        <item>1</item>
+        <item>0</item>
+        <item>-1</item>
+    </string-array>
+
+    <!-- Example settings for Data & Sync -->
+    <string name="pref_header_data_sync">Data &amp; sync</string>
+
+    <string name="pref_title_sync_frequency">Sync frequency</string>
+    <string-array name="pref_sync_frequency_titles">
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>3 hours</item>
+        <item>6 hours</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_sync_frequency_values">
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>180</item>
+        <item>360</item>
+        <item>-1</item>
+    </string-array>
+
+    <string-array name="list_preference_entries">
+        <item>Entry 1</item>
+        <item>Entry 2</item>
+        <item>Entry 3</item>
+    </string-array>
+
+    <string-array name="list_preference_entry_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <string-array name="multi_select_list_preference_default_value" />
+
+    <string name="pref_title_system_sync_settings">System sync settings</string>
+
+    <!-- Example settings for Notifications -->
+    <string name="pref_header_notifications">Notifications</string>
+
+    <string name="pref_title_new_message_notifications">New message notifications</string>
+
+    <string name="pref_title_ringtone">Ringtone</string>
+    <string name="pref_ringtone_silent">Silent</string>
+
+    <string name="pref_title_vibrate">Vibrate</string>
 
 
 </resources>
