@@ -14,6 +14,7 @@ import shuhai.readercore.manager.ChapterLoader;
 import shuhai.readercore.ui.contract.BookReadContract;
 import shuhai.readercore.ui.presenter.BookReadPresenter;
 import shuhai.readercore.view.readview.displayview.BaseReadViewImpl;
+import shuhai.readercore.view.readview.pagewidget.GLRealFlipPageWidget;
 import shuhai.readercore.view.readview.pagewidget.NoEffectFlipPageWidget;
 
 /**

@@ -3,9 +3,9 @@
     android:shape="line" >
 
     <stroke
-        android:width="10dp"
+        android:width="20dp"
         android:color="@color/primary_text" />
 
-    <size android:height="10dp" />
+    <size android:height="20dp" />
 
 </shape>

@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "shuhai.readercore"
-        minSdkVersion 14
+        minSdkVersion 15
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"
@@ -24,13 +24,27 @@ android {
             minifyEnabled false
         }
     }
+
+    allprojects {
+        repositories {
+            maven { url "https://jitpack.io" }
+        }
+    }
+
 }
+
+
+
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+
+
+
+
     //ConverterFactory的String依赖包
     // Rx
     //Annotation
@@ -60,5 +74,8 @@ dependencies {
     compile 'com.flipboard:bottomsheet-core:1.5.3'
     compile 'com.flipboard:bottomsheet-commons:1.5.3'
     compile 'com.android.support:support-v4:26.+'
+    compile 'com.github.eschao:android-PageFlip:1.0.2'
     testCompile 'junit:junit:4.12'
+
+
 }

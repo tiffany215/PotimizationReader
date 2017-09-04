@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     >
+
     <include layout="@layout/common_toolbar"/>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -14,34 +16,63 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:divider="@drawable/dotted_line_gray"
-            android:showDividers="middle"
-
+            android:layout_margin="10dp"
             >
             <TextView
                 android:id="@+id/action_settings_rs"
-                style="@style/app_setting_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:textSize="16sp"
+                android:gravity="left|center"
+                android:clickable="true"
+                style="?android:attr/borderlessButtonStyle"
+                android:drawableRight="@drawable/ic_keyboard_arrow_right_black_24dp"
                 android:text="@string/settings_rd" />
 
             <TextView
                 android:id="@+id/action_settings_ts"
-                style="@style/app_setting_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:textSize="16sp"
+                android:gravity="left|center"
+                style="?android:attr/borderlessButtonStyle"
+                android:drawableRight="@drawable/ic_keyboard_arrow_right_black_24dp"
                 android:text="@string/settings_te" />
 
             <TextView
                 android:id="@+id/action_settings_sm"
-                style="@style/app_setting_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:textSize="16sp"
+                android:gravity="left|center"
+                style="?android:attr/borderlessButtonStyle"
+                android:drawableRight="@drawable/ic_keyboard_arrow_right_black_24dp"
                 android:text="@string/settings_sm" />
 
 
             <TextView
                 android:id="@+id/action_settings_crc"
-                style="@style/app_setting_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:textSize="16sp"
+                android:gravity="left|center"
+                style="?android:attr/borderlessButtonStyle"
+                android:drawableRight="@drawable/ic_keyboard_arrow_right_black_24dp"
                 android:text="@string/settings_crc" />
 
             <TextView
                 android:id="@+id/action_settings_ctc"
-                style="@style/app_setting_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:textSize="16sp"
+                android:gravity="left|center"
+                style="?android:attr/borderlessButtonStyle"
+                android:drawableRight="@drawable/ic_keyboard_arrow_right_black_24dp"
                 android:text="@string/settings_ctc" />
 
             <LinearLayout
@@ -49,60 +80,74 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 >
-                <TextView
-                    android:id="@+id/action_settings_dn"
-                    style="@style/app_setting_content"
-                    android:text="@string/settings_dn" />
-                <android.support.v7.widget.SwitchCompat
-                    android:id="@+id/switchCompat"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/action_settings_dn"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                style="@style/app_setting_content"
+                android:text="@string/settings_dn" />
+
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/switchCompat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
             </LinearLayout>
 
             <TextView
             android:id="@+id/action_settings_uf"
-            style="@style/app_setting_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:textSize="16sp"
+                android:gravity="left|center"
+                style="?android:attr/borderlessButtonStyle"
+                android:drawableRight="@drawable/ic_keyboard_arrow_right_black_24dp"
             android:text="@string/settings_cf" />
 
 
             <TextView
                 android:id="@+id/action_settings_sp"
-                style="@style/app_setting_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:textSize="16sp"
+                android:gravity="left|center"
+                style="?android:attr/borderlessButtonStyle"
+                android:drawableRight="@drawable/ic_keyboard_arrow_right_black_24dp"
                 android:text="@string/settings_sp" />
 
             <TextView
                 android:id="@+id/action_settings_vu"
-                style="@style/app_setting_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:textSize="16sp"
+                android:gravity="left|center"
+                style="?android:attr/borderlessButtonStyle"
+                android:drawableRight="@drawable/ic_keyboard_arrow_right_black_24dp"
                 android:text="@string/settings_vu" />
 
             <TextView
                 android:id="@+id/action_settings_hc"
-                style="@style/app_setting_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:textSize="16sp"
+                android:gravity="left|center"
+                style="?android:attr/borderlessButtonStyle"
+                android:drawableRight="@drawable/ic_keyboard_arrow_right_black_24dp"
                 android:text="@string/settings_hc" />
 
             <TextView
-            android:id="@+id/action_settings_as"
-            style="@style/app_setting_content"
-            android:text="@string/settings_as" />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                android:id="@+id/action_settings_as"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:textSize="16sp"
+                android:gravity="left|center"
+                style="?android:attr/borderlessButtonStyle"
+                android:drawableRight="@drawable/ic_keyboard_arrow_right_black_24dp"
+                android:text="@string/settings_as" />
         </LinearLayout>
     </ScrollView>
 

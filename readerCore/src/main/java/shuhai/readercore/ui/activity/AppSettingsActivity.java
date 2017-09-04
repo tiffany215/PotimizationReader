@@ -1,21 +1,20 @@
 package shuhai.readercore.ui.activity;
 
-
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.v7.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import butterknife.InjectView;
+import butterknife.OnClick;
 import shuhai.readercore.Constants;
 import shuhai.readercore.R;
 import shuhai.readercore.base.BaseActivity;
 import shuhai.readercore.utils.AppUtils;
 
-public class AppSettingsActivity extends BaseActivity implements View.OnClickListener {
+public class AppSettingsActivity extends BaseActivity {
 
     @InjectView(R.id.action_settings_uf)
     public TextView action_settings_uf;
@@ -44,9 +43,6 @@ public class AppSettingsActivity extends BaseActivity implements View.OnClickLis
     @InjectView(R.id.action_settings_dn)
     public  TextView action_settings_dn;
 
-    @InjectView(R.id.action_settings_crc)
-    public TextView action_settings_crc;
-
     @InjectView(R.id.action_settings_ts)
     public TextView action_settings_ts;
 
@@ -61,6 +57,7 @@ public class AppSettingsActivity extends BaseActivity implements View.OnClickLis
 
     }
 
+
     @Override
     public void initToolBar() {
         mCommonToolbar.setTitleTextColor(Color.WHITE);
@@ -68,17 +65,7 @@ public class AppSettingsActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public void configViews() {
-        action_settings_uf.setOnClickListener(this);
-        action_settings_as.setOnClickListener(this);
-        action_settings_sp.setOnClickListener(this);
-        action_settings_hc.setOnClickListener(this);
-        action_settings_ctc.setOnClickListener(this);
-        action_settings_rs.setOnClickListener(this);
-        action_settings_sm.setOnClickListener(this);
-        action_settings_vu.setOnClickListener(this);
-        action_settings_dn.setOnClickListener(this);
-        action_settings_crc.setOnClickListener(this);
-        action_settings_ts.setOnClickListener(this);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
 
@@ -90,7 +77,6 @@ public class AppSettingsActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         switch (item.getItemId()) {
             case R.id.action_search:
                 Intent intent = new Intent(mContext, BookAboutActivity.class);
@@ -108,40 +94,113 @@ public class AppSettingsActivity extends BaseActivity implements View.OnClickLis
                 finish();
                 break;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onClick(View view) {
 
-        switch (view.getId()) {
-            case R.id.action_settings_uf:
-                Toast.makeText(mContext, "1111", Toast.LENGTH_SHORT).show();
-                
-                break;
-            case R.id.action_settings_as:
-                break;
-            case R.id.action_settings_sp:
-                break;
-            case R.id.action_settings_hc:
-                break;
-            case R.id. action_settings_crc:
-                break;
-            case R.id.action_settings_rs:
-                break;
-            case R.id.action_settings_sm:
-                break;
-            case R.id.action_settings_vu:
-                break;
-            case R.id. action_settings_dn:
-                break;
-            case R.id.action_settings_ctc:
-                break;
-            case R.id.action_settings_ts:
-                break;
+    @OnClick(R.id.action_settings_crc)
+    public void OnClickCleanReaderCache(){
+        new AlertDialog.Builder(mContext).setTitle("清除阅读缓存")
+                .setMessage("您确定清除所有书籍的缓存记录吗？")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                //开启线程清理缓存数据
 
 
-        }
+                                //切换至UI线程
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+
+                                    }
+                                });
+                            }
+                        }).start();
+                        dialogInterface.dismiss();
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                })
+                .create().show();
+
     }
+
+
+    @OnClick(R.id.action_settings_ctc)
+    public void OnClickClearThemeCache(){
+        new AlertDialog.Builder(mContext).setTitle("清除主题缓存")
+                .setMessage("您确定要清理所有主题缓存吗?")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+
+                                    }
+                                });
+                            }
+                        }).start();
+
+
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                }).create().show();
+    }
+
+
+    @OnClick(R.id.action_settings_as)
+    public void OnClickAboutShuhai(){
+        new AlertDialog.Builder(mContext).setTitle("书海V" + AppUtils.getPackageInfo().packageName)
+                .setMessage(R.string.about_shuhai_prompt)
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+
+                                    }
+                                });
+                            }
+                        }).start();
+
+
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                }).create().show();
+    }
+
+
 }
