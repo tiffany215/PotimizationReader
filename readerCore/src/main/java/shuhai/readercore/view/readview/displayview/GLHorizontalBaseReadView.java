@@ -11,10 +11,9 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.Toast;
 
-import com.eschao.android.widget.pageflip.Page;
 import com.eschao.android.widget.pageflip.PageFlip;
 import com.eschao.android.widget.pageflip.PageFlipException;
-import com.eschao.android.widget.pageflip.PageFlipState;
+
 
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -25,6 +24,7 @@ import shuhai.readercore.manager.ThemeManager;
 import shuhai.readercore.utils.ScreenUtils;
 import shuhai.readercore.view.readview.BookStatus;
 import shuhai.readercore.view.readview.factory.Factory;
+import shuhai.readercore.view.readview.factory.PageFactory;
 
 
 /**
@@ -34,26 +34,18 @@ import shuhai.readercore.view.readview.factory.Factory;
 
 public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements GLSurfaceView.Renderer, BaseReadViewImpl{
 
-
-    public final static int MSG_ENDED_DRAWING_FRAME = 1;
-    private final static String TAG = "PageRender";
-
-    final static int DRAW_MOVING_FRAME = 0;
-    final static int DRAW_ANIMATING_FRAME = 1;
-    final static int DRAW_FULL_PAGE = 2;
-
-    final static int MAX_PAGES = 30;
+    private final static String TAG = "PageFlipView";
 
     int mPageNo;
-    int mDrawCommand;
+    int mDuration;
+    Handler mHandler;
+    PageFlip mPageFlip;
+    SinglePageRender mPageRender;
+    ReentrantLock mDrawLock;
+
 
     private Factory factory;
 
-
-    public PageFlip mPageFlip;
-    PageRender mPageRender;
-    public ReentrantLock mDrawLock;
-    Handler mHandler;
 
     protected Bitmap mPrePageBitmap,mCurPageBitmap,mNextPageBitmap;
     protected Canvas mPrePageCanvas,mCurPageCanvas,mNextPageCanvas;
@@ -69,28 +61,37 @@ public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements 
     private int mChapterId;
 
 
-
-
-    public GLHorizontalBaseReadView(Context context, int bookId, int chapterId) {
-        super(context,null);
-
-        newHandler();
+    public GLHorizontalBaseReadView(Context context,int bookId, int chapterId) {
+        super(context);
         this.mBookId = bookId;
         this.mChapterId = chapterId;
 
+        // create handler to tackle message
+        newHandler();
+
+        // load preferences
+//        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+        mDuration = 1000;
+//        int pixelsOfMesh = pref.getInt(Constants.PREF_MESH_PIXELS, 10);
+//        boolean isAuto = pref.getBoolean(Constants.PREF_PAGE_MODE, true);
+
+        // create PageFlip
         mPageFlip = new PageFlip(context);
         mPageFlip.setSemiPerimeterRatio(0.8f)
                 .setShadowWidthOfFoldEdges(5, 60, 0.3f)
                 .setShadowWidthOfFoldBase(5, 80, 0.4f)
-                .setPixelsOfMesh(1000)
+                .setPixelsOfMesh(10)
                 .enableAutoPage(true);
         setEGLContextClientVersion(2);
 
-        mPageNo = 1;
+        // init others
+        mPageNo = 3 ;
         mDrawLock = new ReentrantLock();
-        mPageRender = new SinglePageRender(context, mPageFlip, mHandler, mPageNo);
+        mPageRender = new SinglePageRender(context, mPageFlip,mHandler, mPageNo);
+        // configure render
         setRenderer(this);
         setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+
 
         mScreenWidth = ScreenUtils.getScreenWidth();
         mScreenHeight = ScreenUtils.getScreenHeight();
@@ -105,7 +106,11 @@ public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements 
         mNextPageCanvas =  new Canvas(mNextPageBitmap);
 
 
+        factory = new PageFactory(context);
+        ((PageFactory)factory).setChapterLoader();
+        ((PageFactory)factory).setComposingStrategy();
     }
+
 
     public synchronized void init(int theme){
         if(!isPrepare){
@@ -118,95 +123,127 @@ public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements 
 
             factory.onDraw(mCurPageCanvas);
             isPrepare = true;
-
-            postInvalidate();
+            requestRender();
         }
     }
-
-
-    public float actiondownX,actiondownY;
-    protected PointF mTouch = new PointF();
-    private int dx;
-    private int dy;
-    private boolean center;
 
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        switch (event.getAction()) {
+        switch (event.getAction()){
             case MotionEvent.ACTION_DOWN:
-
-                dx = (int) event.getX();
-                dy = (int) event.getY();
-
-                mTouch.x = dx;
-                mTouch.y = dy;
-
-                actiondownX = dx;
-                actiondownY = dy;
-
-                if(actiondownX >= mScreenWidth / 3 && actiondownX <= mScreenWidth * 2 / 3
-                        && actiondownY >= mScreenHeight / 3 && actiondownY <= mScreenHeight * 2 / 3 ){
-                    center = true;
-                }else{
-                    center = false;
-                    //条件成立为右翻
-                    if(actiondownX < mScreenWidth / 2){
-                        BookStatus bookStatus = factory.prePage();
-                        if(bookStatus == BookStatus.NO_PRE_PAGE){
-                            Toast.makeText(getContext(),"没有上一页了",Toast.LENGTH_SHORT).show();
-                            return false;
-                        }else if(bookStatus == BookStatus.LOAD_SUCCESS){
-                            abortAnimation();
-                            factory.onDraw(mPrePageCanvas);
-                        }else{
-                            return false;
-                        }
-                    }else{
-                        BookStatus bookStatus = factory.nextPage();
-                        if(bookStatus == BookStatus.NO_NEXT_PAGE){
-                            Toast.makeText(getContext(),"没有下一页了",Toast.LENGTH_SHORT).show();
-                            return false;
-                        }else if(bookStatus == BookStatus.LOAD_SUCCESS){
-                            abortAnimation();
-                            factory.onDraw(mNextPageCanvas);
-                        }else{
-                            return false;
-                        }
-                    }
-                    requestRender();
-                }
-
-
 
 
                 onFingerDown(event.getX(),event.getY());
+
+//                dx = (int) event.getX();
+//                dy = (int) event.getY();
+//
+//                mTouch.x = dx;
+//                mTouch.y = dy;
+//
+//                actiondownX = dx;
+//                actiondownY = dy;
+//
+//                if(actiondownX >= mScreenWidth / 3 && actiondownX <= mScreenWidth * 2 / 3
+//                        && actiondownY >= mScreenHeight / 3 && actiondownY <= mScreenHeight * 2 / 3 ){
+//                    center = true;
+//                }else{
+//                    center = false;
+//                    //条件成立为右翻
+//                    if(actiondownX < mScreenWidth / 2){
+//                        BookStatus bookStatus = factory.prePage();
+//                        if(bookStatus == BookStatus.NO_PRE_PAGE){
+//                            Toast.makeText(getContext(),"没有上一页了",Toast.LENGTH_SHORT).show();
+//                            return false;
+//                        }else if(bookStatus == BookStatus.LOAD_SUCCESS){
+//                            abortAnimation();
+//                            factory.onDraw(mPrePageCanvas);
+//                        }else{
+//                            return false;
+//                        }
+//                    }else{
+//                        BookStatus bookStatus = factory.nextPage();
+//                        if(bookStatus == BookStatus.NO_NEXT_PAGE){
+//                            Toast.makeText(getContext(),"没有下一页了",Toast.LENGTH_SHORT).show();
+//                            return false;
+//                        }else if(bookStatus == BookStatus.LOAD_SUCCESS){
+//                            abortAnimation();
+//                            factory.onDraw(mNextPageCanvas);
+//                        }else{
+//                            return false;
+//                        }
+//                    }
+//                    postInvalidate();
+//                }
                 break;
             case MotionEvent.ACTION_MOVE:
-                onFingerMove(event.getX(),event.getY());
-                requestRender();
+//                if(center){
+//                    break;
+//                }
+//                int mx = (int) event.getX();
+//                int my = (int) event.getY();
+//
+//                mTouch.x = mx;
+//                mTouch.y = my;
+//
+//                this.requestLayout();
+                onFingerMove(event.getX(), event.getY());
                 break;
             case MotionEvent.ACTION_CANCEL:
-                onFingerUp(event.getX(),event.getY());
+
+                onFingerUp(event.getX(), event.getY());
+//                if(center){
+//
+//
+//
+//                    break;
+//                }
+
+
                 break;
         }
-        return super.onTouchEvent(event);
+        return true;
     }
 
 
-    public  void onFingerMove(float x, float y){
+
+
+
+    /**
+     * Handle finger down event
+     *
+     * @param x finger x coordinate
+     * @param y finger y coordinate
+     */
+    public void onFingerDown(float x, float y) {
+        // if the animation is going, we should ignore this event to avoid
+        // mess drawing on screen
+        if (!mPageFlip.isAnimating() &&
+                mPageFlip.getFirstPage() != null) {
+            mPageFlip.onFingerDown(x, y);
+        }
+    }
+
+    /**
+     * Handle finger moving event
+     *
+     * @param x finger x coordinate
+     * @param y finger y coordinate
+     */
+    public void onFingerMove(float x, float y) {
         if (mPageFlip.isAnimating()) {
-            // 动画无关
+            // nothing to do during animating
         }
         else if (mPageFlip.canAnimate(x, y)) {
-            // 如果点超出当前页面，尝试开始动画
+            // if the point is out of current page, try to start animating
             onFingerUp(x, y);
         }
         // move page by finger
         else if (mPageFlip.onFingerMove(x, y)) {
             try {
                 mDrawLock.lock();
-                if (this.isFingerMove(x, y)) {
+                if (mPageRender != null && mPageRender.onFingerMove(x, y)) {
                     requestRender();
                 }
             }
@@ -216,31 +253,76 @@ public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements 
         }
     }
 
-
-    @Override
-    public void onSurfaceCreated(GL10 gl10, EGLConfig eglConfig) {
-        try {
-            mPageFlip.onSurfaceCreated();
-        }
-        catch (PageFlipException e) {
-            Log.e(TAG, "Failed to run PageFlipFlipRender:onSurfaceCreated");
+    /**
+     * Handle finger up event and start animating if need
+     *
+     * @param x finger x coordinate
+     * @param y finger y coordinate
+     */
+    public void onFingerUp(float x, float y) {
+        if (!mPageFlip.isAnimating()) {
+            mPageFlip.onFingerUp(x, y, mDuration);
+            try {
+                mDrawLock.lock();
+                if (mPageRender != null && mPageRender.onFingerUp(x, y)) {
+                    requestRender();
+                }
+            }
+            finally {
+                mDrawLock.unlock();
+            }
         }
     }
 
-
+    /**
+     * Draw frame
+     *
+     * @param gl OpenGL handle
+     */
     @Override
-    public void onSurfaceChanged(GL10 gl10, int width, int height) {
+    public void onDrawFrame(GL10 gl) {
+        try {
+            mDrawLock.lock();
+            if (mPageRender != null) {
+                mPageRender.onDrawFrame(mCurPageBitmap);
+            }
+        }
+        finally {
+            mDrawLock.unlock();
+        }
+    }
+
+    /**
+     * Handle surface is changed
+     *
+     * @param gl OpenGL handle
+     * @param width new width of surface
+     * @param height new height of surface
+     */
+    @Override
+    public void onSurfaceChanged(GL10 gl, int width, int height) {
         try {
             mPageFlip.onSurfaceChanged(width, height);
+
             // if there is the second page, create double page render when need
             int pageNo = mPageRender.getPageNo();
-           if(!(mPageRender instanceof SinglePageRender)) {
-                mPageRender.release();
-                mPageRender = new SinglePageRender(getContext(),
-                        mPageFlip,
-                        mHandler,
-                        pageNo);
-            }
+//            if (mPageFlip.getSecondPage() != null && width > height) {
+//                if (!(mPageRender instanceof DoublePagesRender)) {
+//                    mPageRender.release();
+//                    mPageRender = new DoublePagesRender(getContext(),
+//                            mPageFlip,
+//                            mHandler,
+//                            pageNo);
+//                }
+//            }
+            // if there is only one page, create single page render when need
+//            else if(!(mPageRender instanceof SinglePageRender)) {
+            mPageRender.release();
+            mPageRender = new SinglePageRender(getContext(),
+                    mPageFlip,
+                    mHandler,
+                    pageNo);
+//            }
 
             // let page render handle surface change
             mPageRender.onSurfaceChanged(width, height);
@@ -251,114 +333,31 @@ public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements 
     }
 
     /**
-     * onDrawFrame是绘制每一帧的方法
-     * @param gl10
+     * Handle surface is created
+     *
+     * @param gl OpenGL handle
+     * @param config EGLConfig object
      */
     @Override
-    public void onDrawFrame(GL10 gl10) {
+    public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         try {
-            mDrawLock.lock();
-            if (mPageRender != null) {
-                mPageFlip.deleteUnusedTextures();
-                Page page = mPageFlip.getFirstPage();
-
-                // 2. 从手指移动和动画触发的处理绘图命令
-                if (mDrawCommand == DRAW_MOVING_FRAME ||
-                        mDrawCommand == DRAW_ANIMATING_FRAME) {
-                    // 正向翻转
-                    if (mPageFlip.getFlipState() == PageFlipState.FORWARD_FLIP) {
-                        //检查第一页的第二个纹理是否有效，如果没有，创建新的。
-                        if (!page.isSecondTextureSet()) {
-                            drawPage(mPrePageCanvas,mPrePageBitmap);
-                            page.setSecondTexture(mPrePageBitmap);
-                        }
-                    }
-                    // 在向后翻页，第一页的第一个纹理检查是有效的
-                    else if (!page.isFirstTextureSet()) {
-                        drawPage(mNextPageCanvas,mNextPageBitmap);
-                        page.setFirstTexture(mNextPageBitmap);
-                    }
-
-                    // 画框翻页
-                    mPageFlip.drawFlipFrame();
-                }
-                // 画平静的页面而不翻转
-                else if (mDrawCommand == DRAW_FULL_PAGE) {
-                    if (!page.isFirstTextureSet()) {
-
-
-                        drawPage(mCurPageCanvas,mCurPageBitmap);
-                        page.setFirstTexture(mCurPageBitmap);
-
-
-                    }
-                    mPageFlip.drawPageFrame();
-                }
-
-                /**
-                 * 3.发送消息到主线程通知绘图结束如果需要，
-                 * 我们可以继续计算下一个动画帧。
-                 * 记住：绘图操作始终在GL线程中，而不是主线程
-                 */
-                Message msg = Message.obtain();
-                msg.what = MSG_ENDED_DRAWING_FRAME;
-                msg.arg1 = mDrawCommand;
-                mHandler.sendMessage(msg);
-            }
+            mPageFlip.onSurfaceCreated();
         }
-        finally {
-            mDrawLock.unlock();
+        catch (PageFlipException e) {
+            Log.e(TAG, "Failed to run PageFlipFlipRender:onSurfaceCreated");
         }
     }
-
-
-    public  void onFingerUp(float x, float y){
-        if (!mPageFlip.isAnimating()) {
-            mPageFlip.onFingerUp(x, y, 1000);
-            try {
-                mDrawLock.lock();
-                if (this.isFingerUp(x, y)) {
-                    requestRender();
-                }
-            }
-            finally {
-                mDrawLock.unlock();
-            }
-        }
-    };
-
-    public  void onFingerDown(float x, float y){
-        if (!mPageFlip.isAnimating() && mPageFlip.getFirstPage() != null) {
-            mPageFlip.onFingerDown(x, y);
-        }
-    };
-
-
-    public boolean isFingerUp(float x, float y) {
-        if (mPageFlip.animating()) {
-            mDrawCommand = DRAW_ANIMATING_FRAME;
-            return true;
-        }
-
-        return false;
-    }
-
-    public boolean isFingerMove(float x, float y) {
-        mDrawCommand = DRAW_MOVING_FRAME;
-        return true;
-    }
-
 
     /**
-     * 创建消息处理程序来处理来自页面呈现的消息，
-     * 页面渲染将在GL线程中发送消息，但是我们要处理这些消息
-     * 主线程中的消息，为什么我们需要处理程序
+     * Create message handler to cope with messages from page render,
+     * Page render will send message in GL thread, but we want to handle those
+     * messages in main thread that why we need handler here
      */
     private void newHandler() {
         mHandler = new Handler() {
             public void handleMessage(Message msg) {
                 switch (msg.what) {
-                    case PageRender.MSG_ENDED_DRAWING_FRAME:
+                    case SinglePageRender.MSG_ENDED_DRAWING_FRAME:
                         try {
                             mDrawLock.lock();
                             // notify page render to handle ended drawing
@@ -379,19 +378,5 @@ public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements 
             }
         };
     }
-
-
-    public abstract void drawPage(Canvas canvas,Bitmap bitmap);
-
-    protected abstract void drawPrePageArea(Canvas canvas);
-
-    protected abstract void drawCurPageArea(Canvas canvas);
-
-    protected abstract void drawNextPageArea(Canvas canvas);
-
-
-
-
-
 
 }
