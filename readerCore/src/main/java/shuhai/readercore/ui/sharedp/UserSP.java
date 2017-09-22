@@ -88,6 +88,22 @@ public class UserSP {
     }
 
 
+    /**
+     * 获取用户最后阅读章节排序号
+     * @return
+     */
+    public int getLastReaderChapterOrder(){
+        return sp.getInt("last.read.order.mark",0);
+    }
+
+    /**
+     * 设置用户最后阅读章节排序号
+     * @param chapterOrder
+     */
+    public void setLastReaderChapterOrder(int chapterOrder){
+        ed.putInt("last.read.order.mark",chapterOrder);
+        ed.commit();
+    }
 
 
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 
 import shuhai.readercore.view.readview.displayview.HorizontalBaseReadView;
+import shuhai.readercore.view.readview.displayview.OnReadStateChangeListener;
 
 /**
  * @author 55345364
@@ -14,8 +15,8 @@ import shuhai.readercore.view.readview.displayview.HorizontalBaseReadView;
 public class LevelScrollFlipPageWidget extends HorizontalBaseReadView {
 
 
-    public LevelScrollFlipPageWidget(Context context, int bookId, int chapterId) {
-        super(context, bookId, chapterId);
+    public LevelScrollFlipPageWidget(Context context, int bookId, int chapterId,OnReadStateChangeListener listener) {
+        super(context, bookId, chapterId,listener);
     }
 
     @Override

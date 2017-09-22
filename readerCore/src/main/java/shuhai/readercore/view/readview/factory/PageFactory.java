@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.widget.ProgressBar;
 
 import java.text.DecimalFormat;
@@ -17,10 +18,12 @@ import java.util.Vector;
 
 import shuhai.readercore.Constants;
 import shuhai.readercore.R;
+import shuhai.readercore.manager.ChapterLoader;
 import shuhai.readercore.utils.ScreenUtils;
 import shuhai.readercore.view.readview.BookStatus;
 import shuhai.readercore.view.readview.dataloader.ChapterLoaderImpl;
 import shuhai.readercore.view.readview.dataloader.HorizontalScrollChapterLoader;
+import shuhai.readercore.view.readview.displayview.OnReadStateChangeListener;
 import shuhai.readercore.view.readview.strategy.HorizontalComposing;
 
 /**
@@ -31,6 +34,8 @@ import shuhai.readercore.view.readview.strategy.HorizontalComposing;
 public class PageFactory extends Factory {
 
     private Context mContext;
+
+    OnReadStateChangeListener listener;
 
     /**
      * 屏幕的高度和宽度
@@ -72,6 +77,7 @@ public class PageFactory extends Factory {
     private Bitmap batteryBitmap;
     private int mBookId;
     private int mChapterId;
+    private int mChapterOrder;
     private int currentPage = 1;
     private int pageCount = 1;
 
@@ -116,7 +122,6 @@ public class PageFactory extends Factory {
 
     }
 
-
     /**
      * 打开书籍文件
      * @param articleId
@@ -125,9 +130,10 @@ public class PageFactory extends Factory {
      * @return 0：文件不存在或打开失败  1：打开成功
      */
     @Override
-    public int openBook(int articleId,int chapterId,int curPage){
+    public int openBook(int articleId,int chapterId,int chapterOrder,int curPage){
         this.mBookId = articleId;
         this.mChapterId = chapterId;
+        this.mChapterOrder = chapterOrder;
         this.currentPage = curPage;
         if(BookStatus.LOAD_SUCCESS == curPage()){
             if(null != chapterLoader){
@@ -138,7 +144,6 @@ public class PageFactory extends Factory {
                 return 0;
         }
     }
-
 
     @Override
     public <T extends ChapterLoaderImpl> T createChapterLoader(Class<T> clz) {
@@ -164,11 +169,15 @@ public class PageFactory extends Factory {
             currentPage = chapterLoader.getCountPate() + 1;
         }
         Vector<String> lines = chapterLoader.pageDown(currentPage,cacheKeyCreate());
+
         if(null != lines && lines.size() > 0){
             mLines = lines;
             return BookStatus.LOAD_SUCCESS;
         }
-        return BookStatus.NO_NEXT_PAGE;
+        if(null == lines || lines.size() <= 0){
+            nextChapter();
+        }
+        return BookStatus.LOAD_SUCCESS;
     }
 
     @Override
@@ -179,13 +188,13 @@ public class PageFactory extends Factory {
         }else if(currentPage == chapterLoader.getCountPate()){
             currentPage = chapterLoader.getCountPate() - 1;
         }
-
-
+        //加载缓存中章节内容
         Vector<String> lines = chapterLoader.pageUp(currentPage,cacheKeyCreate());
         if(null != lines && lines.size() > 0){
             mLines = lines;
             return BookStatus.LOAD_SUCCESS;
         }
+        //如果缓存中内容不存在，则去网络加载内容
         return BookStatus.NO_PRE_PAGE;
     }
 
@@ -199,6 +208,37 @@ public class PageFactory extends Factory {
         return BookStatus.NO_PRE_PAGE;
     }
 
+    @Override
+    public void preChapter() {
+      loadChapter(mChapterId--,mChapterOrder,1);
+    }
+
+    @Override
+    public void curChapter() {
+        loadChapter(mChapterId,mChapterOrder,0);
+    }
+
+    @Override
+    public void nextChapter() {
+        mChapterId += 1;
+        loadChapter(mChapterId,mChapterOrder,2);
+    }
+
+    /**
+     *
+     * @param chapterId
+     * @param chapterOrder
+     * @param flipMark
+     */
+    public void loadChapter(int chapterId,int chapterOrder,int flipMark){
+        //从缓存中获取章节内容，如果章节内容为空则从网络中获取。
+        String chapterContent =  ChapterLoader.getChapter(String.valueOf(mBookId).trim() + String.valueOf(chapterId).trim());
+        if(TextUtils.isEmpty(chapterContent)){
+            onChapterChanged(chapterId,chapterOrder,flipMark);
+            return;
+        }
+        onPageChanger(chapterId,chapterOrder);
+    }
 
     /**
      * 设置数据加载类
@@ -215,7 +255,6 @@ public class PageFactory extends Factory {
             this.chapterLoader.setComposingStrategy(new HorizontalComposing(mWidth,mHeight,mMarginWidth,mMarginHeight,mFontSize,mNumFontSize,mLineSpace,mPaint));
         }
     }
-
 
     /**
      * 绘制章节内容到具体 widget 的 bitmap上。
@@ -257,7 +296,6 @@ public class PageFactory extends Factory {
         this.mBookPageBg = bitmap;
     }
 
-
     /**
      * 缓存key生成方法
      * @return
@@ -268,6 +306,19 @@ public class PageFactory extends Factory {
         return buffer.toString().trim();
     }
 
+    public void setOnReadStateChangeListener(OnReadStateChangeListener listener){
+        this.listener = listener;
+    }
 
+    public void onChapterChanged(int chapterId,int chapterOrder,int flipMark){
+        if(null != listener){
+            listener.onChapterChanged(chapterId,chapterOrder,flipMark);
+        }
+    }
 
+    public void onPageChanger(int chapterId,int page){
+        if(null != listener){
+            listener.onPageChanged(chapterId,page);
+        }
+    }
 }

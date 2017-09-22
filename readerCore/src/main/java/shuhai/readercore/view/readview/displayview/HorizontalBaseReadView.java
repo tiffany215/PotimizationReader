@@ -10,6 +10,7 @@ import android.widget.Scroller;
 import android.widget.Toast;
 
 import shuhai.readercore.manager.ThemeManager;
+import shuhai.readercore.ui.sharedp.UserSP;
 import shuhai.readercore.utils.ScreenUtils;
 import shuhai.readercore.view.readview.BookStatus;
 import shuhai.readercore.view.readview.factory.Factory;
@@ -42,13 +43,16 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
     private int mBookId;
     private int mChapterId;
 
+    OnReadStateChangeListener listener;
 
 
-    public HorizontalBaseReadView(Context context,int bookId,int chapterId) {
+
+    public HorizontalBaseReadView(Context context,int bookId,int chapterId,OnReadStateChangeListener listener) {
         super(context);
 
         this.mBookId = bookId;
         this.mChapterId = chapterId;
+        this.listener = listener;
 
         mScreenWidth = ScreenUtils.getScreenWidth();
         mScreenHeight = ScreenUtils.getScreenHeight();
@@ -66,24 +70,30 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
         factory = new PageFactory(context);
         ((PageFactory)factory).setChapterLoader();
         ((PageFactory)factory).setComposingStrategy();
+        ((PageFactory) factory).setOnReadStateChangeListener(listener);
     }
 
 
     public synchronized void init(int theme){
         if(!isPrepare){
             factory.setBgBitmap(ThemeManager.getThemeDrawable(theme));
-            int ret =  factory.openBook(mBookId,mChapterId,1);
-            if(ret == 0){
-                Toast.makeText(getContext(),"章节内容打开失败！",Toast.LENGTH_LONG).show();
-                return;
-            }
-
-              factory.onDraw(mCurPageCanvas);
-              isPrepare = true;
-
-              postInvalidate();
+            openBook(mBookId,mChapterId,UserSP.getInstance().getLastReaderChapterOrder(),1);
         }
     }
+
+
+    public synchronized void openBook(int articleId,int chapterId,int chapterOrder,int curPage){
+        int ret = factory.openBook(articleId,chapterId,chapterOrder,curPage);
+        if(ret == 0){
+            Toast.makeText(getContext(),"章节内容打开失败！",Toast.LENGTH_LONG).show();
+            return;
+        }
+        factory.onDraw(mCurPageCanvas);
+        isPrepare = true;
+        postInvalidate();
+    }
+
+
 
     private int dx;
     private int dy;

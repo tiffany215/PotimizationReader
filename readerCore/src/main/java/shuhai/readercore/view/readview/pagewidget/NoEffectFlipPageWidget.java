@@ -7,6 +7,7 @@ import android.util.Log;
 
 import shuhai.readercore.utils.ScreenUtils;
 import shuhai.readercore.view.readview.displayview.HorizontalBaseReadView;
+import shuhai.readercore.view.readview.displayview.OnReadStateChangeListener;
 
 /**
  * @author 55345364
@@ -20,10 +21,8 @@ import shuhai.readercore.view.readview.displayview.HorizontalBaseReadView;
 public class NoEffectFlipPageWidget extends HorizontalBaseReadView {
 
 
-    private static final String TAG = "NoEffectFlipPageWidget";
-
-    public NoEffectFlipPageWidget(Context context, int bookId, int chapterId) {
-        super(context, bookId, chapterId);
+    public NoEffectFlipPageWidget(Context context, int bookId, int chapterId,OnReadStateChangeListener listener) {
+        super(context, bookId, chapterId,listener);
     }
 
     @Override

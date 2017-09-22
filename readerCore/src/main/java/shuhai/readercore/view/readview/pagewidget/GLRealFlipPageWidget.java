@@ -43,4 +43,8 @@ public class GLRealFlipPageWidget extends GLHorizontalBaseReadView {
     public void restoreAnimation() {
 
     }
+
+
+
+
 }

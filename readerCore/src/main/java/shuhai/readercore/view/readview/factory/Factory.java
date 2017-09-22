@@ -23,11 +23,20 @@ public abstract class Factory {
 
     public abstract BookStatus curPage();
 
+
+    public abstract void preChapter();
+
+    public abstract void curChapter();
+
+    public abstract void nextChapter();
+
+
+
     public abstract void onDraw(Canvas canvas);
 
     public abstract void setBgBitmap(Bitmap bitmap);
 
-    public abstract int openBook(int articleID,int chapterId,int curPage);
+    public abstract int openBook(int articleID,int chapterId,int chapterOrder,int curPage);
 
 
 }

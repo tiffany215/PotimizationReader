@@ -249,7 +249,7 @@ public class HorizontalComposing implements ComposingStrategy{
 
     /**
      *  对获取字符进行排版，并放入map中。
-     * @param key
+     * @param key 章节缓存 key,由书籍id 和 章节id 拼接组成,(articleId + chapterId)
      * @return
      */
     @Override

@@ -15,4 +15,7 @@ public interface BaseReadViewImpl {
     //设置主题
     void init(int theme);
 
+    void openBook(int articleId,int chapterId,int chapterOrder,int curPage);
+
+
 }

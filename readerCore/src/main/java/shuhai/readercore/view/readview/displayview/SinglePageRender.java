@@ -1,56 +1,25 @@
-/*
- * Copyright (C) 2016 eschao <esc.chao@gmail.com>
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package shuhai.readercore.view.readview.displayview;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 
 import com.eschao.android.widget.pageflip.OnPageFlipListener;
 import com.eschao.android.widget.pageflip.Page;
 import com.eschao.android.widget.pageflip.PageFlip;
 import com.eschao.android.widget.pageflip.PageFlipState;
 
-import shuhai.readercore.R;
 
 /**
- * Single page render
- * <p>
- * Every page need 2 texture in single page mode:
- * <ul>
- *     <li>First texture: current page content</li>
- *     <li>Back texture: back of front content, it is same with first texture
- *     </li>
- *     <li>Second texture: next page content</li>
- * </ul>
- * </p>
  *
- * @author eschao
  */
-
 public class SinglePageRender implements OnPageFlipListener {
+
     public final static int MSG_ENDED_DRAWING_FRAME = 1;
-    private final static String TAG = "PageRender";
 
     final static int DRAW_MOVING_FRAME = 0;
     final static int DRAW_ANIMATING_FRAME = 1;
@@ -89,28 +58,27 @@ public class SinglePageRender implements OnPageFlipListener {
         mPageFlip.deleteUnusedTextures();
         Page page = mPageFlip.getFirstPage();
 
-        // 2. handle drawing command triggered from finger moving and animating
+        // 2. 手指移动和动画触发的处理绘图命令
         if (mDrawCommand == DRAW_MOVING_FRAME ||
                 mDrawCommand == DRAW_ANIMATING_FRAME) {
-            // is forward flip
+            // 正向翻转
             if (mPageFlip.getFlipState() == PageFlipState.FORWARD_FLIP) {
-                // check if second texture of first page is valid, if not,
-                // create new one
+                //检查第一页的第二个纹理是否有效，如果没有，创建新的。
                 if (!page.isSecondTextureSet()) {
                     drawPage(bitmap);
                     page.setSecondTexture(mBitmap);
                 }
             }
-            // in backward flip, check first texture of first page is valid
+            // 在向后翻页，第一页的第一个纹理检查是有效的
             else if (!page.isFirstTextureSet()) {
                 drawPage(bitmap);
                 page.setFirstTexture(mBitmap);
             }
 
-            // draw frame for page flip
+            // 绘制翻页效果
             mPageFlip.drawFlipFrame();
         }
-        // draw stationary page without flipping
+        // 画平静的页面而不翻转
         else if (mDrawCommand == DRAW_FULL_PAGE) {
             if (!page.isFirstTextureSet()) {
                 drawPage(bitmap);
@@ -120,10 +88,10 @@ public class SinglePageRender implements OnPageFlipListener {
             mPageFlip.drawPageFrame();
         }
 
-        // 3. send message to main thread to notify drawing is ended so that
-        // we can continue to calculate next animation frame if need.
-        // Remember: the drawing operation is always in GL thread instead of
-        // main thread
+        // 3.发送消息给主线程通知绘图结束
+        //如果需要，我们可以继续计算下一个动画帧。
+        //记住：绘图操作始终在GL线程中，而不是
+        //主线程
         Message msg = Message.obtain();
         msg.what = MSG_ENDED_DRAWING_FRAME;
         msg.arg1 = mDrawCommand;
@@ -131,13 +99,13 @@ public class SinglePageRender implements OnPageFlipListener {
     }
 
     /**
-     * Handle GL surface is changed
+     * 处理GL表面已更改
      *
      * @param width surface width
      * @param height surface height
      */
     public void onSurfaceChanged(int width, int height) {
-        // recycle bitmap resources if need
+        // 如果需要，可以回收位图资源
         if (mBackgroundBitmap != null) {
             mBackgroundBitmap.recycle();
         }
@@ -146,44 +114,39 @@ public class SinglePageRender implements OnPageFlipListener {
             mBitmap.recycle();
         }
 
-        // create bitmap and canvas for page
+        // 为页面创建位图和画布
         //mBackgroundBitmap = background;
         Page page = mPageFlip.getFirstPage();
         mBitmap = Bitmap.createBitmap((int)page.width(), (int)page.height(),
                 Bitmap.Config.ARGB_8888);
         mCanvas.setBitmap(mBitmap);
-//        LoadBitmapTask.get(mContext).set(width, height, 1);
     }
 
     /**
-     * Handle ended drawing event
-     * In here, we only tackle the animation drawing event, If we need to
-     * continue requesting render, please return true. Remember this function
-     * will be called in main thread
-     *
+     * 处理结束绘图事件
+     * 在这里，我们只处理动画制作事件，如果我们需要的话
+     * 继续请求渲染，请返回true。 记住这个功能
+     * 将在主线程中调用
      * @param what event type
      * @return ture if need render again
      */
     public boolean onEndedDrawing(int what) {
-
-//        Log.e("dddd", "drawPage: " + "------wwww-------->");
-
         if (what == DRAW_ANIMATING_FRAME) {
             boolean isAnimating = mPageFlip.animating();
-            // continue animating
+            // 继续动画
             if (isAnimating) {
                 mDrawCommand = DRAW_ANIMATING_FRAME;
                 return true;
             }
-            // animation is finished
+            //动画完成
             else {
                 final PageFlipState state = mPageFlip.getFlipState();
-                // update page number for backward flip
+                // 更新页码进行向后翻页
                 if (state == PageFlipState.END_WITH_BACKWARD) {
-                    // don't do anything on page number since mPageNo is always
-                    // represents the FIRST_TEXTURE no;
+                    //由于mPageNo总是不要在页码上执行任何操作
+                    //表示FIRST_TEXTURE否;
                 }
-                // update page number and switch textures for forward flip
+                //更新页码并切换纹理以进行向前翻页
                 else if (state == PageFlipState.END_WITH_FORWARD) {
                     mPageFlip.getFirstPage().setFirstTextureWithSecond();
                     mPageNo++;
@@ -197,7 +160,7 @@ public class SinglePageRender implements OnPageFlipListener {
     }
 
     /**
-     * Draw page content
+     * 绘制显示内容
      *
      * @param
      */
@@ -206,10 +169,6 @@ public class SinglePageRender implements OnPageFlipListener {
         final int height = mCanvas.getHeight();
         Paint p = new Paint();
         p.setFilterBitmap(true);
-
-        // 1. draw background bitmap
-//        Bitmap background = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.p5_720);
-//        Bitmap background = LoadBitmapTask.get(mContext).getBitmap();
         Rect rect = new Rect(0, 0, width, height);
         mCanvas.drawBitmap(bitmap, null, rect, p);
 //        bitmap.recycle();
@@ -218,18 +177,18 @@ public class SinglePageRender implements OnPageFlipListener {
     }
 
     /**
-     * If page can flip forward
+     * 如果页面可以向前翻页
      *
-     * @return true if it can flip forward
+     * @return
      */
     public boolean canFlipForward() {
         return (mPageNo < MAX_PAGES);
     }
 
     /**
-     * If page can flip backward
+     * 如果页面可以向后翻页
      *
-     * @return true if it can flip backward
+     * @return
      */
     public boolean canFlipBackward() {
         if (mPageNo > 1) {
@@ -242,7 +201,7 @@ public class SinglePageRender implements OnPageFlipListener {
     }
 
     /**
-     * Get page number
+     * 获取页码
      *
      * @return page number
      */
@@ -251,7 +210,7 @@ public class SinglePageRender implements OnPageFlipListener {
     }
 
     /**
-     * Release resources
+     * 释放资源
      */
     public void release() {
         if (mBitmap != null) {
@@ -264,25 +223,26 @@ public class SinglePageRender implements OnPageFlipListener {
         mBackgroundBitmap = null;
     }
 
+
     /**
-     * Handle finger moving event
+     * 手指移动事件
      *
-     * @param x x coordinate of finger moving
-     * @param y y coordinate of finger moving
-     * @return true if event is handled
+     * @param x x手指移动坐标
+     * @param y y手指移动坐标
+     * @如果事件被处理，返回true
      */
     public boolean onFingerMove(float x, float y) {
         mDrawCommand = DRAW_MOVING_FRAME;
         return true;
     }
 
-    /**
-     * Handle finger up event
-     *
-     * @param x x coordinate of finger up
-     * @param y y coordinate of inger up
-     * @return true if event is handled
-     */
+     /**
+      * 手指握手事件
+      *
+      * @param x x手指坐标
+      * @param y y加入的坐标
+      * @如果事件被处理，返回true
+      */
     public boolean onFingerUp(float x, float y) {
         if (mPageFlip.animating()) {
             mDrawCommand = DRAW_ANIMATING_FRAME;
@@ -293,7 +253,7 @@ public class SinglePageRender implements OnPageFlipListener {
     }
 
     /**
-     * Calculate font size by given SP unit
+     * 用给定的SP单位计算字体大小
      */
     protected int calcFontSize(int size) {
         return (int)(size * mContext.getResources().getDisplayMetrics()

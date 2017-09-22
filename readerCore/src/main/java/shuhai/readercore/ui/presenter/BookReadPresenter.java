@@ -12,6 +12,7 @@ import shuhai.readercore.manager.ChapterLoader;
 import shuhai.readercore.net.callback.ApiCallback;
 import shuhai.readercore.net.exception.ApiException;
 import shuhai.readercore.ui.contract.BookReadContract;
+import shuhai.readercore.ui.sharedp.UserSP;
 
 import static android.content.ContentValues.TAG;
 
@@ -29,9 +30,9 @@ public class BookReadPresenter extends RxPresenter<BookReadContract.View> implem
 
 
     @Override
-    public void getChapterRead(final int articleId, final int chapterId) {
+    public void getChapterRead(final int articleId, final int chapterId,int chapterOrder,int flipMark) {
 
-        BookApis.getInstance().obtainChapter(new ApiCallback<ChapterEntity>() {
+        BookApis.getInstance().obtainChapter(articleId,chapterId,chapterOrder,flipMark,new ApiCallback<ChapterEntity>() {
 
 
             @Override
@@ -52,6 +53,7 @@ public class BookReadPresenter extends RxPresenter<BookReadContract.View> implem
             @Override
             public void onNext(ChapterEntity entity) {
                if(null != entity && null != entity.getMessage() && null != mView){
+                   UserSP.getInstance().setLastReaderChapterOrder(Integer.parseInt(entity.getMessage().get(0).getChapterorder().trim()));
                    String chapterStr = entity.getMessage().get(0).getContent();
                    Log.e(TAG, "onNext: "+ chapterStr );
                    if(!TextUtils.isEmpty(chapterStr)){

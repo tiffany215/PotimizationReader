@@ -3,14 +3,15 @@ package shuhai.readercore.view.readview.displayview;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.PointF;
 import android.opengl.GLSurfaceView;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.widget.Scroller;
 import android.widget.Toast;
 
+import com.eschao.android.widget.pageflip.OnPageFlipListener;
 import com.eschao.android.widget.pageflip.PageFlip;
 import com.eschao.android.widget.pageflip.PageFlipException;
 
@@ -21,8 +22,8 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import shuhai.readercore.manager.ThemeManager;
+import shuhai.readercore.ui.sharedp.UserSP;
 import shuhai.readercore.utils.ScreenUtils;
-import shuhai.readercore.view.readview.BookStatus;
 import shuhai.readercore.view.readview.factory.Factory;
 import shuhai.readercore.view.readview.factory.PageFactory;
 
@@ -44,6 +45,8 @@ public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements 
     ReentrantLock mDrawLock;
 
 
+
+
     private Factory factory;
 
 
@@ -60,15 +63,16 @@ public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements 
     private int mBookId;
     private int mChapterId;
 
+    Scroller mScroller;
 
     public GLHorizontalBaseReadView(Context context,int bookId, int chapterId) {
         super(context);
         this.mBookId = bookId;
         this.mChapterId = chapterId;
-
         // create handler to tackle message
         newHandler();
 
+        mScroller = new Scroller(context);
         // load preferences
 //        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
         mDuration = 1000;
@@ -115,17 +119,23 @@ public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements 
     public synchronized void init(int theme){
         if(!isPrepare){
             factory.setBgBitmap(ThemeManager.getThemeDrawable(theme));
-            int ret =  factory.openBook(mBookId,mChapterId,1);
-            if(ret == 0){
-                Toast.makeText(getContext(),"章节内容打开失败！",Toast.LENGTH_LONG).show();
-                return;
-            }
-
-            factory.onDraw(mCurPageCanvas);
-            isPrepare = true;
-            requestRender();
+            openBook(mBookId,mChapterId,UserSP.getInstance().getLastReaderChapterOrder(),1);
         }
     }
+
+    public synchronized void openBook(int articleId,int chapterId,int chapterOrder,int curPage){
+        int ret =  factory.openBook(mBookId,mChapterId, UserSP.getInstance().getLastReaderChapterOrder(),0);
+        if(ret == 0){
+            Toast.makeText(getContext(),"章节内容打开失败！",Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        factory.onDraw(mCurPageCanvas);
+        isPrepare = true;
+        requestRender();
+    }
+
+
 
 
     @Override
@@ -190,7 +200,8 @@ public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements 
 //                this.requestLayout();
                 onFingerMove(event.getX(), event.getY());
                 break;
-            case MotionEvent.ACTION_CANCEL:
+            case MotionEvent.ACTION_UP:
+
 
                 onFingerUp(event.getX(), event.getY());
 //                if(center){
@@ -200,6 +211,8 @@ public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements 
 //                    break;
 //                }
 
+                mScroller.startScroll((int)event.getX(),0,mScreenWidth - (int)event.getX(),0,700);
+                postInvalidate();
 
                 break;
         }
@@ -379,4 +392,15 @@ public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements 
         };
     }
 
+
+    @Override
+    public void computeScroll() {
+        super.computeScroll();
+        if(mScroller.computeScrollOffset()){
+            onFingerMove(mScroller.getCurrX(),mScroller.getCurrY());
+            postInvalidate();
+        }
+
+
+    }
 }

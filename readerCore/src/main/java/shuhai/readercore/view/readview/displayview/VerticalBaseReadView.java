@@ -44,8 +44,10 @@ public abstract class VerticalBaseReadView extends View implements BaseReadViewI
 
     }
 
+    @Override
+    public void openBook(int articleId,int chapterId,int chapterOrder,int curPage) {
 
-
+    }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
