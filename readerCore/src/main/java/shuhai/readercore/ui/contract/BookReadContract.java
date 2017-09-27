@@ -1,6 +1,7 @@
 package shuhai.readercore.ui.contract;
 
 import shuhai.readercore.base.BaseContract;
+import shuhai.readercore.view.readview.FlipStatus;
 
 /**
  * @author 55345364
@@ -11,7 +12,7 @@ public interface BookReadContract {
 
     interface View extends BaseContract.BaseView{
         void showBookToc();
-        void showChapterRead(int chapterId);
+        void showChapterRead(int chapterId, FlipStatus status);
         void netError();
     }
 
@@ -23,7 +24,7 @@ public interface BookReadContract {
          * @param chapterOrder 章节order
          * @param flipMark 翻页标识 当前章节:0   前一页:1    后一页:2
          */
-        void getChapterRead(int articleId, int chapterId,int chapterOrder,int flipMark);
+        void getChapterRead(int articleId, int chapterId,int chapterOrder,FlipStatus status);
         void getBookMixAToc();
     }
 

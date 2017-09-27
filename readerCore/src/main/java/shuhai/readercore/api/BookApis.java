@@ -9,6 +9,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import shuhai.readercore.net.api.CommonApi;
 import shuhai.readercore.net.callback.ApiCallback;
 import shuhai.readercore.utils.AppUtils;
+import shuhai.readercore.view.readview.FlipStatus;
 
 /**
  * @author 55345364
@@ -43,7 +44,7 @@ public class BookApis {
      * @param callback
      * @param <T>
      */
-    public <T> void obtainChapter(final int articleId, final int chapterId,int chapterOrder,int flipMark,ApiCallback<T> callback){
+    public <T> void obtainChapter(final int articleId, final int chapterId, int chapterOrder, FlipStatus status, ApiCallback<T> callback){
         Map<String,Object> params = new HashMap<>();
         params.put("packageame", "");
         params.put("sign", "cf647dda9b03998695e8436954eeba2d");
@@ -57,7 +58,18 @@ public class BookApis {
         params.put("version", 60);
         params.put("ip", String.valueOf("192.168.1.190"));
         params.put("uid", 173434);
-        params.put("order", flipMark);
+        switch (status) {
+            case ON_FLIP_PRE:
+                params.put("order", 0);
+                break;
+            case ON_FLIP_CUR:
+                params.put("order", 1);
+                break;
+            case ON_FLIP_NEXT:
+                params.put("order", 2);
+                break;
+
+        }
         params.put("articleid", articleId);
         params.put("chapterid", chapterId);
         commonApi.postMultipart("onechapter",params,callback);

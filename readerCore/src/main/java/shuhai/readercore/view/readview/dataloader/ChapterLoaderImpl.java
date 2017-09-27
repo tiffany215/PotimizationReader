@@ -19,6 +19,9 @@ public interface ChapterLoaderImpl {
 
     int getCountPate();
 
+    void clearPageCache();
+
+    void characterTypesetting(String key);
 
     void setComposingStrategy(ComposingStrategy composingStrategy);
 

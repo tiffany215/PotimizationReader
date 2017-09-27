@@ -34,6 +34,16 @@ public class VerticalScrollChapterLoader implements ChapterLoaderImpl{
     }
 
     @Override
+    public void clearPageCache() {
+
+    }
+
+    @Override
+    public void characterTypesetting(String key) {
+
+    }
+
+    @Override
     public void setComposingStrategy(ComposingStrategy composingStrategy) {
 
     }

@@ -1,14 +1,11 @@
 package shuhai.readercore.view.readview.pagewidget;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.util.Log;
 
-import shuhai.readercore.utils.ScreenUtils;
 import shuhai.readercore.view.readview.displayview.HorizontalBaseReadView;
 import shuhai.readercore.view.readview.displayview.OnReadStateChangeListener;
-import shuhai.readercore.view.readview.strategy.FlipStatus;
+import shuhai.readercore.view.readview.FlipStatus;
 
 /**
  * @author 55345364

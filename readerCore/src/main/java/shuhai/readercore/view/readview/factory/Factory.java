@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 
 import shuhai.readercore.view.readview.BookStatus;
 import shuhai.readercore.view.readview.dataloader.ChapterLoaderImpl;
+import shuhai.readercore.view.readview.FlipStatus;
 
 /**
  * @author 55345364
@@ -48,7 +49,7 @@ public abstract class Factory {
 
     public abstract void setBgBitmap(Bitmap bitmap);
 
-    public abstract int openBook(int articleID,int chapterId,int chapterOrder,int curPage);
+    public abstract int openBook(int articleID, int chapterId, int chapterOrder,FlipStatus status);
 
 
 }

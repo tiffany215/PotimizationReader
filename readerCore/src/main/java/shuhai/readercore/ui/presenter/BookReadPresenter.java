@@ -14,6 +14,7 @@ import shuhai.readercore.net.callback.ApiCallback;
 import shuhai.readercore.net.exception.ApiException;
 import shuhai.readercore.ui.contract.BookReadContract;
 import shuhai.readercore.ui.sharedp.UserSP;
+import shuhai.readercore.view.readview.FlipStatus;
 
 import static android.content.ContentValues.TAG;
 
@@ -31,9 +32,9 @@ public class BookReadPresenter extends RxPresenter<BookReadContract.View> implem
 
 
     @Override
-    public void getChapterRead(final int articleId, final int chapterId,int chapterOrder,int flipMark) {
+    public void getChapterRead(final int articleId, final int chapterId, int chapterOrder, final FlipStatus status) {
 
-        BookApis.getInstance().obtainChapter(articleId,chapterId,chapterOrder,flipMark,new ApiCallback<ChapterEntity>() {
+        BookApis.getInstance().obtainChapter(articleId,chapterId,chapterOrder,status,new ApiCallback<ChapterEntity>() {
 
 
             @Override
@@ -72,7 +73,7 @@ public class BookReadPresenter extends RxPresenter<BookReadContract.View> implem
                            DataBaseManager.getInstance().insertChapterInfo(chapterInfo);
                        }
                    }
-                   mView.showChapterRead(Integer.parseInt(entity.getMessage().get(0).getChapterid().trim()));
+                   mView.showChapterRead(Integer.parseInt(entity.getMessage().get(0).getChapterid().trim()),status);
                }
             }
         });

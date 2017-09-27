@@ -11,7 +11,6 @@ import android.view.MotionEvent;
 import android.widget.Scroller;
 import android.widget.Toast;
 
-import com.eschao.android.widget.pageflip.OnPageFlipListener;
 import com.eschao.android.widget.pageflip.PageFlip;
 import com.eschao.android.widget.pageflip.PageFlipException;
 
@@ -26,6 +25,7 @@ import shuhai.readercore.ui.sharedp.UserSP;
 import shuhai.readercore.utils.ScreenUtils;
 import shuhai.readercore.view.readview.factory.Factory;
 import shuhai.readercore.view.readview.factory.PageFactory;
+import shuhai.readercore.view.readview.FlipStatus;
 
 
 /**
@@ -119,12 +119,12 @@ public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements 
     public synchronized void init(int theme){
         if(!isPrepare){
             factory.setBgBitmap(ThemeManager.getThemeDrawable(theme));
-            openBook(mBookId,mChapterId,UserSP.getInstance().getLastReaderChapterOrder(mBookId),1);
+            openBook(mBookId,mChapterId,UserSP.getInstance().getLastReaderChapterOrder(mBookId),FlipStatus.ON_FLIP_CUR);
         }
     }
 
-    public synchronized void openBook(int articleId,int chapterId,int chapterOrder,int curPage){
-        int ret =  factory.openBook(mBookId,mChapterId, UserSP.getInstance().getLastReaderChapterOrder(mBookId),0);
+    public synchronized void openBook(int articleId,int chapterId,int chapterOrder,FlipStatus status){
+        int ret =  factory.openBook(mBookId,mChapterId, UserSP.getInstance().getLastReaderChapterOrder(mBookId),status);
         if(ret == 0){
             Toast.makeText(getContext(),"章节内容打开失败！",Toast.LENGTH_LONG).show();
             return;

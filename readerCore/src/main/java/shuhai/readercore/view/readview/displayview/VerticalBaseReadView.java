@@ -7,6 +7,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import shuhai.readercore.utils.ScreenUtils;
+import shuhai.readercore.view.readview.FlipStatus;
 
 /**
  * @author 55345364
@@ -45,7 +46,7 @@ public abstract class VerticalBaseReadView extends View implements BaseReadViewI
     }
 
     @Override
-    public void openBook(int articleId,int chapterId,int chapterOrder,int curPage) {
+    public void openBook(int articleId, int chapterId, int chapterOrder, FlipStatus status) {
 
     }
 

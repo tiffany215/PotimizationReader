@@ -42,4 +42,9 @@ public class VerticalComposing implements ComposingStrategy{
     public int getCountPage() {
         return 0;
     }
+
+    @Override
+    public void clearPageCache() {
+
+    }
 }

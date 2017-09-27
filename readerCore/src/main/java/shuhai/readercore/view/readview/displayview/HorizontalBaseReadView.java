@@ -15,7 +15,7 @@ import shuhai.readercore.utils.ScreenUtils;
 import shuhai.readercore.view.readview.BookStatus;
 import shuhai.readercore.view.readview.factory.Factory;
 import shuhai.readercore.view.readview.factory.PageFactory;
-import shuhai.readercore.view.readview.strategy.FlipStatus;
+import shuhai.readercore.view.readview.FlipStatus;
 
 /**
  * @author 55345364
@@ -78,20 +78,32 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
     public synchronized void init(int theme){
         if(!isPrepare){
             factory.setBgBitmap(ThemeManager.getThemeDrawable(theme));
-            openBook(mBookId,UserSP.getInstance().getLastReaderChapterId(mBookId),UserSP.getInstance().getLastReaderChapterOrder(mBookId),1);
+            openBook(mBookId,UserSP.getInstance().getLastReaderChapterId(mBookId),UserSP.getInstance().getLastReaderChapterOrder(mBookId),FlipStatus.ON_FLIP_CUR);
         }
     }
 
 
-    public synchronized void openBook(int articleId,int chapterId,int chapterOrder,int curPage){
-        int ret = factory.openBook(articleId,chapterId,chapterOrder,curPage);
+    public synchronized void openBook(int articleId,int chapterId,int chapterOrder,FlipStatus status){
+        int ret = factory.openBook(articleId,chapterId,chapterOrder,status);
         if(ret == 0){
             Toast.makeText(getContext(),"章节内容打开失败！",Toast.LENGTH_LONG).show();
             return;
         }
-        factory.onDraw(mCurPageCanvas);
+        switch (status) {
+            case ON_FLIP_PRE:
+                factory.onDraw(mPrePageCanvas);
+                break;
+
+            case ON_FLIP_CUR:
+                factory.onDraw(mCurPageCanvas);
+                break;
+
+            case ON_FLIP_NEXT:
+                factory.onDraw(mNextPageCanvas);
+                break;
+        }
         isPrepare = true;
-        mFlipStatus = FlipStatus.ON_FLIP_CUR;
+        mFlipStatus = status;
         postInvalidate();
     }
 

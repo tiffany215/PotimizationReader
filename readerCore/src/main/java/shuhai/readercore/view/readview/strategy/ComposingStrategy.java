@@ -33,4 +33,6 @@ public interface ComposingStrategy {
 
     int getCountPage();
 
+    void clearPageCache();
+
 }

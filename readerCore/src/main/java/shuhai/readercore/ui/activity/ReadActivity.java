@@ -17,8 +17,8 @@ import shuhai.readercore.ui.presenter.BookReadPresenter;
 import shuhai.readercore.ui.sharedp.UserSP;
 import shuhai.readercore.view.readview.displayview.BaseReadViewImpl;
 import shuhai.readercore.view.readview.displayview.OnReadStateChangeListener;
-import shuhai.readercore.view.readview.pagewidget.GLRealFlipPageWidget;
 import shuhai.readercore.view.readview.pagewidget.NoEffectFlipPageWidget;
+import shuhai.readercore.view.readview.FlipStatus;
 
 /**
  * @author 55345364
@@ -100,9 +100,9 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View{
     public void readCurrentChapter(){
         String str = ChapterLoader.getChapter(mBookId+""+mChapterId);
         if(!TextUtils.isEmpty(str)){
-            showChapterRead(mChapterId);
+            showChapterRead(mChapterId,FlipStatus.ON_FLIP_CUR);
         }else{
-            mPresenter.getChapterRead(mBookId,mChapterId,mChapterOrder,mFlipMark);
+            mPresenter.getChapterRead(mBookId,mChapterId,mChapterOrder,FlipStatus.ON_FLIP_CUR);
         }
     }
 
@@ -117,8 +117,8 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View{
      * 加载书籍内容
      */
     @Override
-    public void showChapterRead(int chapterId) {
-        mPageWidget.openBook(mBookId,chapterId,UserSP.getInstance().getLastReaderChapterOrder(mBookId),1);
+    public void showChapterRead(int chapterId,FlipStatus status) {
+        mPageWidget.openBook(mBookId,chapterId,UserSP.getInstance().getLastReaderChapterOrder(mBookId),status);
     }
 
     @Override
@@ -142,13 +142,13 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View{
     private class ReadListener implements OnReadStateChangeListener{
 
         @Override
-        public void onChapterChanged(int chapterId,int chapterOrder,int flipMark) {
-            mPresenter.getChapterRead(mBookId,chapterId,chapterOrder,flipMark);
+        public void onChapterChanged(int chapterId,int chapterOrder,FlipStatus status) {
+            mPresenter.getChapterRead(mBookId,chapterId,chapterOrder,status);
         }
 
         @Override
-        public void onPageChanged(int chapterId,int chapterOrder,int page) {
-            mPageWidget.openBook(mBookId,chapterId, chapterOrder,page);
+        public void onPageChanged(int chapterId,int chapterOrder, FlipStatus status) {
+            mPageWidget.openBook(mBookId,chapterId, chapterOrder,status);
         }
     }
 

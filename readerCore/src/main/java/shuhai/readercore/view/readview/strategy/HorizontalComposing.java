@@ -268,5 +268,12 @@ public class HorizontalComposing implements ComposingStrategy{
         return pageList.size();
     }
 
+    @Override
+    public void clearPageCache() {
+        if(null != pageList){
+            pageList.clear();
+        }
+    }
+
 
 }

@@ -13,7 +13,7 @@ import shuhai.readercore.dao.DaoMaster;
 import shuhai.readercore.dao.DaoSession;
 import shuhai.readercore.dao.MarkEntityDao;
 import shuhai.readercore.utils.AppUtils;
-import shuhai.readercore.view.readview.strategy.FlipStatus;
+import shuhai.readercore.view.readview.FlipStatus;
 
 /**
  * @author 55345364

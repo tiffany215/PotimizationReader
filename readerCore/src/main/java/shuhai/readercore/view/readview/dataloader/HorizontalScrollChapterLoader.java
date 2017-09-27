@@ -55,6 +55,16 @@ public class HorizontalScrollChapterLoader implements ChapterLoaderImpl{
         return mComposingStrategy.getCountPage();
     }
 
+    @Override
+    public void clearPageCache() {
+        mComposingStrategy.clearPageCache();
+    }
+
+    @Override
+    public void characterTypesetting(String key) {
+        mComposingStrategy.characterTypesetting(key);
+    }
+
 
     @Override
     public void setComposingStrategy(ComposingStrategy composingStrategy) {
