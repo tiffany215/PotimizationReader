@@ -54,8 +54,9 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View{
 
     @Override
     public void initData() {
-
-
+        mBookId = getIntent().getIntExtra("read.book.id",0);
+        mChapterId = UserSP.getInstance().getLastReaderChapterId(mBookId);
+        mChapterOrder = UserSP.getInstance().getLastReaderChapterOrder(mBookId);
     }
 
     @Override
@@ -66,9 +67,6 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View{
     @Override
     public void configViews() {
 
-        mBookId = 41427;
-        mChapterId = 2668827;
-        mChapterOrder = 18;
         mFlipMark = 0;
 
         initPagerWidget();
@@ -102,7 +100,7 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View{
     public void readCurrentChapter(){
         String str = ChapterLoader.getChapter(mBookId+""+mChapterId);
         if(!TextUtils.isEmpty(str)){
-            showChapterRead();
+            showChapterRead(mChapterId);
         }else{
             mPresenter.getChapterRead(mBookId,mChapterId,mChapterOrder,mFlipMark);
         }
@@ -119,8 +117,8 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View{
      * 加载书籍内容
      */
     @Override
-    public void showChapterRead() {
-        mPageWidget.openBook(mBookId,mChapterId, UserSP.getInstance().getLastReaderChapterOrder(),1);
+    public void showChapterRead(int chapterId) {
+        mPageWidget.openBook(mBookId,chapterId,UserSP.getInstance().getLastReaderChapterOrder(mBookId),1);
     }
 
     @Override
@@ -149,8 +147,8 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View{
         }
 
         @Override
-        public void onPageChanged(int chapterId,int page) {
-            mPageWidget.openBook(mBookId,chapterId, UserSP.getInstance().getLastReaderChapterOrder(),page);
+        public void onPageChanged(int chapterId,int chapterOrder,int page) {
+            mPageWidget.openBook(mBookId,chapterId, chapterOrder,page);
         }
     }
 

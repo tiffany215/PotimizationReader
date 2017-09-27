@@ -6,7 +6,7 @@ package shuhai.readercore.dao;
  */
 public class BookInfoEntity {
 
-    private Integer articleid;
+    private long articleid;
     private String articlename;
     private String author;
     private String bkbmurl;
@@ -21,7 +21,11 @@ public class BookInfoEntity {
     public BookInfoEntity() {
     }
 
-    public BookInfoEntity(Integer articleid, String articlename, String author, String bkbmurl, Integer endtype, String newchpname, String owner, Integer readtime, Integer lastreadchporder, Integer bktype, Integer newchporder) {
+    public BookInfoEntity(long articleid) {
+        this.articleid = articleid;
+    }
+
+    public BookInfoEntity(long articleid, String articlename, String author, String bkbmurl, Integer endtype, String newchpname, String owner, Integer readtime, Integer lastreadchporder, Integer bktype, Integer newchporder) {
         this.articleid = articleid;
         this.articlename = articlename;
         this.author = author;
@@ -35,11 +39,11 @@ public class BookInfoEntity {
         this.newchporder = newchporder;
     }
 
-    public Integer getArticleid() {
+    public long getArticleid() {
         return articleid;
     }
 
-    public void setArticleid(Integer articleid) {
+    public void setArticleid(long articleid) {
         this.articleid = articleid;
     }
 

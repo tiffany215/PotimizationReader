@@ -8,6 +8,7 @@ import android.util.Log;
 import shuhai.readercore.utils.ScreenUtils;
 import shuhai.readercore.view.readview.displayview.HorizontalBaseReadView;
 import shuhai.readercore.view.readview.displayview.OnReadStateChangeListener;
+import shuhai.readercore.view.readview.strategy.FlipStatus;
 
 /**
  * @author 55345364
@@ -26,6 +27,26 @@ public class NoEffectFlipPageWidget extends HorizontalBaseReadView {
     }
 
     @Override
+    protected void drawPageArea(Canvas canvas, FlipStatus status) {
+        switch (status){
+            case ON_FLIP_PRE:
+                canvas.drawBitmap(mPrePageBitmap,0,0,null);
+                break;
+            case ON_FLIP_CUR:
+                canvas.drawBitmap(mCurPageBitmap,0,0,null);
+                break;
+            case ON_FLIP_NEXT:
+                canvas.drawBitmap(mNextPageBitmap,0,0,null);
+                break;
+        }
+    }
+
+    @Override
+    protected void drawPageShadow(Canvas canvas, FlipStatus status) {
+
+    }
+
+    @Override
     public void startAnimation() {
 
     }
@@ -40,41 +61,7 @@ public class NoEffectFlipPageWidget extends HorizontalBaseReadView {
 
     }
 
-    @Override
-    protected void drawPrePageArea(Canvas canvas) {
-        if(actiondownX < mScreenWidth / 2){
-            canvas.drawBitmap(mPrePageBitmap,0,0,null);
-        }
-    }
 
-    @Override
-    protected void drawPrePageShadow(Canvas canvas) {
-
-    }
-
-    @Override
-    protected void drawCurPageArea(Canvas canvas) {
-        if(actiondownX == 0){
-            canvas.drawBitmap(mCurPageBitmap,0,0,null);
-        }
-    }
-
-    @Override
-    protected void drawCurPageShadow(Canvas canvas) {
-
-    }
-
-    @Override
-    protected void drawNextPageArea(Canvas canvas) {
-        if(actiondownX > mScreenWidth / 2){
-            canvas.drawBitmap(mNextPageBitmap,0,0,null);
-        }
-    }
-
-    @Override
-    protected void drawNextPageShadow(Canvas canvas) {
-
-    }
 
 
     @Override

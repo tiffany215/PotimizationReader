@@ -50,7 +50,7 @@ public class WelcomeActivity extends AppCompatActivity {
     private synchronized void GoHome(){
         if(!flag){
             flag = true;
-            startActivity(new Intent(this,MainActivity.class));
+            startActivity(new Intent(this,SplashActivity.class));
             finish();
         }
     }

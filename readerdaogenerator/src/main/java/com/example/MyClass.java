@@ -13,7 +13,7 @@ public class MyClass {
 
 
         Entity bookInfoEntity = schema.addEntity("BookInfoEntity");
-        bookInfoEntity.addIntProperty("articleid");
+        bookInfoEntity.addLongProperty("articleid").primaryKey().notNull();
         bookInfoEntity.addStringProperty("articlename");
         bookInfoEntity.addStringProperty("author");
         bookInfoEntity.addStringProperty("bkbmurl");
@@ -28,7 +28,7 @@ public class MyClass {
 
         Entity chapterEntity = schema.addEntity("ChapterEntity");
         chapterEntity.addIntProperty("articleid");
-        chapterEntity.addIntProperty("chpid");
+        chapterEntity.addLongProperty("chpid").primaryKey().notNull();
         chapterEntity.addStringProperty("chpnamme");
         chapterEntity.addIntProperty("chptype");
         chapterEntity.addIntProperty("chiporder");

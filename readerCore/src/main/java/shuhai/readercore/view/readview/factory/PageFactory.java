@@ -18,12 +18,15 @@ import java.util.Vector;
 
 import shuhai.readercore.Constants;
 import shuhai.readercore.R;
+import shuhai.readercore.dao.ChapterEntity;
 import shuhai.readercore.manager.ChapterLoader;
+import shuhai.readercore.manager.DataBaseManager;
 import shuhai.readercore.utils.ScreenUtils;
 import shuhai.readercore.view.readview.BookStatus;
 import shuhai.readercore.view.readview.dataloader.ChapterLoaderImpl;
 import shuhai.readercore.view.readview.dataloader.HorizontalScrollChapterLoader;
 import shuhai.readercore.view.readview.displayview.OnReadStateChangeListener;
+import shuhai.readercore.view.readview.strategy.FlipStatus;
 import shuhai.readercore.view.readview.strategy.HorizontalComposing;
 
 /**
@@ -80,6 +83,8 @@ public class PageFactory extends Factory {
     private int mChapterOrder;
     private int currentPage = 1;
     private int pageCount = 1;
+
+    private ChapterEntity mChapterEntity;
 
     public PageFactory(Context context){
         this(context,ScreenUtils.getScreenWidth(),ScreenUtils.getScreenHeight(), Constants.MARGIN_WIDTH,Constants.MARGIN_HEIGHT,34);
@@ -160,6 +165,40 @@ public class PageFactory extends Factory {
         return (T) chapterLoader;
     }
 
+
+
+    @Override
+    public BookStatus prePage() {
+        currentPage--;
+        if(currentPage <= 0 ){
+            currentPage = 0;
+        }else if(currentPage == chapterLoader.getCountPate()){
+            currentPage = chapterLoader.getCountPate() - 1;
+        }
+        //加载缓存中章节内容
+        Vector<String> lines = chapterLoader.pageUp(currentPage,cacheKeyCreate(mBookId,mChapterId));
+        if(null != lines && lines.size() > 0){
+            mLines = lines;
+            return BookStatus.LOAD_SUCCESS;
+        }
+        //如果缓存中内容不存在，则去网络加载内容
+        if(null == lines || lines.size() <= 0){
+            preChapter();
+        }
+        return BookStatus.NO_PRE_PAGE;
+    }
+
+    @Override
+    public BookStatus curPage() {
+        Vector<String> lines = chapterLoader.pageCur(currentPage,cacheKeyCreate(mBookId,mChapterId));
+        if(null != lines && lines.size() > 0){
+            mLines = lines;
+            return BookStatus.LOAD_SUCCESS;
+        }
+        return BookStatus.NO_PRE_PAGE;
+    }
+
+
     @Override
     public BookStatus nextPage() {
         currentPage++;
@@ -168,8 +207,7 @@ public class PageFactory extends Factory {
         }else if(currentPage > chapterLoader.getCountPate()){
             currentPage = chapterLoader.getCountPate() + 1;
         }
-        Vector<String> lines = chapterLoader.pageDown(currentPage,cacheKeyCreate());
-
+        Vector<String> lines = chapterLoader.pageDown(currentPage,cacheKeyCreate(mBookId,mChapterId));
         if(null != lines && lines.size() > 0){
             mLines = lines;
             return BookStatus.LOAD_SUCCESS;
@@ -181,47 +219,35 @@ public class PageFactory extends Factory {
     }
 
     @Override
-    public BookStatus prePage() {
-        currentPage--;
-        if(currentPage <= 0 ){
-            currentPage = 0;
-        }else if(currentPage == chapterLoader.getCountPate()){
-            currentPage = chapterLoader.getCountPate() - 1;
-        }
-        //加载缓存中章节内容
-        Vector<String> lines = chapterLoader.pageUp(currentPage,cacheKeyCreate());
-        if(null != lines && lines.size() > 0){
-            mLines = lines;
-            return BookStatus.LOAD_SUCCESS;
-        }
-        //如果缓存中内容不存在，则去网络加载内容
-        return BookStatus.NO_PRE_PAGE;
-    }
-
-    @Override
-    public BookStatus curPage() {
-        Vector<String> lines = chapterLoader.pageCur(currentPage,cacheKeyCreate());
-        if(null != lines && lines.size() > 0){
-            mLines = lines;
-            return BookStatus.LOAD_SUCCESS;
-        }
-        return BookStatus.NO_PRE_PAGE;
-    }
-
-    @Override
     public void preChapter() {
-      loadChapter(mChapterId--,mChapterOrder,1);
+        mChapterEntity = DataBaseManager.getInstance().queryNextChapterInfo(2,mBookId,mChapterOrder, FlipStatus.ON_FLIP_PRE);
+        if(null != mChapterEntity){
+            loadChapter(Integer.parseInt(String.valueOf(mChapterEntity.getChpid())),mChapterEntity.getChiporder(),1);
+        }else{
+            onChapterChanged(mChapterId,mChapterOrder,2);
+        }
     }
 
     @Override
     public void curChapter() {
-        loadChapter(mChapterId,mChapterOrder,0);
+        mChapterEntity = DataBaseManager.getInstance().queryNextChapterInfo(2,mBookId,mChapterOrder, FlipStatus.ON_FLIP_CUR);
+        if(null != mChapterEntity){
+            loadChapter(Integer.parseInt(String.valueOf(mChapterEntity.getChpid())),mChapterEntity.getChiporder(),0);
+        }else{
+            onChapterChanged(mChapterId,mChapterOrder,2);
+        }
     }
 
     @Override
     public void nextChapter() {
-        mChapterId += 1;
-        loadChapter(mChapterId,mChapterOrder,2);
+        //查询下一章章节信息，如果没有章节信息，则从网络中获取章节信息并存入数据库，
+        // 如果有则从缓存中获取章节信息。
+        mChapterEntity = DataBaseManager.getInstance().queryNextChapterInfo(2,mBookId,mChapterOrder, FlipStatus.ON_FLIP_NEXT);
+        if(null != mChapterEntity){
+            loadChapter(Integer.parseInt(String.valueOf(mChapterEntity.getChpid())),mChapterEntity.getChiporder(),2);
+        }else{
+            onChapterChanged(mChapterId, mChapterOrder,2);
+        }
     }
 
     /**
@@ -232,12 +258,13 @@ public class PageFactory extends Factory {
      */
     public void loadChapter(int chapterId,int chapterOrder,int flipMark){
         //从缓存中获取章节内容，如果章节内容为空则从网络中获取。
-        String chapterContent =  ChapterLoader.getChapter(String.valueOf(mBookId).trim() + String.valueOf(chapterId).trim());
+        String chapterContent =  ChapterLoader.getChapter(cacheKeyCreate(mBookId,chapterId));
         if(TextUtils.isEmpty(chapterContent)){
+            //从网络中获取章节内容
             onChapterChanged(chapterId,chapterOrder,flipMark);
             return;
         }
-        onPageChanger(chapterId,chapterOrder);
+        onPageChanged(chapterId,chapterOrder,1);
     }
 
     /**
@@ -269,7 +296,9 @@ public class PageFactory extends Factory {
             }else{
                 canvas.drawBitmap(mBookPageBg,null,rectF,null);
             }
-            canvas.drawText("第十八章：徐美惠的眼线无孔不入。",mMarginWidth,y,mTitlePaint);
+            if(null != mChapterEntity){
+                canvas.drawText(mChapterEntity.getChpnamme(),mMarginWidth,y,mTitlePaint);
+            }
             y += mLineSpace;
             canvas.drawLine(mMarginWidth, y, mWidth - mMarginWidth, y, mTitlePaint);
             y += mFontSize;
@@ -300,10 +329,12 @@ public class PageFactory extends Factory {
      * 缓存key生成方法
      * @return
      */
-    private String cacheKeyCreate(){
+    private String cacheKeyCreate(Object... str){
         StringBuffer buffer = new StringBuffer();
-        buffer.append(mBookId).append(mChapterId);
-        return buffer.toString().trim();
+        for(Object value : str){
+            buffer.append(value.toString());
+        }
+        return buffer.toString();
     }
 
     public void setOnReadStateChangeListener(OnReadStateChangeListener listener){
@@ -316,9 +347,9 @@ public class PageFactory extends Factory {
         }
     }
 
-    public void onPageChanger(int chapterId,int page){
+    public void onPageChanged(int chapterId,int chapterOrder,int page){
         if(null != listener){
-            listener.onPageChanged(chapterId,page);
+            listener.onPageChanged(chapterId,chapterOrder,page);
         }
     }
 }

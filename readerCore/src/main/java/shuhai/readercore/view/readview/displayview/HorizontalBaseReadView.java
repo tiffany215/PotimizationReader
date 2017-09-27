@@ -15,6 +15,7 @@ import shuhai.readercore.utils.ScreenUtils;
 import shuhai.readercore.view.readview.BookStatus;
 import shuhai.readercore.view.readview.factory.Factory;
 import shuhai.readercore.view.readview.factory.PageFactory;
+import shuhai.readercore.view.readview.strategy.FlipStatus;
 
 /**
  * @author 55345364
@@ -41,9 +42,10 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
     public boolean isPrepare;
 
     private int mBookId;
-    private int mChapterId;
 
     OnReadStateChangeListener listener;
+
+    private FlipStatus mFlipStatus = FlipStatus.ON_FLIP_CUR;
 
 
 
@@ -51,7 +53,6 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
         super(context);
 
         this.mBookId = bookId;
-        this.mChapterId = chapterId;
         this.listener = listener;
 
         mScreenWidth = ScreenUtils.getScreenWidth();
@@ -77,7 +78,7 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
     public synchronized void init(int theme){
         if(!isPrepare){
             factory.setBgBitmap(ThemeManager.getThemeDrawable(theme));
-            openBook(mBookId,mChapterId,UserSP.getInstance().getLastReaderChapterOrder(),1);
+            openBook(mBookId,UserSP.getInstance().getLastReaderChapterId(mBookId),UserSP.getInstance().getLastReaderChapterOrder(mBookId),1);
         }
     }
 
@@ -90,6 +91,7 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
         }
         factory.onDraw(mCurPageCanvas);
         isPrepare = true;
+        mFlipStatus = FlipStatus.ON_FLIP_CUR;
         postInvalidate();
     }
 
@@ -129,6 +131,7 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
                         }else if(bookStatus == BookStatus.LOAD_SUCCESS){
                             abortAnimation();
                             factory.onDraw(mPrePageCanvas);
+                            mFlipStatus = FlipStatus.ON_FLIP_PRE;
                         }else{
                             return false;
                         }
@@ -140,6 +143,7 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
                         }else if(bookStatus == BookStatus.LOAD_SUCCESS){
                             abortAnimation();
                             factory.onDraw(mNextPageCanvas);
+                            mFlipStatus = FlipStatus.ON_FLIP_NEXT;
                         }else{
                             return false;
                         }
@@ -178,28 +182,12 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
 
     @Override
     protected void onDraw(Canvas canvas) {
-        drawPrePageArea(canvas);
-        drawPrePageShadow(canvas);
-
-        drawCurPageArea(canvas);
-        drawCurPageShadow(canvas);
-
-        drawNextPageArea(canvas);
-        drawNextPageShadow(canvas);
+        drawPageArea(canvas,mFlipStatus);
+        drawPageShadow(canvas,mFlipStatus);
     }
 
-
-
-
-    protected abstract void drawPrePageArea(Canvas canvas);
-    protected abstract void drawPrePageShadow(Canvas canvas);
-
-    protected abstract void drawCurPageArea(Canvas canvas);
-    protected abstract void drawCurPageShadow(Canvas canvas);
-
-    protected abstract void drawNextPageArea(Canvas canvas);
-    protected abstract void drawNextPageShadow(Canvas canvas);
-
+    protected abstract void drawPageArea(Canvas canvas, FlipStatus status);
+    protected abstract void drawPageShadow(Canvas canvas,FlipStatus status);
 
 }
 

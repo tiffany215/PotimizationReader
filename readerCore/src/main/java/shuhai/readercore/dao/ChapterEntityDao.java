@@ -14,7 +14,7 @@ import shuhai.readercore.dao.ChapterEntity;
 /** 
  * DAO for table "CHAPTER_ENTITY".
 */
-public class ChapterEntityDao extends AbstractDao<ChapterEntity, Void> {
+public class ChapterEntityDao extends AbstractDao<ChapterEntity, Long> {
 
     public static final String TABLENAME = "CHAPTER_ENTITY";
 
@@ -24,7 +24,7 @@ public class ChapterEntityDao extends AbstractDao<ChapterEntity, Void> {
     */
     public static class Properties {
         public final static Property Articleid = new Property(0, Integer.class, "articleid", false, "ARTICLEID");
-        public final static Property Chpid = new Property(1, Integer.class, "chpid", false, "CHPID");
+        public final static Property Chpid = new Property(1, long.class, "chpid", true, "CHPID");
         public final static Property Chpnamme = new Property(2, String.class, "chpnamme", false, "CHPNAMME");
         public final static Property Chptype = new Property(3, Integer.class, "chptype", false, "CHPTYPE");
         public final static Property Chiporder = new Property(4, Integer.class, "chiporder", false, "CHIPORDER");
@@ -44,7 +44,7 @@ public class ChapterEntityDao extends AbstractDao<ChapterEntity, Void> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"CHAPTER_ENTITY\" (" + //
                 "\"ARTICLEID\" INTEGER," + // 0: articleid
-                "\"CHPID\" INTEGER," + // 1: chpid
+                "\"CHPID\" INTEGER PRIMARY KEY NOT NULL ," + // 1: chpid
                 "\"CHPNAMME\" TEXT," + // 2: chpnamme
                 "\"CHPTYPE\" INTEGER," + // 3: chptype
                 "\"CHIPORDER\" INTEGER);"); // 4: chiporder
@@ -65,11 +65,7 @@ public class ChapterEntityDao extends AbstractDao<ChapterEntity, Void> {
         if (articleid != null) {
             stmt.bindLong(1, articleid);
         }
- 
-        Integer chpid = entity.getChpid();
-        if (chpid != null) {
-            stmt.bindLong(2, chpid);
-        }
+        stmt.bindLong(2, entity.getChpid());
  
         String chpnamme = entity.getChpnamme();
         if (chpnamme != null) {
@@ -89,8 +85,8 @@ public class ChapterEntityDao extends AbstractDao<ChapterEntity, Void> {
 
     /** @inheritdoc */
     @Override
-    public Void readKey(Cursor cursor, int offset) {
-        return null;
+    public Long readKey(Cursor cursor, int offset) {
+        return cursor.getLong(offset + 1);
     }    
 
     /** @inheritdoc */
@@ -98,7 +94,7 @@ public class ChapterEntityDao extends AbstractDao<ChapterEntity, Void> {
     public ChapterEntity readEntity(Cursor cursor, int offset) {
         ChapterEntity entity = new ChapterEntity( //
             cursor.isNull(offset + 0) ? null : cursor.getInt(offset + 0), // articleid
-            cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1), // chpid
+            cursor.getLong(offset + 1), // chpid
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // chpnamme
             cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3), // chptype
             cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4) // chiporder
@@ -110,7 +106,7 @@ public class ChapterEntityDao extends AbstractDao<ChapterEntity, Void> {
     @Override
     public void readEntity(Cursor cursor, ChapterEntity entity, int offset) {
         entity.setArticleid(cursor.isNull(offset + 0) ? null : cursor.getInt(offset + 0));
-        entity.setChpid(cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1));
+        entity.setChpid(cursor.getLong(offset + 1));
         entity.setChpnamme(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setChptype(cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3));
         entity.setChiporder(cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4));
@@ -118,15 +114,19 @@ public class ChapterEntityDao extends AbstractDao<ChapterEntity, Void> {
     
     /** @inheritdoc */
     @Override
-    protected Void updateKeyAfterInsert(ChapterEntity entity, long rowId) {
-        // Unsupported or missing PK type
-        return null;
+    protected Long updateKeyAfterInsert(ChapterEntity entity, long rowId) {
+        entity.setChpid(rowId);
+        return rowId;
     }
     
     /** @inheritdoc */
     @Override
-    public Void getKey(ChapterEntity entity) {
-        return null;
+    public Long getKey(ChapterEntity entity) {
+        if(entity != null) {
+            return entity.getChpid();
+        } else {
+            return null;
+        }
     }
 
     /** @inheritdoc */

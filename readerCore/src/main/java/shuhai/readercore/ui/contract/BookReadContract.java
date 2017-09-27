@@ -11,7 +11,7 @@ public interface BookReadContract {
 
     interface View extends BaseContract.BaseView{
         void showBookToc();
-        void showChapterRead();
+        void showChapterRead(int chapterId);
         void netError();
     }
 

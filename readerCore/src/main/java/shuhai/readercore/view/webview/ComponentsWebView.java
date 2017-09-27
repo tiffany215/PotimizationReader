@@ -88,18 +88,11 @@ public class ComponentsWebView extends BaseWbView {
                     public void run() {
                         // 处理免费阅读业务
                         // 处理免费阅读业务
-//                        OpenReadBookTask.getInstance(appContext, mContext)
-//                                .readBook(
-//                                        BkConfig.SHOP_BOOKS,
-//                                        articleid,
-//                                        ReadSetting.getIntance(mContext)
-//                                                .getLastReadChp(articleid),
-//                                        ReadSetting.getIntance(mContext)
-//                                                .getLastReadOrd(articleid),
-//                                        null, null);
-
+                        Intent intent = new Intent();
+                        intent.putExtra("read.book.id",articleid);
+                        intent.setClass(mContext,ReadActivity.class);
+                        mContext.startActivity(intent);
                         Toast.makeText(mContext, "阅读", Toast.LENGTH_SHORT).show();
-
 
                     }
                 });
@@ -155,7 +148,7 @@ public class ComponentsWebView extends BaseWbView {
                         // 跳转书籍activity
                         Intent intent = new Intent(mContext,
                                 BookAboutActivity.class);
-                        intent.putExtra("url", vurl);
+                        intent.putExtra("url", vurl + "&packagename=com.shuhai.bookos");
                         mContext.startActivity(intent);
                     }
                 });

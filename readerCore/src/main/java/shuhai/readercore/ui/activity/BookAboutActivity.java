@@ -83,16 +83,10 @@ public class BookAboutActivity extends BaseWVActivity {
                     public void run() {
                         // 处理免费阅读业务
                         // 处理免费阅读业务
-//                        OpenReadBookTask.getInstance(appContext, mContext)
-//                                .readBook(
-//                                        BkConfig.SHOP_BOOKS,
-//                                        articleid,
-//                                        ReadSetting.getIntance(mContext)
-//                                                .getLastReadChp(articleid),
-//                                        ReadSetting.getIntance(mContext)
-//                                                .getLastReadOrd(articleid),
-//                                        null, null);
-
+                        Intent intent = new Intent();
+                        intent.putExtra("read.book.id",Integer.parseInt(articleid));
+                        intent.setClass(mContext,ReadActivity.class);
+                        startActivity(intent);
                         Toast.makeText(mContext, "阅读", Toast.LENGTH_SHORT).show();
 
 
@@ -149,7 +143,7 @@ public class BookAboutActivity extends BaseWVActivity {
                     public void run() {
                         // 跳转书籍activity
                         Intent intent = new Intent(mContext,
-                                ReadActivity.class);
+                                BookAboutActivity.class);
                         intent.putExtra("url", vurl);
                         mContext.startActivity(intent);
                     }

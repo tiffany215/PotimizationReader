@@ -7,7 +7,7 @@ package shuhai.readercore.dao;
 public class ChapterEntity {
 
     private Integer articleid;
-    private Integer chpid;
+    private long chpid;
     private String chpnamme;
     private Integer chptype;
     private Integer chiporder;
@@ -15,7 +15,11 @@ public class ChapterEntity {
     public ChapterEntity() {
     }
 
-    public ChapterEntity(Integer articleid, Integer chpid, String chpnamme, Integer chptype, Integer chiporder) {
+    public ChapterEntity(long chpid) {
+        this.chpid = chpid;
+    }
+
+    public ChapterEntity(Integer articleid, long chpid, String chpnamme, Integer chptype, Integer chiporder) {
         this.articleid = articleid;
         this.chpid = chpid;
         this.chpnamme = chpnamme;
@@ -31,11 +35,11 @@ public class ChapterEntity {
         this.articleid = articleid;
     }
 
-    public Integer getChpid() {
+    public long getChpid() {
         return chpid;
     }
 
-    public void setChpid(Integer chpid) {
+    public void setChpid(long chpid) {
         this.chpid = chpid;
     }
 

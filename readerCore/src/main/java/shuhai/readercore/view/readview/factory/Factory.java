@@ -17,10 +17,22 @@ public abstract class Factory {
 
     public abstract <T extends ChapterLoaderImpl> T createChapterLoader(Class<T> clz);
 
+    /**
+     * 获取下一页内容
+     * @return
+     */
     public abstract BookStatus nextPage();
 
+    /**
+     * 获取上一页内容
+     * @return
+     */
     public abstract BookStatus prePage();
 
+    /**
+     * 获取当前页内容
+     * @return
+     */
     public abstract BookStatus curPage();
 
 

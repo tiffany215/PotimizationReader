@@ -14,7 +14,7 @@ import shuhai.readercore.dao.BookInfoEntity;
 /** 
  * DAO for table "BOOK_INFO_ENTITY".
 */
-public class BookInfoEntityDao extends AbstractDao<BookInfoEntity, Void> {
+public class BookInfoEntityDao extends AbstractDao<BookInfoEntity, Long> {
 
     public static final String TABLENAME = "BOOK_INFO_ENTITY";
 
@@ -23,7 +23,7 @@ public class BookInfoEntityDao extends AbstractDao<BookInfoEntity, Void> {
      * Can be used for QueryBuilder and for referencing column names.
     */
     public static class Properties {
-        public final static Property Articleid = new Property(0, Integer.class, "articleid", false, "ARTICLEID");
+        public final static Property Articleid = new Property(0, long.class, "articleid", true, "ARTICLEID");
         public final static Property Articlename = new Property(1, String.class, "articlename", false, "ARTICLENAME");
         public final static Property Author = new Property(2, String.class, "author", false, "AUTHOR");
         public final static Property Bkbmurl = new Property(3, String.class, "bkbmurl", false, "BKBMURL");
@@ -49,7 +49,7 @@ public class BookInfoEntityDao extends AbstractDao<BookInfoEntity, Void> {
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"BOOK_INFO_ENTITY\" (" + //
-                "\"ARTICLEID\" INTEGER," + // 0: articleid
+                "\"ARTICLEID\" INTEGER PRIMARY KEY NOT NULL ," + // 0: articleid
                 "\"ARTICLENAME\" TEXT," + // 1: articlename
                 "\"AUTHOR\" TEXT," + // 2: author
                 "\"BKBMURL\" TEXT," + // 3: bkbmurl
@@ -72,11 +72,7 @@ public class BookInfoEntityDao extends AbstractDao<BookInfoEntity, Void> {
     @Override
     protected void bindValues(SQLiteStatement stmt, BookInfoEntity entity) {
         stmt.clearBindings();
- 
-        Integer articleid = entity.getArticleid();
-        if (articleid != null) {
-            stmt.bindLong(1, articleid);
-        }
+        stmt.bindLong(1, entity.getArticleid());
  
         String articlename = entity.getArticlename();
         if (articlename != null) {
@@ -131,15 +127,15 @@ public class BookInfoEntityDao extends AbstractDao<BookInfoEntity, Void> {
 
     /** @inheritdoc */
     @Override
-    public Void readKey(Cursor cursor, int offset) {
-        return null;
+    public Long readKey(Cursor cursor, int offset) {
+        return cursor.getLong(offset + 0);
     }    
 
     /** @inheritdoc */
     @Override
     public BookInfoEntity readEntity(Cursor cursor, int offset) {
         BookInfoEntity entity = new BookInfoEntity( //
-            cursor.isNull(offset + 0) ? null : cursor.getInt(offset + 0), // articleid
+            cursor.getLong(offset + 0), // articleid
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // articlename
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // author
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // bkbmurl
@@ -157,7 +153,7 @@ public class BookInfoEntityDao extends AbstractDao<BookInfoEntity, Void> {
     /** @inheritdoc */
     @Override
     public void readEntity(Cursor cursor, BookInfoEntity entity, int offset) {
-        entity.setArticleid(cursor.isNull(offset + 0) ? null : cursor.getInt(offset + 0));
+        entity.setArticleid(cursor.getLong(offset + 0));
         entity.setArticlename(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setAuthor(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setBkbmurl(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
@@ -172,15 +168,19 @@ public class BookInfoEntityDao extends AbstractDao<BookInfoEntity, Void> {
     
     /** @inheritdoc */
     @Override
-    protected Void updateKeyAfterInsert(BookInfoEntity entity, long rowId) {
-        // Unsupported or missing PK type
-        return null;
+    protected Long updateKeyAfterInsert(BookInfoEntity entity, long rowId) {
+        entity.setArticleid(rowId);
+        return rowId;
     }
     
     /** @inheritdoc */
     @Override
-    public Void getKey(BookInfoEntity entity) {
-        return null;
+    public Long getKey(BookInfoEntity entity) {
+        if(entity != null) {
+            return entity.getArticleid();
+        } else {
+            return null;
+        }
     }
 
     /** @inheritdoc */

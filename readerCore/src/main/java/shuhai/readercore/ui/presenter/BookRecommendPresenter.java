@@ -44,7 +44,7 @@ public class BookRecommendPresenter extends RxPresenter<BookRecommendContract.Vi
                     for (int i = 0; i < bookInfoEntity.getMessage().size(); i++) {
 
                         shuhai.readercore.dao.BookInfoEntity bkbaseinfo = new shuhai.readercore.dao.BookInfoEntity();
-                        bkbaseinfo.setArticleid(Integer.valueOf(bookInfoEntity.getMessage().get(i).getArticleid()));
+                        bkbaseinfo.setArticleid(Long.parseLong(bookInfoEntity.getMessage().get(i).getArticleid()));
                         bkbaseinfo.setArticlename(bookInfoEntity.getMessage().get(i).getArticlename());
                         bkbaseinfo.setAuthor(bookInfoEntity.getMessage().get(i).getAuthor());
                         bkbaseinfo.setBkbmurl(bookInfoEntity.getMessage().get(i).getCover());

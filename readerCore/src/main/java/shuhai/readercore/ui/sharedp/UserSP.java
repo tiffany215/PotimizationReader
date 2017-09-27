@@ -92,18 +92,36 @@ public class UserSP {
      * 获取用户最后阅读章节排序号
      * @return
      */
-    public int getLastReaderChapterOrder(){
-        return sp.getInt("last.read.order.mark",0);
+    public int getLastReaderChapterOrder(int articleId){
+        return sp.getInt("last.read.order.mark" + articleId,0);
     }
 
     /**
      * 设置用户最后阅读章节排序号
      * @param chapterOrder
      */
-    public void setLastReaderChapterOrder(int chapterOrder){
-        ed.putInt("last.read.order.mark",chapterOrder);
+    public void setLastReaderChapterOrder(int articleId,int chapterOrder){
+        ed.putInt("last.read.order.mark" + articleId ,chapterOrder);
         ed.commit();
     }
 
 
+    /**
+     * 获取最后阅读章节ID
+     * @param articleId 书籍Id
+     * @return
+     */
+    public int getLastReaderChapterId(int articleId){
+        return sp.getInt("last.read.chapter.mark" + articleId,-1);
+    }
+
+    /**
+     * 设置最后阅读章节ID
+     * @param articleId 书籍Id
+     * @param chapterId 章节Id
+     */
+    public void setLastReaderChapterId(int articleId,int chapterId){
+        ed.putInt("last.read.chapter.mark"+ articleId,chapterId);
+        ed.commit();
+    }
 }
