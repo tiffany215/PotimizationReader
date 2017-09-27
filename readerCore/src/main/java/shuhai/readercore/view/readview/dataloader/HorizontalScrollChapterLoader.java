@@ -1,9 +1,5 @@
 package shuhai.readercore.view.readview.dataloader;
-
 import java.util.Vector;
-import java.util.concurrent.ExecutionException;
-
-import shuhai.readercore.view.readview.BookStatus;
 import shuhai.readercore.view.readview.strategy.ComposingStrategy;
 
 /**
@@ -51,7 +47,7 @@ public class HorizontalScrollChapterLoader implements ChapterLoaderImpl{
     }
 
     @Override
-    public int getCountPate() {
+    public int getCountPage() {
         return mComposingStrategy.getCountPage();
     }
 

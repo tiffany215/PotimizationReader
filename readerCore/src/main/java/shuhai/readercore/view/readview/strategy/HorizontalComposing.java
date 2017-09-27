@@ -2,7 +2,6 @@ package shuhai.readercore.view.readview.strategy;
 
 import android.graphics.Paint;
 import android.text.TextUtils;
-import android.util.Log;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,7 +9,6 @@ import java.util.Vector;
 
 import shuhai.readercore.manager.ChapterLoader;
 
-import static android.content.ContentValues.TAG;
 
 /**
  * @author 55345364

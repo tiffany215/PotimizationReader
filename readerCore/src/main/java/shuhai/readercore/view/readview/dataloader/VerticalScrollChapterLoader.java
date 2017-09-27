@@ -29,7 +29,7 @@ public class VerticalScrollChapterLoader implements ChapterLoaderImpl{
     }
 
     @Override
-    public int getCountPate() {
+    public int getCountPage() {
         return 0;
     }
 

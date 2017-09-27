@@ -127,14 +127,7 @@ public class PageFactory extends Factory {
 
     }
 
-    /**
-     * 打开书籍文件
-     * @param articleId
-     * @param chapterId
-     * @param chapterOrder
-     * @param status
-     * @return 0：文件不存在或打开失败  1：打开成功
-     */
+
     @Override
     public int openBook(int articleId,int chapterId,int chapterOrder,FlipStatus status){
         this.mBookId = articleId;
@@ -143,7 +136,7 @@ public class PageFactory extends Factory {
         if(null != chapterLoader){
             chapterLoader.clearPageCache();
             chapterLoader.characterTypesetting(cacheKeyCreate(articleId,chapterId));
-            pageCount = chapterLoader.getCountPate();
+            pageCount = chapterLoader.getCountPage();
             switch (status) {
                 case ON_FLIP_PRE:
                     currentPage = pageCount;
@@ -185,8 +178,8 @@ public class PageFactory extends Factory {
         currentPage--;
         if(currentPage <= 0 ){
             currentPage = 0;
-        }else if(currentPage == chapterLoader.getCountPate()){
-            currentPage = chapterLoader.getCountPate() - 1;
+        }else if(currentPage == chapterLoader.getCountPage()){
+            currentPage = chapterLoader.getCountPage() - 1;
         }
         //加载缓存中章节内容
         Vector<String> lines = chapterLoader.pageUp(currentPage,cacheKeyCreate(mBookId,mChapterId));
@@ -220,8 +213,8 @@ public class PageFactory extends Factory {
         currentPage++;
         if(currentPage == 1){
             currentPage = 2;
-        }else if(currentPage > chapterLoader.getCountPate()){
-            currentPage = chapterLoader.getCountPate() + 1;
+        }else if(currentPage > chapterLoader.getCountPage()){
+            currentPage = chapterLoader.getCountPage() + 1;
         }
         Vector<String> lines = chapterLoader.pageDown(currentPage,cacheKeyCreate(mBookId,mChapterId));
         if(null != lines && lines.size() > 0){
@@ -246,13 +239,11 @@ public class PageFactory extends Factory {
 
     @Override
     public void nextChapter() {
-        //查询下一章章节信息，如果没有章节信息，则从网络中获取章节信息并存入数据库，
-        // 如果有则从缓存中获取章节信息。
         loadChapter(mChapterOrder,FlipStatus.ON_FLIP_NEXT);
     }
 
     /**
-     *
+     * 加载章节，并刷新章节内容
      * @param chapterOrder
      * @param status
      */
@@ -266,6 +257,7 @@ public class PageFactory extends Factory {
                 return;
             }
         }
+            //回调至ReadActivity中，从ReadActivity中回去网络中章节
             onChapterChanged(mChapterId, mChapterOrder,status);
 
     }
@@ -323,10 +315,15 @@ public class PageFactory extends Factory {
         }
     }
 
+    /**
+     * 设置阅读页背景
+     * @param bitmap
+     */
     @Override
     public void setBgBitmap(Bitmap bitmap) {
         this.mBookPageBg = bitmap;
     }
+
 
     /**
      * 缓存key生成方法
@@ -340,16 +337,32 @@ public class PageFactory extends Factory {
         return buffer.toString();
     }
 
+    /**
+     * 设置翻页监听
+     * @param listener
+     */
     public void setOnReadStateChangeListener(OnReadStateChangeListener listener){
         this.listener = listener;
     }
 
+    /**
+     * 章节变化回调
+     * @param chapterId
+     * @param chapterOrder
+     * @param status
+     */
     public void onChapterChanged(int chapterId,int chapterOrder,FlipStatus status){
         if(null != listener){
             listener.onChapterChanged(chapterId,chapterOrder,status);
         }
     }
 
+    /**
+     * 页码变化回调
+     * @param chapterId
+     * @param chapterOrder
+     * @param status
+     */
     public void onPageChanged(int chapterId,int chapterOrder,FlipStatus status){
         if(null != listener){
             listener.onPageChanged(chapterId,chapterOrder,status);
