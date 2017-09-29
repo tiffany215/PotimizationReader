@@ -5,6 +5,9 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 
+import com.kingja.loadsir.callback.Callback;
+import com.kingja.loadsir.core.LoadSir;
+
 import javax.inject.Inject;
 
 import butterknife.InjectView;
@@ -13,6 +16,7 @@ import shuhai.readercore.base.BaseActivity;
 import shuhai.readercore.manager.ChapterLoader;
 import shuhai.readercore.manager.ThemeManager;
 import shuhai.readercore.ui.contract.BookReadContract;
+import shuhai.readercore.ui.dialog.callback.LoadingCallback;
 import shuhai.readercore.ui.presenter.BookReadPresenter;
 import shuhai.readercore.ui.sharedp.UserSP;
 import shuhai.readercore.view.readview.displayview.BaseReadViewImpl;
@@ -67,6 +71,15 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View{
     @Override
     public void configViews() {
 
+        loadService = LoadSir.getDefault().register(mContext, new Callback.OnReloadListener() {
+            @Override
+            public void onReload(View v) {
+//              loadService.showCallback(LoadingCallback.class);
+//                loadService.showSuccess();
+
+            }
+        });
+
         mFlipMark = 0;
 
         initPagerWidget();
@@ -74,6 +87,10 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View{
         mPresenter.attachView(this);
 
         mPresenter.getBookMixAToc();
+
+
+
+
 
 
     }
@@ -128,7 +145,9 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View{
 
     @Override
     public void showError() {
-
+        if(null != loadService){
+            loadService.showSuccess();
+        }
     }
 
     @Override
@@ -149,6 +168,20 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View{
         @Override
         public void onPageChanged(int chapterId,int chapterOrder, FlipStatus status) {
             mPageWidget.openBook(mBookId,chapterId, chapterOrder,status);
+        }
+
+        @Override
+        public void onStartLoadChapter() {
+            if(null != loadService){
+                loadService.showCallback(LoadingCallback.class);
+            }
+        }
+
+        @Override
+        public void onSuccessLoadChapter() {
+            if(null != loadService){
+                loadService.showSuccess();
+            }
         }
     }
 

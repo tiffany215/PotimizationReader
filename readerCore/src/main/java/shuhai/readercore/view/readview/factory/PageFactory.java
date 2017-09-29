@@ -148,6 +148,7 @@ public class PageFactory extends Factory {
                     currentPage = 1;
                     break;
             }
+            onSuccessLoadChapter();
         }
         if(BookStatus.LOAD_SUCCESS == curPage()){
                 return 1;
@@ -248,6 +249,7 @@ public class PageFactory extends Factory {
      * @param status
      */
     public void loadChapter(int chapterOrder,FlipStatus status){
+        onStartLoadChapter();
         mChapterEntity = DataBaseManager.getInstance().queryNextChapterInfo(2,mBookId,chapterOrder,status);
         if(null != mChapterEntity){
             //从缓存中获取章节内容，如果章节内容为空则从网络中获取。
@@ -366,6 +368,20 @@ public class PageFactory extends Factory {
     public void onPageChanged(int chapterId,int chapterOrder,FlipStatus status){
         if(null != listener){
             listener.onPageChanged(chapterId,chapterOrder,status);
+        }
+    }
+
+
+    public void onStartLoadChapter(){
+        if(null != listener){
+            listener.onStartLoadChapter();
+        }
+    }
+
+
+    public void onSuccessLoadChapter(){
+        if(null != listener){
+            listener.onSuccessLoadChapter();
         }
     }
 }

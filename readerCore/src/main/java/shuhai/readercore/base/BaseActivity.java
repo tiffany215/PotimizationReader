@@ -9,8 +9,13 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.kingja.loadsir.callback.Callback;
+import com.kingja.loadsir.core.LoadService;
+import com.kingja.loadsir.core.LoadSir;
+
 import butterknife.ButterKnife;
 import shuhai.readercore.R;
+import shuhai.readercore.ui.dialog.callback.LoadingCallback;
 
 /**
  * @author 55345364
@@ -23,6 +28,8 @@ public abstract class BaseActivity extends AppCompatActivity{
 
     public Toolbar mCommonToolbar;
 
+    public LoadService loadService;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -30,7 +37,6 @@ public abstract class BaseActivity extends AppCompatActivity{
         setContentView(getLayoutId());
         this.mContext = this;
         ButterKnife.inject(this);
-
         mCommonToolbar = ButterKnife.findById(this, R.id.common_toolbar);
         if(null != mCommonToolbar){
             initToolBar();

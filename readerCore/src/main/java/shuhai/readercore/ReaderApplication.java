@@ -2,6 +2,9 @@ package shuhai.readercore;
 
 import android.app.Application;
 
+import com.kingja.loadsir.core.LoadSir;
+
+import shuhai.readercore.ui.dialog.callback.LoadingCallback;
 import shuhai.readercore.utils.AppUtils;
 
 /**
@@ -18,8 +21,7 @@ public class ReaderApplication extends Application {
         super.onCreate();
         sInstance = this;
         AppUtils.init(this);
-
-
+        LoadSir.beginBuilder().addCallback(new LoadingCallback()).setDefaultCallback(LoadingCallback.class).commit();
 
     }
 

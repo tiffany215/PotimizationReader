@@ -6,8 +6,8 @@ android {
 
     defaultConfig {
         applicationId "shuhai.readercore"
-        minSdkVersion 15
-        targetSdkVersion 24
+        minSdkVersion 16
+        targetSdkVersion 25
         versionCode 1
         versionName "1.0"
 
@@ -75,6 +75,7 @@ dependencies {
     compile 'com.flipboard:bottomsheet-commons:1.5.3'
     compile 'com.android.support:support-v4:26.+'
     compile 'com.github.eschao:android-PageFlip:1.0.2'
+    compile 'com.kingja.loadsir:loadsir:1.2.0'
     testCompile 'junit:junit:4.12'
 
 

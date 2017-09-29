@@ -40,16 +40,19 @@ public class BookReadPresenter extends RxPresenter<BookReadContract.View> implem
             @Override
             public void onStart() {
 
+                Log.e(TAG, "onStart: ----------------->");
+
             }
 
             @Override
             public void onComplete() {
-
+                Log.e(TAG, "onStart: ----------------->");
             }
 
             @Override
             public void onError(ApiException e) {
-
+                Log.e(TAG, "onError: ----------------->");
+                mView.showError();
             }
 
             @Override

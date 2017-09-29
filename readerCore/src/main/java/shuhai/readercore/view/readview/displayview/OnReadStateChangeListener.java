@@ -25,4 +25,17 @@ public interface OnReadStateChangeListener {
      */
     void onPageChanged(int chapterId,int chapterOrder, FlipStatus status);
 
+
+    /**
+     * 开始加载章节
+     */
+    void onStartLoadChapter();
+
+    /**
+     *
+     */
+    void onSuccessLoadChapter();
+
+
+
 }
