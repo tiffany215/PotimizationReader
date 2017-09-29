@@ -1,6 +1,7 @@
 package shuhai.readercore.manager;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v4.content.ContextCompat;
 
 import shuhai.readercore.R;
@@ -21,6 +22,7 @@ public class ThemeManager {
     public static final int LEATHER = 3;
     public static final int GRAY = 4;
     public static final int NIGHT = 5;
+    public static final int PARCHMENT = 6;
 
 
     public static Bitmap getThemeDrawable(int theme){
@@ -43,6 +45,9 @@ public class ThemeManager {
                 break;
             case NIGHT:
                 bitmap.eraseColor(ContextCompat.getColor(AppUtils.getAppContext(),R.color.read_theme_night));
+                break;
+            case PARCHMENT:
+                bitmap = BitmapFactory.decodeResource(AppUtils.getResources(),R.drawable.theme_leather_bg);
                 break;
             default:
                 bitmap.eraseColor(ContextCompat.getColor(AppUtils.getAppContext(), R.color.read_theme_white));

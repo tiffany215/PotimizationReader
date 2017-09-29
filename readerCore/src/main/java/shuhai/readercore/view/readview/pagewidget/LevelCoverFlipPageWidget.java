@@ -22,7 +22,23 @@ public class LevelCoverFlipPageWidget extends HorizontalBaseReadView {
 
     @Override
     protected void drawPageArea(Canvas canvas, FlipStatus status) {
+        switch (status) {
+            case ON_FLIP_PRE:
+                canvas.drawBitmap(mCurPageBitmap,0,0,null);
+                canvas.drawBitmap(mPrePageBitmap,400,0,null);
 
+                break;
+
+            case ON_FLIP_CUR:
+                canvas.drawBitmap(mCurPageBitmap,100,0,null);
+                break;
+
+            case ON_FLIP_NEXT:
+                canvas.drawBitmap(mCurPageBitmap,0,0,null);
+                canvas.drawBitmap(mNextPageBitmap,-400,0,null);
+                break;
+
+        }
     }
 
     @Override

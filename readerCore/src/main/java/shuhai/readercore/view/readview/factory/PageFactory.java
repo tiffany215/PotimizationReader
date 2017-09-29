@@ -151,6 +151,7 @@ public class PageFactory extends Factory {
             onSuccessLoadChapter();
         }
         if(BookStatus.LOAD_SUCCESS == curPage()){
+                mChapterEntity = DataBaseManager.getInstance().queryNextChapterInfo(2,mBookId,chapterOrder,FlipStatus.ON_FLIP_CUR);
                 return 1;
         }else{
                 return 0;
@@ -192,7 +193,7 @@ public class PageFactory extends Factory {
         if(null == lines || lines.size() <= 0){
             preChapter();
         }
-        return BookStatus.NO_PRE_PAGE;
+        return BookStatus.LOAD_SUCCESS;
     }
 
     @Override

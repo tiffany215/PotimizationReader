@@ -16,8 +16,13 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 
+import com.kingja.loadsir.callback.Callback;
+import com.kingja.loadsir.core.LoadService;
+import com.kingja.loadsir.core.LoadSir;
+
 import butterknife.InjectView;
 import shuhai.readercore.R;
+import shuhai.readercore.ui.dialog.callback.LoadingCallback;
 import shuhai.readercore.utils.NetworkUtils;
 
 /**
@@ -33,6 +38,7 @@ public abstract  class BaseWVActivity extends BaseActivity {
 
     @InjectView(R.id.swipe_refresh_layout)
     public SwipeRefreshLayout swipeRefreshLayout;
+
 
 
 //    @InjectView(R.id.web_progressbar)
@@ -59,6 +65,14 @@ public abstract  class BaseWVActivity extends BaseActivity {
 
     @Override
     public void configViews() {
+        loadService = LoadSir.getDefault().register(swipeRefreshLayout, new Callback.OnReloadListener() {
+            @Override
+            public void onReload(View v) {
+
+            }
+        });
+
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -99,6 +113,8 @@ public abstract  class BaseWVActivity extends BaseActivity {
 
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            loadService.showCallback(LoadingCallback.class);
+
         }
 
         public void onPageFinished(WebView view, String url) {
@@ -113,6 +129,7 @@ public abstract  class BaseWVActivity extends BaseActivity {
 
             }
             swipeRefreshLayout.setRefreshing(false);
+            loadService.showSuccess();
         }
 
         @SuppressWarnings("deprecation")
@@ -120,6 +137,7 @@ public abstract  class BaseWVActivity extends BaseActivity {
         public void onReceivedError(WebView view, int errorCode,
                                     String description, String failingUrl) {
             super.onReceivedError(view, errorCode, description, failingUrl);
+            loadService.showSuccess();
             webView.loadUrl("file:///android_asset/repair/repair.html");
             webView.getSettings().setLayoutAlgorithm( WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
             return;
@@ -164,6 +182,7 @@ public abstract  class BaseWVActivity extends BaseActivity {
     public void loadWeb() {
         if (!NetworkUtils.isAvailable(mContext)) {
 //            errorLayout.setVisibility(View.VISIBLE);
+
             return;
         }
 
