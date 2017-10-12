@@ -137,25 +137,24 @@ public class PageFactory extends Factory {
             chapterLoader.clearPageCache();
             chapterLoader.characterTypesetting(cacheKeyCreate(articleId,chapterId));
             pageCount = chapterLoader.getCountPage();
-            switch (status) {
-                case ON_FLIP_PRE:
-                    currentPage = pageCount;
-                    break;
-                case ON_FLIP_CUR:
-                    currentPage = 1;
-                    break;
-                case ON_FLIP_NEXT:
-                    currentPage = 1;
-                    break;
-            }
-            onSuccessLoadChapter();
         }
-        if(BookStatus.LOAD_SUCCESS == curPage()){
-                mChapterEntity = DataBaseManager.getInstance().queryNextChapterInfo(2,mBookId,chapterOrder,FlipStatus.ON_FLIP_CUR);
+            mChapterEntity = DataBaseManager.getInstance().queryNextChapterInfo(2,mBookId,chapterOrder,FlipStatus.ON_FLIP_CUR);
+            if(pageCount > 0){
+                onSuccessLoadChapter();
                 return 1;
         }else{
                 return 0;
-        }
+            }
+    }
+
+    @Override
+    public int getCurPage() {
+        return currentPage;
+    }
+
+    @Override
+    public int getCountPage() {
+        return pageCount;
     }
 
     @Override
@@ -189,11 +188,7 @@ public class PageFactory extends Factory {
             mLines = lines;
             return BookStatus.LOAD_SUCCESS;
         }
-        //如果缓存中内容不存在，则去网络加载内容
-        if(null == lines || lines.size() <= 0){
-            preChapter();
-        }
-        return BookStatus.LOAD_SUCCESS;
+        return BookStatus.NO_PRE_PAGE;
     }
 
     @Override
@@ -202,9 +197,6 @@ public class PageFactory extends Factory {
         if(null != lines && lines.size() > 0){
             mLines = lines;
             return BookStatus.LOAD_SUCCESS;
-        }
-        if(null == lines || lines.size() <= 0){
-            curChapter();
         }
         return BookStatus.NO_PRE_PAGE;
     }
@@ -223,10 +215,7 @@ public class PageFactory extends Factory {
             mLines = lines;
             return BookStatus.LOAD_SUCCESS;
         }
-        if(null == lines || lines.size() <= 0){
-            nextChapter();
-        }
-        return BookStatus.LOAD_SUCCESS;
+        return BookStatus.NO_NEXT_PAGE;
     }
 
     @Override

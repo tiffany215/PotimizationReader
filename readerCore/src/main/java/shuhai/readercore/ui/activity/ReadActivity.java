@@ -2,6 +2,7 @@ package shuhai.readercore.ui.activity;
 
 import android.text.TextUtils;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 
@@ -73,6 +74,9 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View{
 
     @Override
     public void configViews() {
+
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
+                WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         loadService = LoadSir.getDefault().register(mContext, new Callback.OnReloadListener() {
             @Override

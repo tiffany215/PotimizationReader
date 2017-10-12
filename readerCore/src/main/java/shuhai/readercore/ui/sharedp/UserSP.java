@@ -124,4 +124,24 @@ public class UserSP {
         ed.putInt("last.read.chapter.mark"+ articleId,chapterId);
         ed.commit();
     }
+
+
+    /**
+     * 设置推荐书籍状态
+     * @param flag
+     */
+    public void setRecommendStatue(boolean flag){
+        ed.putBoolean("book.store.recommend",flag);
+        ed.commit();
+    }
+
+
+    /**
+     * 获取推荐书籍状态
+     * @return
+     */
+    public boolean getRecommendStatue(){
+        return sp.getBoolean("book.store.recommend",false);
+    }
+
 }

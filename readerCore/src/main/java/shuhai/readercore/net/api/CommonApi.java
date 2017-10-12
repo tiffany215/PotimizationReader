@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -66,7 +67,7 @@ public class CommonApi {
      * @param <T>
      * @return
      */
-    public <T> Observable<T> postMultipart(final String entrance,final Map<String,Object> params,Class<T> clz){
+    public <T> Observable<T> postMultipart(final String entrance, final Map<String, RequestBody> params, Class<T> clz){
         return apiService.postMultipart(entrance,params).compose(this.norTransFormer(clz));
     }
 
@@ -118,7 +119,7 @@ public class CommonApi {
      * @param <T>
      * @return
      */
-    public <T>Subscription postMultipart(final String entrance,final Map<String,Object> params,ApiCallback<T> callback){
+    public <T>Subscription postMultipart(final String entrance,final Map<String,RequestBody> params,ApiCallback<T> callback){
         return this.postMultipart(entrance,params,ClassUtils.getTClass(callback)).subscribe(new ApiCallbackSubscriber(mContext,callback));
     }
 

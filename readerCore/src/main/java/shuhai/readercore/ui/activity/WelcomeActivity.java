@@ -10,6 +10,7 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import shuhai.readercore.R;
+import shuhai.readercore.ui.sharedp.UserSP;
 
 /**
  * @author 55345364
@@ -50,7 +51,11 @@ public class WelcomeActivity extends AppCompatActivity {
     private synchronized void GoHome(){
         if(!flag){
             flag = true;
-            startActivity(new Intent(this,MainActivity.class));
+            if(UserSP.getInstance().getRecommendStatue()){
+                startActivity(new Intent(this,MainActivity.class));
+            }else{
+                startActivity(new Intent(this,MainActivity.class));
+            }
             finish();
         }
     }

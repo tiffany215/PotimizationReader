@@ -6,6 +6,7 @@ import shuhai.readercore.manager.DataBaseManager;
 import shuhai.readercore.net.callback.ApiCallback;
 import shuhai.readercore.net.exception.ApiException;
 import shuhai.readercore.ui.contract.BookRecommendContract;
+import shuhai.readercore.ui.sharedp.UserSP;
 
 /**
  * @author 55345364
@@ -42,7 +43,6 @@ public class BookRecommendPresenter extends RxPresenter<BookRecommendContract.Vi
                 //将推荐书籍存入库中
                 if(null != bookInfoEntity && null != bookInfoEntity.getMessage()){
                     for (int i = 0; i < bookInfoEntity.getMessage().size(); i++) {
-
                         shuhai.readercore.dao.BookInfoEntity bkbaseinfo = new shuhai.readercore.dao.BookInfoEntity();
                         bkbaseinfo.setArticleid(Long.parseLong(bookInfoEntity.getMessage().get(i).getArticleid()));
                         bkbaseinfo.setArticlename(bookInfoEntity.getMessage().get(i).getArticlename());
@@ -55,9 +55,8 @@ public class BookRecommendPresenter extends RxPresenter<BookRecommendContract.Vi
                         bkbaseinfo.setLastreadchporder(0);
                         bkbaseinfo.setBktype(2);
                         bkbaseinfo.setNewchporder(Integer.valueOf(bookInfoEntity.getMessage().get(i).getLastchapterid()));
-
-
                         DataBaseManager.getInstance().insertBookInfo(bkbaseinfo);
+                        UserSP.getInstance().setRecommendStatue(true);
                     }
                 }
             }

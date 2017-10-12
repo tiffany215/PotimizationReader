@@ -5,10 +5,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import shuhai.readercore.net.api.CommonApi;
 import shuhai.readercore.net.callback.ApiCallback;
 import shuhai.readercore.utils.AppUtils;
+import shuhai.readercore.utils.TimeFromatUtile;
 import shuhai.readercore.view.readview.FlipStatus;
 
 /**
@@ -39,59 +42,66 @@ public class BookApis {
     }
 
 
+
+    private RequestBody formatParams(Object params){
+        return RequestBody.create(null,String.valueOf(params));
+    }
+
+
     /**
      * 获取单章内容
      * @param callback
      * @param <T>
      */
     public <T> void obtainChapter(final int articleId, final int chapterId, int chapterOrder, FlipStatus status, ApiCallback<T> callback){
-        Map<String,Object> params = new HashMap<>();
-        params.put("packageame", "");
-        params.put("sign", "cf647dda9b03998695e8436954eeba2d");
-        params.put("source", "shuhai");
-        params.put("uuid", "00000000-35b8-f815-39da-21960033c587");
-        params.put("siteid", 300);
-        params.put("timestamp", 1500432469);
-        params.put("chapterorder", chapterOrder);
-        params.put("username", "wangxu");
-        params.put("imei", 356261050497138L);
-        params.put("version", 60);
-        params.put("ip", String.valueOf("192.168.1.190"));
-        params.put("uid", 173434);
+        Map<String, RequestBody> params = new HashMap<>();
+        String systemTime = String.valueOf(TimeFromatUtile.getCurrentDateTimeSeconds());
+        params.put("packagename", formatParams("com.shuhai.bookos"));
+        params.put("sign",  formatParams("cf647dda9b03998695e8436954eeba2d"));
+        params.put("source",  formatParams("shuhai"));
+        params.put("uuid",  formatParams("00000000-35b8-f815-39da-21960033c587"));
+        params.put("siteid",  formatParams("300"));
+        params.put("timestamp", formatParams(systemTime));
+        params.put("chapterorder", formatParams(chapterOrder));
+        params.put("username", formatParams("wangxu"));
+        params.put("imei", formatParams("356261050497138L"));
+        params.put("version", formatParams(60));
+        params.put("ip", formatParams("192.168.1.190"));
+        params.put("uid", formatParams("173434"));
         switch (status) {
             case ON_FLIP_PRE:
-                params.put("order", 0);
+                params.put("order", formatParams(1));
                 break;
             case ON_FLIP_CUR:
-                params.put("order", 1);
+                params.put("order", formatParams(0));
                 break;
             case ON_FLIP_NEXT:
-                params.put("order", 2);
+                params.put("order", formatParams(2));
                 break;
 
         }
-        params.put("articleid", articleId);
-        params.put("chapterid", chapterId);
+        params.put("articleid", formatParams(articleId));
+        params.put("chapterid", formatParams(chapterId));
         commonApi.postMultipart("onechapter",params,callback);
     }
 
 
     public <T> void obtainRecommendBook(int sex,int pagesize,ApiCallback<T> callback){
-        Map<String,Object> params = new HashMap<>();
-        params.put("packageame", "");
-        params.put("sign", "cf647dda9b03998695e8436954eeba2d");
-        params.put("source", "shuhai");
-        params.put("uuid", "00000000-35b8-f815-39da-21960033c587");
-        params.put("siteid", 300);
-        params.put("timestamp", 1500432469);
-        params.put("chapterorder", 18);
-        params.put("username", "wangxu");
-        params.put("imei", 356261050497138L);
-        params.put("version", 60);
-        params.put("ip", String.valueOf("192.168.1.190"));
-        params.put("uid", 173434);
-        params.put("sex", sex);
-        params.put("pagesize", pagesize);
+        Map<String,RequestBody> params = new HashMap<>();
+        params.put("packageame", formatParams("com.shuhai.bookos"));
+        params.put("sign", formatParams("cf647dda9b03998695e8436954eeba2d"));
+        params.put("source", formatParams("shuhai"));
+        params.put("uuid", formatParams("00000000-35b8-f815-39da-21960033c587"));
+        params.put("siteid", formatParams(300));
+        params.put("timestamp", formatParams(1500432469));
+        params.put("chapterorder", formatParams(18));
+        params.put("username", formatParams("wangxu"));
+        params.put("imei", formatParams(356261050497138L));
+        params.put("version", formatParams(60));
+        params.put("ip", formatParams("192.168.1.190"));
+        params.put("uid", formatParams(173434));
+        params.put("sex", formatParams(sex));
+        params.put("pagesize", formatParams(pagesize));
         commonApi.postMultipart("bookcasebooks",params,callback);
     }
 

@@ -81,4 +81,16 @@ public abstract class Factory {
     public abstract int openBook(int articleID, int chapterId, int chapterOrder,FlipStatus status);
 
 
+    /**
+     * 获取当前页码
+     * @return
+     */
+    public abstract int getCurPage();
+
+
+    /**
+     * 获取当前章中页数
+     * @return
+     */
+    public abstract int getCountPage();
 }
