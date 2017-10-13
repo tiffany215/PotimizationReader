@@ -22,7 +22,7 @@ public interface BookReadContract {
          * @param articleId 书籍id
          * @param chapterId 章节id
          * @param chapterOrder 章节order
-         * @param flipMark 翻页标识 当前章节:0   前一页:1    后一页:2
+         * @param status 翻页标识 当前章节:0   前一页:1    后一页:2
          */
         void getChapterRead(int articleId, int chapterId,int chapterOrder,FlipStatus status);
         void getBookMixAToc();

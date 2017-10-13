@@ -127,6 +127,25 @@ public class UserSP {
 
 
     /**
+     * 设置最后阅读页码
+     * @param articleId 书籍id
+     * @param page 当前章节页码
+     */
+    public void setLastReaderPage(int articleId,int page){
+        ed.putInt("last.read.page.mark" + articleId,page);
+        ed.commit();
+    }
+
+    /**
+     * 获取最后阅读页码
+     * @param articleId 书籍id
+     * @return
+     */
+    public int getLastReaderPage(int articleId){
+        return sp.getInt("last.read.page.mark" + articleId,1);
+    }
+
+    /**
      * 设置推荐书籍状态
      * @param flag
      */

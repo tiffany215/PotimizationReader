@@ -87,10 +87,17 @@ public abstract class Factory {
      */
     public abstract int getCurPage();
 
+    /**
+     * 设置当前页
+     */
+    public abstract void setCurPage(int page);
 
     /**
      * 获取当前章中页数
      * @return
      */
     public abstract int getCountPage();
+
+
+
 }

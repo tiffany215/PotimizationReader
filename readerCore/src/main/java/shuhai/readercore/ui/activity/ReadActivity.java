@@ -35,8 +35,6 @@ import shuhai.readercore.view.readview.FlipStatus;
 
 public class ReadActivity extends BaseActivity implements BookReadContract.View{
 
-
-
     @InjectView(R.id.flReadWidget)
     FrameLayout lsReadWidget;
 
@@ -44,7 +42,6 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View{
 
     @Inject
     BookReadPresenter mPresenter = new BookReadPresenter();
-
 
     private int mBookId;
 
@@ -74,36 +71,20 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View{
 
     @Override
     public void configViews() {
-
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
         loadService = LoadSir.getDefault().register(mContext, new Callback.OnReloadListener() {
             @Override
             public void onReload(View v) {
 //              loadService.showCallback(LoadingCallback.class);
 //                loadService.showSuccess();
-
             }
         });
-
         mFlipMark = 0;
-
         initPagerWidget();
-
         mPresenter.attachView(this);
-
         mPresenter.getBookMixAToc();
-
-
-
-
-
-
     }
-
-
-
 
 
     /**

@@ -9,6 +9,7 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.ProgressBar;
 
 import java.text.DecimalFormat;
@@ -85,6 +86,7 @@ public class PageFactory extends Factory {
     private int pageCount = 1;
 
     private ChapterEntity mChapterEntity;
+    private String TAG = "";
 
     public PageFactory(Context context){
         this(context,ScreenUtils.getScreenWidth(),ScreenUtils.getScreenHeight(), Constants.MARGIN_WIDTH,Constants.MARGIN_HEIGHT,34);
@@ -153,6 +155,11 @@ public class PageFactory extends Factory {
     }
 
     @Override
+    public void setCurPage(int page) {
+        currentPage = page;
+    }
+
+    @Override
     public int getCountPage() {
         return pageCount;
     }
@@ -193,6 +200,7 @@ public class PageFactory extends Factory {
 
     @Override
     public BookStatus curPage() {
+        Log.e(TAG, "openBook: ---------3----------->");
         Vector<String> lines = chapterLoader.pageCur(currentPage,cacheKeyCreate(mBookId,mChapterId));
         if(null != lines && lines.size() > 0){
             mLines = lines;
@@ -204,6 +212,8 @@ public class PageFactory extends Factory {
 
     @Override
     public BookStatus nextPage() {
+
+        Log.e(TAG, "openBook: ---------4----------->");
         currentPage++;
         if(currentPage == 1){
             currentPage = 2;
@@ -294,6 +304,8 @@ public class PageFactory extends Factory {
                 y += mLineSpace;
                 canvas.drawText(line,mMarginWidth,y,mPaint);
                 y += mFontSize;
+
+                Log.e(TAG, line);
             }
 
             if(null != batteryBitmap){
