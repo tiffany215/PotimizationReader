@@ -304,8 +304,6 @@ public class PageFactory extends Factory {
                 y += mLineSpace;
                 canvas.drawText(line,mMarginWidth,y,mPaint);
                 y += mFontSize;
-
-                Log.e(TAG, line);
             }
 
             if(null != batteryBitmap){

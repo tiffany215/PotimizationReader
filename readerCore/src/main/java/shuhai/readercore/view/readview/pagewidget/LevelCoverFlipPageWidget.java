@@ -22,7 +22,9 @@ import shuhai.readercore.view.readview.FlipStatus;
 public class LevelCoverFlipPageWidget extends HorizontalBaseReadView {
 
 
-    public LevelCoverFlipPageWidget(Context context, int bookId, int chapterId,OnReadStateChangeListener listener) {
+    private static final String TAG = "LevelCoverFlipPageWidget";
+
+    public LevelCoverFlipPageWidget(Context context, int bookId, int chapterId, OnReadStateChangeListener listener) {
         super(context, bookId, chapterId,listener);
     }
 
@@ -32,6 +34,10 @@ public class LevelCoverFlipPageWidget extends HorizontalBaseReadView {
             case ON_FLIP_PRE:
                 canvas.drawBitmap(mCurPageBitmap,0,0,null);
                 canvas.drawBitmap(mPrePageBitmap,prePageLeft,0,null);
+                Log.e(TAG, "prePageLeft--------------------->: " + prePageLeft);
+
+
+
                 break;
 
             case ON_FLIP_CUR:
@@ -41,6 +47,7 @@ public class LevelCoverFlipPageWidget extends HorizontalBaseReadView {
             case ON_FLIP_NEXT:
                 canvas.drawBitmap(mNextPageBitmap,0,0,null);
                 canvas.drawBitmap(mCurPageBitmap,currPageLeft,0,null);
+//                Log.e(TAG, "currPageLeft--------------------->: " + currPageLeft);
                 break;
         }
     }
@@ -52,7 +59,7 @@ public class LevelCoverFlipPageWidget extends HorizontalBaseReadView {
         RectF rectF = new RectF(right, 0, mScreenWidth, mScreenHeight);
         Paint paint = new Paint();
         paint.setAntiAlias(true);
-        LinearGradient linearGradient = new LinearGradient(right, 0,right + 26, 0, 0xffbbbbbb, 0x00bbbbbb, Shader.TileMode.CLAMP);
+        LinearGradient linearGradient = new LinearGradient(right, 0,right + 26, 0, 0xffaaaaaa, 0x00aaaaaa, Shader.TileMode.CLAMP);
         paint.setShader(linearGradient);
         paint.setStyle(Paint.Style.FILL);
         canvas.drawRect(rectF, paint);

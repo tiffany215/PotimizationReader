@@ -89,11 +89,8 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
         mNextPageBitmap = Bitmap.createBitmap(mScreenWidth,mScreenHeight, Bitmap.Config.ARGB_8888);
 
         mPrePageCanvas =  new Canvas(mPrePageBitmap);
-//        mPrePageCanvas.drawColor(Color.WHITE);
         mCurPageCanvas =  new Canvas(mCurPageBitmap);
-//        mCurPageCanvas.drawColor(Color.BLUE);
         mNextPageCanvas =  new Canvas(mNextPageBitmap);
-//        mNextPageCanvas.drawColor(Color.YELLOW);
 
         mScroller = new Scroller(getContext());
 
@@ -122,24 +119,17 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
         mPrePageBitmap = mCurPageBitmap;
         prePageLeft = -mScreenWidth;
         factory.setCurPage(UserSP.getInstance().getLastReaderPage(mBookId));
-
-
-        Log.e(TAG, "openBook: ---------1----------->");
-
         BookStatus bookStatus = factory.curPage();
         if(bookStatus ==  BookStatus.LOAD_SUCCESS){
             factory.onDraw(mCurPageCanvas);
             if(factory.getCountPage() > 1){
-                Log.e(TAG, "openBook: ---------2----------->");
                 bookStatus = factory.nextPage();
                 if(bookStatus == BookStatus.LOAD_SUCCESS){
                     factory.onDraw(mNextPageCanvas);
                 }
             }
         }
-//        factory.setCurPage(1);
         state = STATE_STOP;
-//        isPrepare = true;
         mFlipStatus = status;
         postInvalidate();
     }
@@ -212,7 +202,7 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
                     mFlipStatus = FlipStatus.ON_FLIP_NEXT;
                     isPreMoving = false;
                     isCurrMoving = true;
-                    if(factory.getCurPage() == factory.getCountPage()){
+                    if(factory.getCurPage() > factory.getCountPage()){
                         state = STATE_STOP;
                         releaseMoving();
                     }else{
@@ -235,7 +225,11 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
             case MotionEvent.ACTION_UP:
                 if (Math.abs(speed) < speed_shake)
                     speed = 0;
-                mScroller.startScroll(currPageLeft,0,-mScreenWidth - currPageLeft,0,500);
+                if(speed <= 0){
+                    mScroller.startScroll(currPageLeft,0,-mScreenWidth - currPageLeft,0,1000);
+                }else{
+                    mScroller.startScroll(mScreenWidth  + prePageLeft ,0, Math.abs(mScreenWidth - (mScreenWidth  + prePageLeft)),0,1000);
+                }
                 postInvalidate();
                 try
                 {
@@ -251,7 +245,6 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
 
 
         return true;
-//        return super.onTouchEvent(event);
     }
 
 
@@ -294,29 +287,27 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
         //向左滑动
         if(prePageLeft > -mScreenWidth && speed <= 0){
             moveLeft(status,curX);
-            Log.e(TAG, "1: -------------->"+ currPageLeft);
         }
         else if(currPageLeft < 0 && speed >= 0){
-
             moveRight(status,curX);
         }
 
         //页面向左滑动
-        else if(speed < 0 && factory.getCurPage() < factory.getCountPage()){
-            moveLeft(status,curX);
-
-            Log.e(TAG, "2: -------------->"+ currPageLeft);
-
-            if(currPageLeft == (-mScreenWidth)){
-                addNextPage();
-                bookStatus = factory.nextPage();
-                if(bookStatus == BookStatus.NO_NEXT_PAGE){
-                    Toast.makeText(getContext(),"没有下一页了",Toast.LENGTH_SHORT).show();
-                    factory.nextChapter();
-                }else if(bookStatus == BookStatus.LOAD_SUCCESS){
-                    abortAnimation();
-                    factory.onDraw(mNextPageCanvas);
-                    mFlipStatus = FlipStatus.ON_FLIP_NEXT;
+        else if(speed < 0 && factory.getCurPage() <= factory.getCountPage()) {
+            moveLeft(status, curX);
+            if (currPageLeft == (-mScreenWidth)) {
+                bookStatus = factory.curPage();
+                factory.onDraw(mCurPageCanvas);
+                if (BookStatus.LOAD_SUCCESS == bookStatus) {
+                    bookStatus = factory.nextPage();
+                    if (bookStatus == BookStatus.NO_NEXT_PAGE) {
+                        Toast.makeText(getContext(), "没有下一页了", Toast.LENGTH_SHORT).show();
+                        factory.nextChapter();
+                    } else if (bookStatus == BookStatus.LOAD_SUCCESS) {
+                        abortAnimation();
+                        factory.onDraw(mNextPageCanvas);
+                        mFlipStatus = FlipStatus.ON_FLIP_NEXT;
+                    }
                 }
             }
         }
@@ -325,7 +316,8 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
         else if(speed > 0 && factory.getCurPage() > 1){
             moveRight(status,curX);
             if(prePageLeft == 0){
-                addPrePage();
+                factory.curPage();
+                factory.onDraw(mCurPageCanvas);
                 bookStatus = factory.prePage();
                 if(bookStatus == BookStatus.NO_PRE_PAGE){
                     Toast.makeText(getContext(),"没有上一页了",Toast.LENGTH_SHORT).show();
@@ -376,7 +368,7 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
     private void moveRight(FlipStatus status,int curX){
         switch (status) {
             case ON_FLIP_PRE:
-                prePageLeft = curX;
+                prePageLeft = -(mScreenWidth - curX);
                 if (prePageLeft > 0)
                     prePageLeft = 0;
                 right = mScreenWidth + prePageLeft;
@@ -390,26 +382,12 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
         }
     }
 
-    private void addPrePage(){
-        Bitmap temp = mNextPageBitmap;
-        mNextPageBitmap = mCurPageBitmap;
-        mCurPageBitmap = mPrePageBitmap;
-        mPrePageBitmap = temp;
-    }
-
-
-    private void addNextPage(){
-        Bitmap temp = mCurPageBitmap;
-        mCurPageBitmap = mNextPageBitmap;
-//        mNextPageBitmap = mPrePageBitmap;
-        mPrePageBitmap = temp;
-        mNextPageCanvas.restore();
-    }
-
-
     @Override
     public void computeScroll() {
         if(mScroller.computeScrollOffset()) {
+
+            Log.e(TAG,"----------------------->>" + mScroller.getCurrX());
+
             updatePageArea(mFlipStatus, mScroller.getCurrX());
             postInvalidate();
         }
