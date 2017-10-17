@@ -19,5 +19,7 @@ public interface BaseReadViewImpl {
 
     void openBook(int articleId,int chapterId,int chapterOrder,FlipStatus status);
 
+    void closeBook();
+
 
 }

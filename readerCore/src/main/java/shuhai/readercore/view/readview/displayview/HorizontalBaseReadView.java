@@ -68,6 +68,9 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
     private int mBookId;
     private int mChpterId;
 
+
+    private int currPageSize;
+
     OnReadStateChangeListener listener;
 
     private FlipStatus mFlipStatus = FlipStatus.ON_FLIP_CUR;
@@ -116,14 +119,15 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
             Toast.makeText(getContext(),"章节内容打开失败！",Toast.LENGTH_LONG).show();
             return;
         }
-        mPrePageBitmap = mCurPageBitmap;
+
         prePageLeft = -mScreenWidth;
-//        factory.setCurPage(UserSP.getInstance().getLastReaderPage(mBookId));
-        BookStatus bookStatus = factory.curPage();
+        currPageSize = 1;
+//        UserSP.getInstance().getLastReaderPage(articleId);
+        BookStatus bookStatus = factory.getCurPageContent(currPageSize);
         if(bookStatus ==  BookStatus.LOAD_SUCCESS){
             factory.onDraw(mCurPageCanvas);
             if(factory.getCountPage() > 1){
-                bookStatus = factory.nextPage();
+                bookStatus = factory.getCurPageContent(currPageSize + 1);
                 if(bookStatus == BookStatus.LOAD_SUCCESS){
                     factory.onDraw(mNextPageCanvas);
                 }
@@ -134,6 +138,11 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
         postInvalidate();
     }
 
+
+
+    public void closeBook(){
+        UserSP.getInstance().setLastReaderPage(mBookId,currPageSize);
+    }
 
 
     // 手指滑动的距离
@@ -181,7 +190,7 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
                     mFlipStatus = FlipStatus.ON_FLIP_PRE;
                     isPreMoving = true;
                     isCurrMoving = false;
-                    if(factory.getCurPage() == 1){
+                    if(currPageSize == 1){
                         state = STATE_STOP;
                         releaseMoving();
                     }else{
@@ -202,7 +211,7 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
                     mFlipStatus = FlipStatus.ON_FLIP_NEXT;
                     isPreMoving = false;
                     isCurrMoving = true;
-                    if(factory.getCurPage() > factory.getCountPage()){
+                    if(currPageSize > factory.getCountPage()){
                         state = STATE_STOP;
                         releaseMoving();
                     }else{
@@ -295,24 +304,21 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
         }
 
         //页面向左滑动
-        else if(speed < 0 && factory.getCurPage() <= factory.getCountPage()) {
+        else if(speed < 0 && currPageSize <= factory.getCountPage()) {
             moveLeft(status, curX);
-            if (currPageLeft == (-mScreenWidth)) {
+            Log.e(TAG, "--------------curX------------->: "  + curX );
+            if (currPageLeft == -mScreenWidth) {
 
-//                factory.setCurPage(factory.getCurPage() - 1);
+                currPageSize++;
 
-                factory.prePage();
-                factory.onDraw(mPrePageCanvas);
-
-
-                factory.setCurPage(factory.getCurPage() + 1);
-                factory. curPage();
+                factory.getCurPageContent(currPageSize);
                 factory.onDraw(mCurPageCanvas);
 
+                factory.getCurPageContent(currPageSize - 1);
+                factory.onDraw(mPrePageCanvas);
 
-                factory.nextPage();
+                factory.getCurPageContent(currPageSize + 1);
                 factory.onDraw(mNextPageCanvas);
-
 
 
 
@@ -339,7 +345,7 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
         }
 
         //快速滑动后页面滚动
-        else if(speed > 0 && factory.getCurPage() > 1){
+        else if(speed > 0 && currPageSize > 1){
             moveRight(status,curX);
             if(prePageLeft == 0){
 //                factory.curPage();
@@ -353,22 +359,16 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
 //                    mFlipStatus = FlipStatus.ON_FLIP_PRE;
 //                }
 
+                currPageSize--;
 
-
-
-                factory.curPage();
-                factory.onDraw(mNextPageCanvas);
-
-                factory.prePage();
+                factory.getCurPageContent(currPageSize);
                 factory.onDraw(mCurPageCanvas);
 
-                factory.prePage();
+                factory.getCurPageContent(currPageSize - 1);
                 factory.onDraw(mPrePageCanvas);
 
-
-
-
-
+                factory.getCurPageContent(currPageSize + 1);
+                factory.onDraw(mNextPageCanvas);
             }
         }
 
@@ -394,13 +394,13 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
                 prePageLeft = curX;
                 if (curX < - mScreenWidth)
                     prePageLeft = - mScreenWidth;
-                right = mScreenWidth + prePageLeft;
+                    right = mScreenWidth + prePageLeft;
                 break;
             case ON_FLIP_NEXT:
                 currPageLeft = curX;
                 if (curX < -mScreenWidth)
                     currPageLeft = -mScreenWidth;
-                right = mScreenWidth + currPageLeft;
+                    right = mScreenWidth + currPageLeft;
                 break;
         }
     }

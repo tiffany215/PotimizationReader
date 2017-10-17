@@ -81,17 +81,17 @@ public abstract class Factory {
     public abstract int openBook(int articleID, int chapterId, int chapterOrder,FlipStatus status);
 
 
-    /**
-     * 获取当前页码
-     * @return
-     */
-    public abstract int getCurPage();
-
-    /**
-     * 设置当前页
-     */
-    public abstract void setCurPage(int page);
-
+//    /**
+//     * 获取当前页码
+//     * @return
+//     */
+//    public abstract int getCurPage();
+//
+//    /**
+//     * 设置当前页
+//     */
+//    public abstract void setCurPage(int page);
+//
     /**
      * 获取当前章中页数
      * @return
@@ -100,6 +100,14 @@ public abstract class Factory {
 
 
     public abstract void setAlpha(int alpha);
+
+
+    /**
+     * 获取指定页码内容
+     * @param pageSize 指定页码
+     * @return
+     */
+    public abstract BookStatus getCurPageContent(int pageSize);
 
 
 }

@@ -32,11 +32,9 @@ public class LevelScrollFlipPageWidget extends HorizontalBaseReadView {
     protected void drawPageArea(Canvas canvas, FlipStatus status) {
         switch (status) {
             case ON_FLIP_PRE:
+                canvas.drawBitmap(mNextPageBitmap,0,0,null);
                 canvas.drawBitmap(mCurPageBitmap, mScreenWidth + prePageLeft, 0, null);
                 canvas.drawBitmap(mPrePageBitmap, prePageLeft, 0, null);
-
-                Log.e(TAG, "prePageLeft-------------------->>: " + prePageLeft );
-
                 break;
 
             case ON_FLIP_CUR:

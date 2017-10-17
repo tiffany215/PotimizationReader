@@ -149,16 +149,16 @@ public class PageFactory extends Factory {
             }
     }
 
-    @Override
-    public int getCurPage() {
-        return currentPage;
-    }
-
-    @Override
-    public void setCurPage(int page) {
-        currentPage = page;
-    }
-
+//    @Override
+//    public int getCurPage() {
+//        return currentPage;
+//    }
+//
+//    @Override
+//    public void setCurPage(int page) {
+//        currentPage = page;
+//    }
+//
     @Override
     public int getCountPage() {
         return pageCount;
@@ -170,6 +170,8 @@ public class PageFactory extends Factory {
         mPaint.setAlpha(alpha);
         mTitlePaint.setAlpha(alpha);
     }
+
+
 
     @Override
     public <T extends ChapterLoaderImpl> T createChapterLoader(Class<T> clz) {
@@ -186,6 +188,16 @@ public class PageFactory extends Factory {
         return (T) chapterLoader;
     }
 
+
+    @Override
+    public BookStatus getCurPageContent(int pageSize) {
+        Vector<String> lines = chapterLoader.pageUp(pageSize,cacheKeyCreate(mBookId,mChapterId));
+        if(null != lines && lines.size() > 0){
+            mLines = lines;
+            return BookStatus.LOAD_SUCCESS;
+        }
+        return BookStatus.NO_PRE_PAGE;
+    }
 
 
     @Override

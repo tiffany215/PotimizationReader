@@ -136,7 +136,9 @@ public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements 
     }
 
 
+    public synchronized void closeBook(){
 
+    }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
