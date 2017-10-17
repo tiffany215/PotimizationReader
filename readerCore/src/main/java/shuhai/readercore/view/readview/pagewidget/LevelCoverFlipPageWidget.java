@@ -57,7 +57,7 @@ public class LevelCoverFlipPageWidget extends HorizontalBaseReadView {
         RectF rectF = new RectF(right, 0, mScreenWidth, mScreenHeight);
         Paint paint = new Paint();
         paint.setAntiAlias(true);
-        LinearGradient linearGradient = new LinearGradient(right, 0,right + 26, 0, 0xffaaaaaa, 0x00aaaaaa, Shader.TileMode.CLAMP);
+        LinearGradient linearGradient = new LinearGradient(right, 0,right + 26, 0, 0xff555555, 0x00aaaaaa, Shader.TileMode.CLAMP);
         paint.setShader(linearGradient);
         paint.setStyle(Paint.Style.FILL);
         canvas.drawRect(rectF, paint);

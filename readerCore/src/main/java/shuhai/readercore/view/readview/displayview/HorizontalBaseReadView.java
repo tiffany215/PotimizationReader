@@ -304,10 +304,12 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
             moveRight(status,curX);
         }
 
-        //页面向左滑动
+        //手指向左滑动
         else if(speed < 0 && currPageSize <= factory.getCountPage()) {
             moveLeft(status, curX);
             if (currPageLeft == -mScreenWidth) {
+                // 向后翻页动作完成，重新绘制显示内容。
+
                 currPageSize++;
 
                 factory.getCurPageContent(currPageSize);
@@ -321,6 +323,7 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
                 factory.getCurPageContent(currPageSize + 1);
                 factory.setCurPageSize(currPageSize + 1);
                 factory.onDraw(mNextPageCanvas);
+
             }
         }
 
@@ -328,7 +331,7 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
         else if(speed > 0 && currPageSize > 1){
             moveRight(status,curX);
             if(prePageLeft == 0){
-
+                // 向前翻页动作完成，重新绘制显示内容。
                 currPageSize--;
 
                 factory.getCurPageContent(currPageSize);

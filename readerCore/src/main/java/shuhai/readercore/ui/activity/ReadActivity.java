@@ -98,7 +98,7 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View{
 //        mPageWidget = new NoEffectFlipPageWidget(this,mBookId,mChapterId,new ReadListener());
 //        mPageWidget = new LevelFadeFlipPageWidget(this,mBookId,mChapterId,new ReadListener());
 //        mPageWidget = new GLRealFlipPageWidget(this,mBookId,mChapterId);
-        mPageWidget.init(ThemeManager.PARCHMENT);
+        mPageWidget.init(ThemeManager.CLASSICAL);
         lsReadWidget.removeAllViews();
         lsReadWidget.addView((View) mPageWidget);
     }

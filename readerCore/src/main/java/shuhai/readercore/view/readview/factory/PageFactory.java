@@ -106,12 +106,14 @@ public class PageFactory extends Factory {
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setTextSize(mFontSize);
         mPaint.setColor(ContextCompat.getColor(context, R.color.primary_text));
+//        mPaint.setShadowLayer(1f, 0.5f, 0.5f, Color.WHITE);//设置阴影层，这是关键
+
 
         mTitlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mTitlePaint.setTextSize(mNumFontSize);
         mTitlePaint.setStyle(Paint.Style.FILL);//设置填充样式
         mTitlePaint.setStrokeWidth(1);//设置画笔宽度
-        mTitlePaint.setColor(ContextCompat.getColor(context, R.color.secondary_text));
+        mTitlePaint.setColor(ContextCompat.getColor(context, R.color.primary_text));
 
         timeLen = (int) mTitlePaint.measureText("00:00");
         percentLen = (int) mTitlePaint.measureText("00.00%");

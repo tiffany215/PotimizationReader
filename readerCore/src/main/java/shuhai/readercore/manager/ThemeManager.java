@@ -23,6 +23,8 @@ public class ThemeManager {
     public static final int GRAY = 4;
     public static final int NIGHT = 5;
     public static final int PARCHMENT = 6;
+    public static final int CLASSICAL = 7;
+    public static final int MODERN = 8;
 
 
     public static Bitmap getThemeDrawable(int theme){
@@ -47,7 +49,15 @@ public class ThemeManager {
                 bitmap.eraseColor(ContextCompat.getColor(AppUtils.getAppContext(),R.color.read_theme_night));
                 break;
             case PARCHMENT:
+                bitmap = BitmapFactory.decodeResource(AppUtils.getResources(),R.drawable.theme_reader_bg_02);
+                break;
+
+            case CLASSICAL:
                 bitmap = BitmapFactory.decodeResource(AppUtils.getResources(),R.drawable.theme_leather_bg);
+                break;
+
+            case MODERN:
+                bitmap = BitmapFactory.decodeResource(AppUtils.getResources(),R.drawable.theme_reader_bg_01);
                 break;
             default:
                 bitmap.eraseColor(ContextCompat.getColor(AppUtils.getAppContext(), R.color.read_theme_white));
