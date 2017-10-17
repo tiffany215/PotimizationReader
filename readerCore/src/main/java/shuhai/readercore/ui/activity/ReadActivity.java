@@ -24,6 +24,8 @@ import shuhai.readercore.view.readview.displayview.BaseReadViewImpl;
 import shuhai.readercore.view.readview.displayview.OnReadStateChangeListener;
 import shuhai.readercore.view.readview.pagewidget.GLRealFlipPageWidget;
 import shuhai.readercore.view.readview.pagewidget.LevelCoverFlipPageWidget;
+import shuhai.readercore.view.readview.pagewidget.LevelFadeFlipPageWidget;
+import shuhai.readercore.view.readview.pagewidget.LevelScrollFlipPageWidget;
 import shuhai.readercore.view.readview.pagewidget.NoEffectFlipPageWidget;
 import shuhai.readercore.view.readview.FlipStatus;
 
@@ -91,8 +93,10 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View{
      * 将阅读内容绘制好的View添加到当前容器
      */
     private void initPagerWidget(){
-        mPageWidget = new LevelCoverFlipPageWidget(this,mBookId,mChapterId,new ReadListener());
+//        mPageWidget = new LevelCoverFlipPageWidget(this,mBookId,mChapterId,new ReadListener());
+        mPageWidget = new LevelScrollFlipPageWidget(this,mBookId,mChapterId,new ReadListener());
 //        mPageWidget = new NoEffectFlipPageWidget(this,mBookId,mChapterId,new ReadListener());
+//        mPageWidget = new LevelFadeFlipPageWidget(this,mBookId,mChapterId,new ReadListener());
 //        mPageWidget = new GLRealFlipPageWidget(this,mBookId,mChapterId);
         mPageWidget.init(ThemeManager.PARCHMENT);
         lsReadWidget.removeAllViews();

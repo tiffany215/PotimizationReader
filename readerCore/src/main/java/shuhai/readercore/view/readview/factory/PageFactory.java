@@ -86,7 +86,7 @@ public class PageFactory extends Factory {
     private int pageCount = 1;
 
     private ChapterEntity mChapterEntity;
-    private String TAG = "";
+    private String TAG = "PageFactory";
 
     public PageFactory(Context context){
         this(context,ScreenUtils.getScreenWidth(),ScreenUtils.getScreenHeight(), Constants.MARGIN_WIDTH,Constants.MARGIN_HEIGHT,34);
@@ -164,6 +164,13 @@ public class PageFactory extends Factory {
         return pageCount;
     }
 
+
+    @Override
+    public void setAlpha(int alpha) {
+        mPaint.setAlpha(alpha);
+        mTitlePaint.setAlpha(alpha);
+    }
+
     @Override
     public <T extends ChapterLoaderImpl> T createChapterLoader(Class<T> clz) {
         ChapterLoaderImpl chapterLoader = null;
@@ -200,7 +207,6 @@ public class PageFactory extends Factory {
 
     @Override
     public BookStatus curPage() {
-        Log.e(TAG, "openBook: ---------3----------->");
         Vector<String> lines = chapterLoader.pageCur(currentPage,cacheKeyCreate(mBookId,mChapterId));
         if(null != lines && lines.size() > 0){
             mLines = lines;
@@ -212,8 +218,6 @@ public class PageFactory extends Factory {
 
     @Override
     public BookStatus nextPage() {
-
-        Log.e(TAG, "openBook: ---------4----------->");
         currentPage++;
         if(currentPage == 1){
             currentPage = 2;
@@ -299,12 +303,15 @@ public class PageFactory extends Factory {
             y += mLineSpace;
             canvas.drawLine(mMarginWidth, y, mWidth - mMarginWidth, y, mTitlePaint);
             y += mFontSize;
+            Log.e(TAG, "--------------------------------------------------->" );
             for (String line : mLines)
             {
                 y += mLineSpace;
                 canvas.drawText(line,mMarginWidth,y,mPaint);
                 y += mFontSize;
+                Log.e(TAG, "onDraw: " + line );
             }
+
 
             if(null != batteryBitmap){
                 canvas.drawBitmap(batteryBitmap,mMarginWidth + 2, mHeight - mMarginHeight - ScreenUtils.dpToPxInt(12), mTitlePaint);

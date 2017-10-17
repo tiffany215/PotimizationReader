@@ -99,5 +99,7 @@ public abstract class Factory {
     public abstract int getCountPage();
 
 
+    public abstract void setAlpha(int alpha);
+
 
 }

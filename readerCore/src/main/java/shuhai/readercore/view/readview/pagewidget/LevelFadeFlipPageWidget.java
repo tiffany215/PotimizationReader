@@ -8,24 +8,20 @@ import android.graphics.RectF;
 import android.graphics.Shader;
 import android.util.Log;
 
+import shuhai.readercore.view.readview.FlipStatus;
 import shuhai.readercore.view.readview.displayview.HorizontalBaseReadView;
 import shuhai.readercore.view.readview.displayview.OnReadStateChangeListener;
-import shuhai.readercore.view.readview.FlipStatus;
 import shuhai.readercore.view.readview.factory.Factory;
 
 /**
  * @author 55345364
- * @date 2017/7/18.
- * 水平覆盖翻页效果
- *
+ * @date 2017/10/16.
  */
 
-public class LevelCoverFlipPageWidget extends HorizontalBaseReadView {
-
-
+public class LevelFadeFlipPageWidget extends HorizontalBaseReadView {
     private static final String TAG = "LevelCoverFlipPageWidget";
 
-    public LevelCoverFlipPageWidget(Context context, int bookId, int chapterId, OnReadStateChangeListener listener) {
+    public LevelFadeFlipPageWidget(Context context, int bookId, int chapterId, OnReadStateChangeListener listener) {
         super(context, bookId, chapterId,listener);
     }
 
@@ -42,7 +38,6 @@ public class LevelCoverFlipPageWidget extends HorizontalBaseReadView {
                 break;
 
             case ON_FLIP_NEXT:
-                canvas.drawBitmap(mPrePageBitmap,-mScreenWidth,0,null);
                 canvas.drawBitmap(mNextPageBitmap,0,0,null);
                 canvas.drawBitmap(mCurPageBitmap,currPageLeft,0,null);
                 break;
@@ -65,6 +60,20 @@ public class LevelCoverFlipPageWidget extends HorizontalBaseReadView {
     @Override
     protected void fadePageArea(Factory factory) {
 
+
+
+//        double percent = Math.abs(currPageLeft) / mScreenWidth ;
+//
+//
+//
+        Log.e(TAG, "currPageLeft---------------->: " +   Math.abs(currPageLeft));
+//        Log.e(TAG, "mScreenWidth---------------->: " +   mScreenWidth );
+//
+//        Log.e(TAG, "percent---------------->: " +   percent );
+//        if(percent == 0){
+//            percent = 1;
+//        }
+        factory.setAlpha(Math.abs(currPageLeft));
     }
 
     @Override
@@ -81,6 +90,4 @@ public class LevelCoverFlipPageWidget extends HorizontalBaseReadView {
     public void restoreAnimation() {
 
     }
-
-
 }
