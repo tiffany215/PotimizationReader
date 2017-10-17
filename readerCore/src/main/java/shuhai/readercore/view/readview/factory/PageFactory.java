@@ -9,7 +9,6 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.ProgressBar;
 
 import java.text.DecimalFormat;
@@ -82,8 +81,8 @@ public class PageFactory extends Factory {
     private int mBookId;
     private int mChapterId;
     private int mChapterOrder;
-    private int currentPage = 1;
     private int pageCount = 1;
+    private int currentPage = 1;
 
     private ChapterEntity mChapterEntity;
     private String TAG = "PageFactory";
@@ -149,16 +148,6 @@ public class PageFactory extends Factory {
             }
     }
 
-//    @Override
-//    public int getCurPage() {
-//        return currentPage;
-//    }
-//
-//    @Override
-//    public void setCurPage(int page) {
-//        currentPage = page;
-//    }
-//
     @Override
     public int getCountPage() {
         return pageCount;
@@ -171,6 +160,10 @@ public class PageFactory extends Factory {
         mTitlePaint.setAlpha(alpha);
     }
 
+    @Override
+    public void setCurPageSize(int pageSize) {
+        currentPage = pageSize;
+    }
 
 
     @Override
@@ -199,50 +192,6 @@ public class PageFactory extends Factory {
         return BookStatus.NO_PRE_PAGE;
     }
 
-
-    @Override
-    public BookStatus prePage() {
-        currentPage--;
-        if(currentPage <= 0 ){
-            currentPage = 0;
-        }else if(currentPage == chapterLoader.getCountPage()){
-            currentPage = chapterLoader.getCountPage() - 1;
-        }
-        //加载缓存中章节内容
-        Vector<String> lines = chapterLoader.pageUp(currentPage,cacheKeyCreate(mBookId,mChapterId));
-        if(null != lines && lines.size() > 0){
-            mLines = lines;
-            return BookStatus.LOAD_SUCCESS;
-        }
-        return BookStatus.NO_PRE_PAGE;
-    }
-
-    @Override
-    public BookStatus curPage() {
-        Vector<String> lines = chapterLoader.pageCur(currentPage,cacheKeyCreate(mBookId,mChapterId));
-        if(null != lines && lines.size() > 0){
-            mLines = lines;
-            return BookStatus.LOAD_SUCCESS;
-        }
-        return BookStatus.NO_PRE_PAGE;
-    }
-
-
-    @Override
-    public BookStatus nextPage() {
-        currentPage++;
-        if(currentPage == 1){
-            currentPage = 2;
-        }else if(currentPage > chapterLoader.getCountPage()){
-            currentPage = chapterLoader.getCountPage() + 1;
-        }
-        Vector<String> lines = chapterLoader.pageDown(currentPage,cacheKeyCreate(mBookId,mChapterId));
-        if(null != lines && lines.size() > 0){
-            mLines = lines;
-            return BookStatus.LOAD_SUCCESS;
-        }
-        return BookStatus.NO_NEXT_PAGE;
-    }
 
     @Override
     public void preChapter() {
@@ -315,13 +264,11 @@ public class PageFactory extends Factory {
             y += mLineSpace;
             canvas.drawLine(mMarginWidth, y, mWidth - mMarginWidth, y, mTitlePaint);
             y += mFontSize;
-            Log.e(TAG, "--------------------------------------------------->" );
             for (String line : mLines)
             {
                 y += mLineSpace;
                 canvas.drawText(line,mMarginWidth,y,mPaint);
                 y += mFontSize;
-                Log.e(TAG, "onDraw: " + line );
             }
 
 

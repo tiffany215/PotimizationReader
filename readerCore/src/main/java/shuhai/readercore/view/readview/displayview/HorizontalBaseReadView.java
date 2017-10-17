@@ -129,6 +129,7 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
             if(factory.getCountPage() > 1){
                 bookStatus = factory.getCurPageContent(currPageSize + 1);
                 if(bookStatus == BookStatus.LOAD_SUCCESS){
+                    factory.setCurPageSize(currPageSize + 1);
                     factory.onDraw(mNextPageCanvas);
                 }
             }
@@ -290,7 +291,7 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
      * @param curX
      */
     private void updatePageArea(FlipStatus status,int curX){
-        BookStatus bookStatus;
+
         if(state != STATE_MOVE){
             return;
         }
@@ -306,41 +307,20 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
         //页面向左滑动
         else if(speed < 0 && currPageSize <= factory.getCountPage()) {
             moveLeft(status, curX);
-            Log.e(TAG, "--------------curX------------->: "  + curX );
             if (currPageLeft == -mScreenWidth) {
-
                 currPageSize++;
 
                 factory.getCurPageContent(currPageSize);
+                factory.setCurPageSize(currPageSize);
                 factory.onDraw(mCurPageCanvas);
 
                 factory.getCurPageContent(currPageSize - 1);
+                factory.setCurPageSize(currPageSize - 1);
                 factory.onDraw(mPrePageCanvas);
 
                 factory.getCurPageContent(currPageSize + 1);
+                factory.setCurPageSize(currPageSize + 1);
                 factory.onDraw(mNextPageCanvas);
-
-
-
-
-//                bookStatus = factory.curPage();
-//                factory.onDraw(mCurPageCanvas);
-//                if (BookStatus.LOAD_SUCCESS == bookStatus) {
-//                    bookStatus = factory.nextPage();
-//                    if (bookStatus == BookStatus.NO_NEXT_PAGE) {
-//                        Toast.makeText(getContext(), "没有下一页了", Toast.LENGTH_SHORT).show();
-//                        factory.nextChapter();
-//                    } else if (bookStatus == BookStatus.LOAD_SUCCESS) {
-//                        abortAnimation();
-//                        factory.onDraw(mNextPageCanvas);
-//                        mFlipStatus = FlipStatus.ON_FLIP_NEXT;
-//                    }
-//                }
-
-
-
-
-
             }
         }
 
@@ -348,26 +328,19 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
         else if(speed > 0 && currPageSize > 1){
             moveRight(status,curX);
             if(prePageLeft == 0){
-//                factory.curPage();
-//                factory.onDraw(mCurPageCanvas);
-//                bookStatus = factory.prePage();
-//                if(bookStatus == BookStatus.NO_PRE_PAGE){
-//                    Toast.makeText(getContext(),"没有上一页了",Toast.LENGTH_SHORT).show();
-//                }else if(bookStatus == BookStatus.LOAD_SUCCESS){
-//                    abortAnimation();
-//                    factory.onDraw(mPrePageCanvas);
-//                    mFlipStatus = FlipStatus.ON_FLIP_PRE;
-//                }
 
                 currPageSize--;
 
                 factory.getCurPageContent(currPageSize);
+                factory.setCurPageSize(currPageSize);
                 factory.onDraw(mCurPageCanvas);
 
                 factory.getCurPageContent(currPageSize - 1);
+                factory.setCurPageSize(currPageSize - 1);
                 factory.onDraw(mPrePageCanvas);
 
                 factory.getCurPageContent(currPageSize + 1);
+                factory.setCurPageSize(currPageSize + 1);
                 factory.onDraw(mNextPageCanvas);
             }
         }

@@ -24,25 +24,6 @@ public abstract class Factory {
     public abstract <T extends ChapterLoaderImpl> T createChapterLoader(Class<T> clz);
 
     /**
-     * 获取下一页内容
-     * @return
-     */
-    public abstract BookStatus nextPage();
-
-    /**
-     * 获取上一页内容
-     * @return
-     */
-    public abstract BookStatus prePage();
-
-    /**
-     * 获取当前页内容
-     * @return
-     */
-    public abstract BookStatus curPage();
-
-
-    /**
      * 获取上一章内容
      */
     public abstract void preChapter();
@@ -81,17 +62,6 @@ public abstract class Factory {
     public abstract int openBook(int articleID, int chapterId, int chapterOrder,FlipStatus status);
 
 
-//    /**
-//     * 获取当前页码
-//     * @return
-//     */
-//    public abstract int getCurPage();
-//
-//    /**
-//     * 设置当前页
-//     */
-//    public abstract void setCurPage(int page);
-//
     /**
      * 获取当前章中页数
      * @return
@@ -100,6 +70,12 @@ public abstract class Factory {
 
 
     public abstract void setAlpha(int alpha);
+
+
+    /**
+     * 设置当前页码
+     */
+    public abstract void setCurPageSize(int pageSize);
 
 
     /**
