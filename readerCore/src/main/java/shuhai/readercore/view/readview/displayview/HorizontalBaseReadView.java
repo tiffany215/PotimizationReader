@@ -125,6 +125,7 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
 //        UserSP.getInstance().getLastReaderPage(articleId);
         BookStatus bookStatus = factory.getCurPageContent(currPageSize);
         if(bookStatus ==  BookStatus.LOAD_SUCCESS){
+            factory.setCurPageSize(currPageSize);
             factory.onDraw(mCurPageCanvas);
             if(factory.getCountPage() > 1){
                 bookStatus = factory.getCurPageContent(currPageSize + 1);
@@ -191,7 +192,7 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
                     mFlipStatus = FlipStatus.ON_FLIP_PRE;
                     isPreMoving = true;
                     isCurrMoving = false;
-                    if(currPageSize == 1){
+                    if(currPageSize < 1){
                         state = STATE_STOP;
                         releaseMoving();
                     }else{
@@ -235,7 +236,7 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
             case MotionEvent.ACTION_UP:
                 if (Math.abs(speed) < speed_shake)
                     speed = 0;
-                if(speed <= 0){
+                if(speed < 0){
                     mScroller.startScroll(currPageLeft,0,-mScreenWidth - currPageLeft,0,500);
                 }else{
                     mScroller.startScroll(mScreenWidth  + prePageLeft ,0, Math.abs(mScreenWidth - (mScreenWidth  + prePageLeft)),0,500);
@@ -292,6 +293,9 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
      */
     private void updatePageArea(FlipStatus status,int curX){
 
+        Log.e(TAG, "------------------curX------------>: " + curX );
+
+
         if(state != STATE_MOVE){
             return;
         }
@@ -311,6 +315,17 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
                 // 向后翻页动作完成，重新绘制显示内容。
 
                 currPageSize++;
+
+                if(currPageSize > factory.getCountPage()){
+                    factory.getCurPageContent(currPageSize);
+                    factory.setCurPageSize(currPageSize);
+                    factory.onDraw(mPrePageCanvas);
+
+
+                    factory.nextChapter();
+
+                }
+
 
                 factory.getCurPageContent(currPageSize);
                 factory.setCurPageSize(currPageSize);
@@ -334,17 +349,40 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
                 // 向前翻页动作完成，重新绘制显示内容。
                 currPageSize--;
 
-                factory.getCurPageContent(currPageSize);
-                factory.setCurPageSize(currPageSize);
-                factory.onDraw(mCurPageCanvas);
 
-                factory.getCurPageContent(currPageSize - 1);
-                factory.setCurPageSize(currPageSize - 1);
-                factory.onDraw(mPrePageCanvas);
+                if(currPageSize == 1){
+                    factory.getCurPageContent(currPageSize);
+                    factory.setCurPageSize(currPageSize);
+                    factory.onDraw(mNextPageCanvas);
 
-                factory.getCurPageContent(currPageSize + 1);
-                factory.setCurPageSize(currPageSize + 1);
-                factory.onDraw(mNextPageCanvas);
+                    factory.preChapter();
+
+                    currPageSize = factory.getCountPage();
+
+                    factory.getCurPageContent(currPageSize);
+                    factory.setCurPageSize(currPageSize);
+                    factory.onDraw(mCurPageCanvas);
+
+
+                    factory.getCurPageContent(currPageSize - 1);
+                    factory.setCurPageSize(currPageSize - 1);
+                    factory.onDraw(mPrePageCanvas);
+
+
+                }else{
+
+                    factory.getCurPageContent(currPageSize);
+                    factory.setCurPageSize(currPageSize);
+                    factory.onDraw(mCurPageCanvas);
+
+                    factory.getCurPageContent(currPageSize - 1);
+                    factory.setCurPageSize(currPageSize - 1);
+                    factory.onDraw(mPrePageCanvas);
+
+                    factory.getCurPageContent(currPageSize + 1);
+                    factory.setCurPageSize(currPageSize + 1);
+                    factory.onDraw(mNextPageCanvas);
+                }
             }
         }
 
