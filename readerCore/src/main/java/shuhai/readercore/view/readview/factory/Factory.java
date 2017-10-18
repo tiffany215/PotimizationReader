@@ -75,7 +75,7 @@ public abstract class Factory {
     /**
      * 设置当前页码
      */
-    public abstract void setCurPageSize(int pageSize);
+    public abstract void setPageSize(int pageSize);
 
 
     /**
@@ -83,7 +83,7 @@ public abstract class Factory {
      * @param pageSize 指定页码
      * @return
      */
-    public abstract BookStatus getCurPageContent(int pageSize);
+    public abstract BookStatus getPageContent(int pageSize);
 
 
 }

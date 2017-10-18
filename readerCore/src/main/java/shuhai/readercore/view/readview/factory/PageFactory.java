@@ -163,7 +163,7 @@ public class PageFactory extends Factory {
     }
 
     @Override
-    public void setCurPageSize(int pageSize) {
+    public void setPageSize(int pageSize) {
         currentPage = pageSize;
     }
 
@@ -185,7 +185,7 @@ public class PageFactory extends Factory {
 
 
     @Override
-    public BookStatus getCurPageContent(int pageSize) {
+    public BookStatus getPageContent(int pageSize) {
         Vector<String> lines = chapterLoader.pageUp(pageSize,cacheKeyCreate(mBookId,mChapterId));
         if(null != lines && lines.size() > 0){
             mLines = lines;
