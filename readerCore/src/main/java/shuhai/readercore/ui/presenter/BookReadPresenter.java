@@ -25,6 +25,9 @@ import static android.content.ContentValues.TAG;
 
 public class BookReadPresenter extends RxPresenter<BookReadContract.View> implements BookReadContract.Presenter<BookReadContract.View>{
 
+
+
+    public static final String TAG = "BookReadPresenter";
     @Inject
     public BookReadPresenter(){
 
@@ -46,7 +49,7 @@ public class BookReadPresenter extends RxPresenter<BookReadContract.View> implem
 
             @Override
             public void onComplete() {
-                Log.e(TAG, "onStart: ----------------->");
+                Log.e(TAG, "onComplete: ----------------->");
             }
 
             @Override
