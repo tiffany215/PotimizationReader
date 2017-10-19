@@ -2,6 +2,7 @@ package shuhai.readercore.view.readview.dataloader;
 
 import java.util.Vector;
 
+import shuhai.readercore.view.readview.FlipStatus;
 import shuhai.readercore.view.readview.strategy.ComposingStrategy;
 
 /**
@@ -12,20 +13,22 @@ import shuhai.readercore.view.readview.strategy.ComposingStrategy;
 public interface ChapterLoaderImpl {
 
     /**
-     * 获取上一页内容
-     * @param page 第几页
-     * @param key 获取缓存内容的key
-     * @return 返回上一页文字内容
+     * 返回章节可排版的总页数
+     * @return
      */
-    Vector<String> pageDown(int page,String key);
+    int getCountPage(FlipStatus status);
 
     /**
-     * 获取当前页内容
-     * @param page 第几页
-     * @param key 获取缓存内容的key
-     * @return 返回当前页文字内容
+     *
      */
-    Vector<String> pageUp(int page,String key);
+    void clearPageCache();
+
+    void characterTypesetting(String key, FlipStatus status);
+
+    void chapterReplace(FlipStatus status);
+
+    void setComposingStrategy(ComposingStrategy composingStrategy);
+
 
     /**
      * 获取下一页内容
@@ -33,24 +36,7 @@ public interface ChapterLoaderImpl {
      * @param key 获取缓存内容的key
      * @return 返回上一页文字内容
      */
-    Vector<String> pageCur(int page,String key);
-
-    /**
-     * 返回章节可排版的总页数
-     * @return
-     */
-    int getCountPage();
-
-    /**
-     *
-     */
-    void clearPageCache();
-
-
-
-    void characterTypesetting(String key);
-
-    void setComposingStrategy(ComposingStrategy composingStrategy);
+    Vector<String> obtainPageContent(int page, String key);
 
 
 

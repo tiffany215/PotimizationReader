@@ -210,6 +210,10 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
                     pageCount = factory.getCountPage();
                     postDrawView(pageSize,mCurPageCanvas);
                     postDrawView(pageSize + 1,mNextPageCanvas);
+
+                    factory.chapterReplace(mFlipStatus);
+
+
                 }else if(pageSize > 1 && pageSize < pageCount){
                     Log.e(TAG, "-------------------postInvalidateView---------3------------------>" );
                     postInvalidateView(pageSize - 1,pageSize,pageSize + 1);

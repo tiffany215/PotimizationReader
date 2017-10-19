@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Vector;
 
 import shuhai.readercore.manager.ChapterLoader;
+import shuhai.readercore.view.readview.FlipStatus;
 
 
 /**
@@ -62,7 +63,10 @@ public class HorizontalComposing implements ComposingStrategy{
     private Paint mPaint;
 
 
+    private Map<Integer,Vector<String>> prePageList;
     private Map<Integer,Vector<String>> pageList;
+    private Map<Integer,Vector<String>> nextPageList;
+    private Map<Integer,Vector<String>> tempPageList;
 
 
     /**
@@ -92,6 +96,16 @@ public class HorizontalComposing implements ComposingStrategy{
         if(null == pageList){
             pageList = new HashMap<>();
         }
+        if(null == prePageList){
+            prePageList = new HashMap<>();
+        }
+        if(null == nextPageList){
+            nextPageList = new HashMap<>();
+        }
+        if(null == tempPageList){
+            tempPageList = new HashMap<>();
+        }
+
     }
 
 
@@ -156,7 +170,7 @@ public class HorizontalComposing implements ComposingStrategy{
                  */
                 if(lineSize > mPageLineCount || paragraphArrCount - 1 == i){
                     pageSize++;
-                    pageList.put(pageSize,lines);
+                    tempPageList.put(pageSize,lines);
                     lines = new Vector<>();
                     paraSpace = 0;
                     mPageLineCount = mVisibleHeight / (mFontSize + mLineSpace);
@@ -165,7 +179,7 @@ public class HorizontalComposing implements ComposingStrategy{
                 }
             }
         }
-        return pageList;
+        return tempPageList;
     }
 
 
@@ -187,17 +201,16 @@ public class HorizontalComposing implements ComposingStrategy{
         return paraLines;
     }
 
-
     /**
-     *  从缓存中后去章节内容后进行排版
+     * 获取当前页内容
      * @param page
      * @param key
      * @return
      */
     @Override
-    public Vector<String> pageUp(int page, String key) {
+    public Vector<String> obtainPageContent(int page, String key) {
         if(null == pageList || null == pageList.get(page) || pageList.get(page).size() == 0){
-            if(characterTypesetting(key)){
+            if(characterTypesetting(key,FlipStatus.ON_FLIP_CUR)){
                 return pageList.get(page);
             }else{
                 return null;
@@ -206,43 +219,6 @@ public class HorizontalComposing implements ComposingStrategy{
         return pageList.get(page);
     }
 
-
-    /**
-     * 获取下一页内容
-     * @param page 页码数
-     * @param key 从缓存中取出内容的依据  （由 书籍id 和章节id 组成）
-     * @return
-     */
-    @Override
-    public Vector<String> pageDown(int page, String key) {
-        if(null == pageList || null == pageList.get(page) || pageList.get(page).size() == 0){
-            if(characterTypesetting(key)){
-                return pageList.get(page);
-            }else{
-                return null;
-            }
-        }
-        return pageList.get(page);
-    }
-
-
-    /**
-     *
-     * @param page
-     * @param key
-     * @return
-     */
-    @Override
-    public Vector<String> pageCur(int page, String key) {
-        if(null == pageList || null == pageList.get(page) || pageList.get(page).size() == 0){
-            if(characterTypesetting(key)){
-                return pageList.get(page);
-            }else{
-                return null;
-            }
-        }
-        return pageList.get(page);
-    }
 
 
     /**
@@ -251,25 +227,74 @@ public class HorizontalComposing implements ComposingStrategy{
      * @return
      */
     @Override
-    public boolean characterTypesetting(String key) {
+    public boolean characterTypesetting(String key,FlipStatus status) {
         boolean isComplete = false;
         Map<Integer,Vector<String>> chapterMapData = autoSplitPage(ChapterLoader.getChapter(key));
         if(null != chapterMapData && chapterMapData.size() > 0){
-            pageList.putAll(chapterMapData);
+            switch (status) {
+                case ON_FLIP_PRE:
+                    prePageList.putAll(chapterMapData);
+                    break;
+
+                case ON_FLIP_CUR:
+                    pageList.putAll(chapterMapData);
+                    break;
+
+                case ON_FLIP_NEXT:
+                    nextPageList.putAll(chapterMapData);
+                    break;
+            }
+
             isComplete = true;
         }
         return isComplete;
     }
 
     @Override
-    public int getCountPage() {
-        return pageList.size();
+    public int getCountPage(FlipStatus status) {
+
+        int pageCount;
+        switch (status) {
+            case ON_FLIP_PRE:
+                pageCount =  prePageList.size();
+                break;
+            case ON_FLIP_CUR:
+                pageCount =  pageList.size();
+                break;
+            case ON_FLIP_NEXT:
+                pageCount =  nextPageList.size();
+                break;
+            default:
+                pageCount = 1;
+                break;
+        }
+        return pageCount;
     }
 
     @Override
     public void clearPageCache() {
         if(null != pageList){
             pageList.clear();
+        }
+    }
+
+    @Override
+    public void chapterReplace(FlipStatus flipStatus) {
+        Map<Integer,Vector<String>> temp;
+        switch (flipStatus) {
+            case ON_FLIP_PRE:
+                temp = pageList;
+                pageList = prePageList;
+                prePageList = nextPageList;
+                nextPageList = temp;
+                break;
+
+            case ON_FLIP_NEXT:
+                temp = pageList;
+                pageList = nextPageList;
+                nextPageList = prePageList;
+                prePageList = temp;
+                break;
         }
     }
 

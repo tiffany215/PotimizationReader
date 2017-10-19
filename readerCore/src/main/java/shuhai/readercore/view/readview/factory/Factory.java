@@ -86,4 +86,10 @@ public abstract class Factory {
     public abstract BookStatus getPageContent(int pageSize);
 
 
+    /**
+     *
+     * @param status
+     */
+    public abstract void chapterReplace(FlipStatus status);
+
 }

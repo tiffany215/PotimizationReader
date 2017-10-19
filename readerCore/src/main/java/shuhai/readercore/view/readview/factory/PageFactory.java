@@ -138,8 +138,8 @@ public class PageFactory extends Factory {
         this.mChapterOrder = chapterOrder;
         if(null != chapterLoader){
             chapterLoader.clearPageCache();
-            chapterLoader.characterTypesetting(cacheKeyCreate(articleId,chapterId));
-            pageCount = chapterLoader.getCountPage();
+            chapterLoader.characterTypesetting(cacheKeyCreate(articleId,chapterId),status);
+            pageCount = chapterLoader.getCountPage(status);
         }
             mChapterEntity = DataBaseManager.getInstance().queryNextChapterInfo(2,mBookId,chapterOrder,FlipStatus.ON_FLIP_CUR);
             if(pageCount > 0){
@@ -186,7 +186,7 @@ public class PageFactory extends Factory {
 
     @Override
     public BookStatus getPageContent(int pageSize) {
-        Vector<String> lines = chapterLoader.pageUp(pageSize,cacheKeyCreate(mBookId,mChapterId));
+        Vector<String> lines = chapterLoader.obtainPageContent(pageSize,cacheKeyCreate(mBookId,mChapterId));
         if(null != lines && lines.size() > 0){
             mLines = lines;
             return BookStatus.LOAD_SUCCESS;
@@ -350,6 +350,12 @@ public class PageFactory extends Factory {
     public void onSuccessLoadChapter(){
         if(null != listener){
             listener.onSuccessLoadChapter();
+        }
+    }
+
+    public void chapterReplace(FlipStatus status){
+        if(null != chapterLoader){
+            chapterLoader.chapterReplace(status);
         }
     }
 }

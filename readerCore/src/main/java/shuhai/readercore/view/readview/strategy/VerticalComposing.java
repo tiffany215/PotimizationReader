@@ -3,6 +3,8 @@ package shuhai.readercore.view.readview.strategy;
 
 import java.util.Vector;
 
+import shuhai.readercore.view.readview.FlipStatus;
+
 /**
  * @author 55345364
  * @date 2017/7/13.
@@ -19,32 +21,29 @@ public class VerticalComposing implements ComposingStrategy{
     }
 
     @Override
-    public Vector<String> pageUp(int page, String key) {
+    public Vector<String> obtainPageContent(int page, String key) {
         return null;
     }
 
-    @Override
-    public Vector<String> pageCur(int page, String key) {
-        return null;
-    }
 
     @Override
-    public Vector<String> pageDown(int page, String key) {
-        return null;
-    }
-
-    @Override
-    public boolean characterTypesetting(String key) {
+    public boolean characterTypesetting(String key, FlipStatus status) {
         return false;
     }
 
+
     @Override
-    public int getCountPage() {
+    public int getCountPage(FlipStatus status) {
         return 0;
     }
 
     @Override
     public void clearPageCache() {
+
+    }
+
+    @Override
+    public void chapterReplace(FlipStatus flipStatus) {
 
     }
 }

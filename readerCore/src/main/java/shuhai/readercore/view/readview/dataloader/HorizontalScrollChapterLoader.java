@@ -1,5 +1,7 @@
 package shuhai.readercore.view.readview.dataloader;
 import java.util.Vector;
+
+import shuhai.readercore.view.readview.FlipStatus;
 import shuhai.readercore.view.readview.strategy.ComposingStrategy;
 
 /**
@@ -14,41 +16,10 @@ public class HorizontalScrollChapterLoader implements ChapterLoaderImpl{
 
    private ComposingStrategy mComposingStrategy;
 
-    /**
-     * 获取下一页内容
-     */
-    @Override
-    public Vector<String> pageDown(int page,String key) {
-        if(null == mComposingStrategy){
-            return null;
-        }
-        return mComposingStrategy.pageDown(page,key);
-    }
-
-    /**
-     * 获取上一页内容
-     * @return
-     */
-    @Override
-    public Vector<String> pageUp(int page,String key) {
-        return mComposingStrategy.pageUp(page,key);
-    }
-
-
-    /**
-     * 获取当前页内容
-     * @param page
-     * @param key
-     * @return
-     */
-    @Override
-    public Vector<String> pageCur(int page, String key) {
-        return mComposingStrategy.pageCur(page,key);
-    }
 
     @Override
-    public int getCountPage() {
-        return mComposingStrategy.getCountPage();
+    public int getCountPage(FlipStatus flipStatus) {
+        return mComposingStrategy.getCountPage(flipStatus);
     }
 
     @Override
@@ -57,8 +28,13 @@ public class HorizontalScrollChapterLoader implements ChapterLoaderImpl{
     }
 
     @Override
-    public void characterTypesetting(String key) {
-        mComposingStrategy.characterTypesetting(key);
+    public void characterTypesetting(String key, FlipStatus status) {
+        mComposingStrategy.characterTypesetting(key,status);
+    }
+
+    @Override
+    public void chapterReplace(FlipStatus status) {
+        mComposingStrategy.chapterReplace(status);
     }
 
 
@@ -66,4 +42,10 @@ public class HorizontalScrollChapterLoader implements ChapterLoaderImpl{
     public void setComposingStrategy(ComposingStrategy composingStrategy) {
         this.mComposingStrategy = composingStrategy;
     }
+
+    @Override
+    public Vector<String> obtainPageContent(int page, String key) {
+        return mComposingStrategy.obtainPageContent(page,key);
+    }
+
 }
