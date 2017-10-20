@@ -180,6 +180,9 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
      * @param curX
      */
     private void updatePageArea(FlipStatus status,int curX){
+
+        Log.e(TAG, "-------------------curX--------------------------->"  + curX);
+
         if(state != STATE_MOVE){
             return;
         }
@@ -206,12 +209,14 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
                     factory.nextChapter();
                 }if(mFlipStatus == FlipStatus.ON_FLIP_NEXT && pageSize > pageCount){
                     Log.e(TAG, "-------------------postInvalidateView--------2------------------->" );
+                    postDrawView(--pageSize,mPrePageCanvas);
+                    factory.chapterReplace(mFlipStatus);
                     pageSize = 1;
                     pageCount = factory.getCountPage();
                     postDrawView(pageSize,mCurPageCanvas);
                     postDrawView(pageSize + 1,mNextPageCanvas);
 
-                    factory.chapterReplace(mFlipStatus);
+
 
 
                 }else if(pageSize > 1 && pageSize < pageCount){
@@ -223,7 +228,7 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
         }
 
         //手指向右滑动
-        else if(speed > 0 && pageSize > 1){
+        else if(speed > 0 && pageSize >= 1){
             moveRight(status,curX);
             if(prePageLeft == 0){
                 // 向前翻页动作完成，重新绘制显示内容。
@@ -417,12 +422,15 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
                 if (curX < - mScreenWidth)
                     prePageLeft = - mScreenWidth;
                     right = mScreenWidth + prePageLeft;
+                Log.e(TAG, "------moveLeft------prePageLeft------------------->" + prePageLeft );
                 break;
+
             case ON_FLIP_NEXT:
                 currPageLeft = curX;
                 if (curX < -mScreenWidth)
                     currPageLeft = -mScreenWidth;
                     right = mScreenWidth + currPageLeft;
+                Log.e(TAG, "------moveLeft------currPageLeft------------------->" + currPageLeft );
                 break;
         }
     }
@@ -439,12 +447,14 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
                 if (prePageLeft > 0)
                     prePageLeft = 0;
                 right = mScreenWidth + prePageLeft;
+                Log.e(TAG, "------moveRight------prePageLeft------------------->" + prePageLeft );
                 break;
             case ON_FLIP_NEXT:
                 currPageLeft = curX;
                 if (currPageLeft > 0)
                     currPageLeft = 0;
                 right = mScreenWidth + currPageLeft;
+                Log.e(TAG, "------moveRight------prePageLeft------------------->" + prePageLeft );
                 break;
         }
     }

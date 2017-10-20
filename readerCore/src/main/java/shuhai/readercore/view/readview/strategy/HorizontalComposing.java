@@ -280,7 +280,7 @@ public class HorizontalComposing implements ComposingStrategy{
 
     @Override
     public void chapterReplace(FlipStatus flipStatus) {
-        Map<Integer,Vector<String>> temp;
+        Map<Integer,Vector<String>> temp = new HashMap<>();
         switch (flipStatus) {
             case ON_FLIP_PRE:
                 temp = pageList;
@@ -290,10 +290,17 @@ public class HorizontalComposing implements ComposingStrategy{
                 break;
 
             case ON_FLIP_NEXT:
-                temp = pageList;
-                pageList = nextPageList;
-                nextPageList = prePageList;
-                prePageList = temp;
+
+                temp.putAll(pageList);
+                pageList.clear();
+                pageList.putAll(nextPageList);
+
+
+                nextPageList.clear();
+                nextPageList.putAll(prePageList);
+
+                prePageList.clear();
+                prePageList.putAll(temp);
                 break;
         }
     }
