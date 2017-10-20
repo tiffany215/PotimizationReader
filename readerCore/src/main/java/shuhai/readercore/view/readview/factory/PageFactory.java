@@ -279,7 +279,8 @@ public class PageFactory extends Factory {
             }
 
             float percent = (float) currentPage / pageCount;
-            canvas.drawText(decimalFormat.format(percent * 100) + "%",mMarginWidth, mHeight  - mMarginHeight, mTitlePaint);
+            canvas.drawText(currentPage + " / " + pageCount,mMarginWidth, mHeight  - mMarginHeight, mTitlePaint);
+//            canvas.drawText(decimalFormat.format(percent * 100) + "%",mMarginWidth, mHeight  - mMarginHeight, mTitlePaint);
             String mTime = simpleDateFormat.format(new Date());
             canvas.drawText(mTime, mWidth - mMarginWidth - timeLen, mHeight - mMarginHeight, mTitlePaint);
         }

@@ -93,10 +93,12 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View{
      * 将阅读内容绘制好的View添加到当前容器
      */
     private void initPagerWidget(){
-        mPageWidget = new LevelCoverFlipPageWidget(this,mBookId,mChapterId,new ReadListener());
-//        mPageWidget = new LevelScrollFlipPageWidget(this,mBookId,mChapterId,new ReadListener());
+//        mPageWidget = new LevelCoverFlipPageWidget(this,mBookId,mChapterId,new ReadListener());
+        mPageWidget = new LevelScrollFlipPageWidget(this,mBookId,mChapterId,new ReadListener());
 //        mPageWidget = new NoEffectFlipPageWidget(this,mBookId,mChapterId,new ReadListener());
-//        mPageWidget = new LevelFadeFlipPageWidget(this,mBookId,mChapterId,new ReadListener());
+//        mPageWidget = new LevelFadeFlipPageWidget(this,mBookId,mChapterId,new ReadListener())
+//
+// ;
 //        mPageWidget = new GLRealFlipPageWidget(this,mBookId,mChapterId);
         mPageWidget.init(ThemeManager.CLASSICAL);
         lsReadWidget.removeAllViews();

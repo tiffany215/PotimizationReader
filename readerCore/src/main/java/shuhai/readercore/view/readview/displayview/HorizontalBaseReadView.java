@@ -41,6 +41,7 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
     public static final int STATE_STOP = 1;
     public int state;
 
+
     // 前一页，当前页，下一页的左边位置
     public int prePageLeft = 0, currPageLeft = 0;
 
@@ -234,11 +235,19 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
                 // 向前翻页动作完成，重新绘制显示内容。
                 pageSize--;
                 if(pageSize == 1){
+                    //翻页到当前章节的第一页，重新绘制当前页和下一页，预加载上一章的最后一页再绘制
                     postDrawView(pageSize,mCurPageCanvas);
                     postDrawView(pageSize + 1,mNextPageCanvas);
                     factory.preChapter();
                     mBookStatus = BookStatus.PRE_CHAPTER_LOAD_SUCCESS;
                 }else if(mFlipStatus == FlipStatus.ON_FLIP_PRE && pageSize < 1){
+
+                    //完成章节跳转，绘制
+
+                    postDrawView(1,mNextPageCanvas);
+
+                    factory.chapterReplace(mFlipStatus);
+
 
                     pageSize = factory.getCountPage();
                     pageCount = factory.getCountPage();
