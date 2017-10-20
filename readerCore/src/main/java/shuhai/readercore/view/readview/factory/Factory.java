@@ -59,7 +59,7 @@ public abstract class Factory {
      * @param status 翻阅状态，标记当前页或下一页或上一页
      * @return
      */
-    public abstract int openBook(int articleID, int chapterId, int chapterOrder,FlipStatus status);
+    public abstract BookStatus openBook(int articleID, int chapterId, int chapterOrder,FlipStatus status);
 
 
     /**
@@ -81,15 +81,10 @@ public abstract class Factory {
     /**
      * 获取指定页码内容
      * @param pageSize 指定页码
-     * @return
+     * @param key 获取缓存内容 需要的键值
+     * @return 获取缓存的状态，获取成功或失败！
      */
-    public abstract BookStatus getPageContent(int pageSize);
+    public abstract BookStatus getPageContent(int chapterId,int pageSize,String key);
 
-
-    /**
-     *
-     * @param status
-     */
-    public abstract void chapterReplace(FlipStatus status);
 
 }

@@ -21,29 +21,22 @@ public class VerticalComposing implements ComposingStrategy{
     }
 
     @Override
-    public Vector<String> obtainPageContent(int page, String key) {
+    public Vector<String> obtainPageContent(int chapterId, int page, String key) {
         return null;
     }
 
-
     @Override
-    public boolean characterTypesetting(String key, FlipStatus status) {
+    public boolean characterTypesetting(int chapterId, String key) {
         return false;
     }
 
-
     @Override
-    public int getCountPage(FlipStatus status) {
+    public int getCountPage(int chapterId) {
         return 0;
     }
 
     @Override
     public void clearPageCache() {
-
-    }
-
-    @Override
-    public void chapterReplace(FlipStatus flipStatus) {
 
     }
 }

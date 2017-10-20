@@ -22,7 +22,7 @@ public interface ComposingStrategy {
 
 
     //获取当前页内容
-    Vector<String> obtainPageContent(int page, String key);
+    Vector<String> obtainPageContent(int chapterId,int page, String key);
 
 
 //    //获取下一页内容
@@ -30,18 +30,13 @@ public interface ComposingStrategy {
 
 
     //文字排版
-    boolean characterTypesetting(String key,FlipStatus status);
+    boolean characterTypesetting(int chapterId,String key);
 
 
-    int getCountPage(FlipStatus flipStatus);
+    int getCountPage(int chapterId);
+
 
     void clearPageCache();
 
-
-    /**
-     * 章节替换
-     * @param flipStatus
-     */
-    void chapterReplace(FlipStatus flipStatus);
 
 }

@@ -18,8 +18,8 @@ public class HorizontalScrollChapterLoader implements ChapterLoaderImpl{
 
 
     @Override
-    public int getCountPage(FlipStatus flipStatus) {
-        return mComposingStrategy.getCountPage(flipStatus);
+    public int getCountPage(int chapterId) {
+        return mComposingStrategy.getCountPage(chapterId);
     }
 
     @Override
@@ -28,15 +28,9 @@ public class HorizontalScrollChapterLoader implements ChapterLoaderImpl{
     }
 
     @Override
-    public void characterTypesetting(String key, FlipStatus status) {
-        mComposingStrategy.characterTypesetting(key,status);
+    public void characterTypesetting(int chapterId,String key, FlipStatus status) {
+        mComposingStrategy.characterTypesetting(chapterId,key);
     }
-
-    @Override
-    public void chapterReplace(FlipStatus status) {
-        mComposingStrategy.chapterReplace(status);
-    }
-
 
     @Override
     public void setComposingStrategy(ComposingStrategy composingStrategy) {
@@ -44,8 +38,8 @@ public class HorizontalScrollChapterLoader implements ChapterLoaderImpl{
     }
 
     @Override
-    public Vector<String> obtainPageContent(int page, String key) {
-        return mComposingStrategy.obtainPageContent(page,key);
+    public Vector<String> obtainPageContent(int chapterId,int page, String key) {
+        return mComposingStrategy.obtainPageContent(chapterId,page,key);
     }
 
 }

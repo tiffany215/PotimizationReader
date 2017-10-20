@@ -31,4 +31,18 @@ public class StringUtils {
             return "did not work";
         }
     }
+
+
+    /**
+     * 缓存key生成方法
+     * @return
+     */
+    public static String cacheKeyCreate(Object... str){
+        StringBuffer buffer = new StringBuffer();
+        for(Object value : str){
+            buffer.append(value.toString());
+        }
+        return buffer.toString();
+    }
+
 }

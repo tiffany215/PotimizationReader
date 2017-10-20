@@ -22,6 +22,7 @@ import shuhai.readercore.dao.ChapterEntity;
 import shuhai.readercore.manager.ChapterLoader;
 import shuhai.readercore.manager.DataBaseManager;
 import shuhai.readercore.utils.ScreenUtils;
+import shuhai.readercore.utils.StringUtils;
 import shuhai.readercore.view.readview.BookStatus;
 import shuhai.readercore.view.readview.dataloader.ChapterLoaderImpl;
 import shuhai.readercore.view.readview.dataloader.HorizontalScrollChapterLoader;
@@ -132,22 +133,44 @@ public class PageFactory extends Factory {
 
 
     @Override
-    public int openBook(int articleId,int chapterId,int chapterOrder,FlipStatus status){
+    public BookStatus openBook(int articleId,int chapterId,int chapterOrder,FlipStatus status){
         this.mBookId = articleId;
         this.mChapterId = chapterId;
         this.mChapterOrder = chapterOrder;
+        BookStatus bookStatus = BookStatus.START_LOAD_SUCCESS;
         if(null != chapterLoader){
             chapterLoader.clearPageCache();
-            chapterLoader.characterTypesetting(cacheKeyCreate(articleId,chapterId),status);
-            pageCount = chapterLoader.getCountPage(status);
+            chapterLoader.characterTypesetting(chapterId,StringUtils.cacheKeyCreate(articleId,chapterId),status);
+            pageCount = chapterLoader.getCountPage(chapterId);
         }
             mChapterEntity = DataBaseManager.getInstance().queryNextChapterInfo(2,mBookId,chapterOrder,FlipStatus.ON_FLIP_CUR);
             if(pageCount > 0){
+                switch (status) {
+                    case ON_FLIP_PRE:
+                        bookStatus = BookStatus.PRE_CHAPTER_LOAD_SUCCESS;
+                        break;
+                    case ON_FLIP_CUR:
+                        bookStatus = BookStatus.CUR_CHAPTER_LOAD_SUCCESS;
+                        break;
+                    case ON_FLIP_NEXT:
+                        bookStatus = BookStatus.NEXT_CHAPTER_LOAD_SUCCESS;
+                        break;
+                }
                 onSuccessLoadChapter();
-                return 1;
-        }else{
-                return 0;
+        }else {
+                switch (status) {
+                    case ON_FLIP_PRE:
+                        bookStatus = BookStatus.PRE_CHAPTER_LOAD_FAILURE;
+                        break;
+                    case ON_FLIP_CUR:
+                        bookStatus = BookStatus.CUR_CHAPTER_LOAD_FAILURE;
+                        break;
+                    case ON_FLIP_NEXT:
+                        bookStatus = BookStatus.NEXT_CHAPTER_LOAD_FAILURE;
+                        break;
+                }
             }
+        return bookStatus;
     }
 
     @Override
@@ -185,8 +208,8 @@ public class PageFactory extends Factory {
 
 
     @Override
-    public BookStatus getPageContent(int pageSize) {
-        Vector<String> lines = chapterLoader.obtainPageContent(pageSize,cacheKeyCreate(mBookId,mChapterId));
+    public BookStatus getPageContent(int chapterId,int pageSize,String key) {
+        Vector<String> lines = chapterLoader.obtainPageContent(chapterId,pageSize,key);
         if(null != lines && lines.size() > 0){
             mLines = lines;
             return BookStatus.LOAD_SUCCESS;
@@ -197,32 +220,35 @@ public class PageFactory extends Factory {
 
     @Override
     public void preChapter() {
-        loadChapter(mChapterOrder,FlipStatus.ON_FLIP_PRE);
+        mChapterEntity = DataBaseManager.getInstance().queryNextChapterInfo(2,mBookId,mChapterOrder,FlipStatus.ON_FLIP_PRE);
+        loadChapter(FlipStatus.ON_FLIP_PRE,mChapterEntity);
     }
 
     @Override
     public void curChapter() {
-        loadChapter(mChapterOrder,FlipStatus.ON_FLIP_CUR);
+        mChapterEntity = DataBaseManager.getInstance().queryNextChapterInfo(2,mBookId,mChapterOrder,FlipStatus.ON_FLIP_CUR);
+        loadChapter(FlipStatus.ON_FLIP_CUR,mChapterEntity);
     }
 
     @Override
     public void nextChapter() {
-        loadChapter(mChapterOrder,FlipStatus.ON_FLIP_NEXT);
+        mChapterEntity = DataBaseManager.getInstance().queryNextChapterInfo(2,mBookId,mChapterOrder,FlipStatus.ON_FLIP_NEXT);
+        loadChapter(FlipStatus.ON_FLIP_NEXT,mChapterEntity);
     }
 
     /**
      * 加载章节，并刷新章节内容
-     * @param chapterOrder
      * @param status
+     * @param chapterEntity
      */
-    public void loadChapter(int chapterOrder,FlipStatus status){
+    public void loadChapter(FlipStatus status,ChapterEntity chapterEntity){
         onStartLoadChapter();
-        mChapterEntity = DataBaseManager.getInstance().queryNextChapterInfo(2,mBookId,chapterOrder,status);
-        if(null != mChapterEntity){
+
+        if(null != chapterEntity){
             //从缓存中获取章节内容，如果章节内容为空则从网络中获取。
-            String chapterContent =  ChapterLoader.getChapter(cacheKeyCreate(mBookId,mChapterEntity.getChpid()));
+            String chapterContent =  ChapterLoader.getChapter(StringUtils.cacheKeyCreate(mBookId,chapterEntity.getChpid()));
             if(!TextUtils.isEmpty(chapterContent)){
-                onPageChanged(Integer.parseInt(String.valueOf(mChapterEntity.getChpid())),mChapterEntity.getChiporder(),status);
+                onPageChanged(Integer.parseInt(String.valueOf(chapterEntity.getChpid())),chapterEntity.getChiporder(),status);
                 return;
             }
         }
@@ -296,17 +322,7 @@ public class PageFactory extends Factory {
     }
 
 
-    /**
-     * 缓存key生成方法
-     * @return
-     */
-    private String cacheKeyCreate(Object... str){
-        StringBuffer buffer = new StringBuffer();
-        for(Object value : str){
-            buffer.append(value.toString());
-        }
-        return buffer.toString();
-    }
+
 
     /**
      * 设置翻页监听
@@ -351,12 +367,6 @@ public class PageFactory extends Factory {
     public void onSuccessLoadChapter(){
         if(null != listener){
             listener.onSuccessLoadChapter();
-        }
-    }
-
-    public void chapterReplace(FlipStatus status){
-        if(null != chapterLoader){
-            chapterLoader.chapterReplace(status);
         }
     }
 }

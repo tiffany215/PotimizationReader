@@ -16,16 +16,15 @@ public interface ChapterLoaderImpl {
      * 返回章节可排版的总页数
      * @return
      */
-    int getCountPage(FlipStatus status);
+    int getCountPage(int chapterId);
 
     /**
      *
      */
     void clearPageCache();
 
-    void characterTypesetting(String key, FlipStatus status);
+    void characterTypesetting(int chapterId,String key, FlipStatus status);
 
-    void chapterReplace(FlipStatus status);
 
     void setComposingStrategy(ComposingStrategy composingStrategy);
 
@@ -36,7 +35,7 @@ public interface ChapterLoaderImpl {
      * @param key 获取缓存内容的key
      * @return 返回上一页文字内容
      */
-    Vector<String> obtainPageContent(int page, String key);
+    Vector<String> obtainPageContent(int chapterId,int page, String key);
 
 
 

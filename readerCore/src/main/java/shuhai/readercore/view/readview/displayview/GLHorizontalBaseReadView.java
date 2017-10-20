@@ -124,11 +124,11 @@ public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements 
     }
 
     public synchronized void openBook(int articleId,int chapterId,int chapterOrder,FlipStatus status){
-        int ret =  factory.openBook(mBookId,mChapterId, UserSP.getInstance().getLastReaderChapterOrder(mBookId),status);
-        if(ret == 0){
-            Toast.makeText(getContext(),"章节内容打开失败！",Toast.LENGTH_LONG).show();
-            return;
-        }
+        factory.openBook(mBookId,mChapterId, UserSP.getInstance().getLastReaderChapterOrder(mBookId),status);
+//        if(ret == 0){
+//            Toast.makeText(getContext(),"章节内容打开失败！",Toast.LENGTH_LONG).show();
+//            return;
+//        }
 
         factory.onDraw(mCurPageCanvas);
         isPrepare = true;
