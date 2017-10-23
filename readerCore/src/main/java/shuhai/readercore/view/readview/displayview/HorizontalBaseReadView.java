@@ -180,17 +180,16 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
     private void updatePageArea(FlipStatus status,int curX){
 
 
-        Log.e(TAG, "------------------------------>" + curX );
         if(state != STATE_MOVE){
             return;
         }
 
         //向左滑动
         if(prePageLeft > -mScreenWidth && speed <= 0){
-            moveLeft(status,curX);
+            moveRight(status,curX);
         }
         else if(currPageLeft < 0 && speed >= 0){
-            moveRight(status,curX);
+            moveLeft(status,curX);
         }
 
         //手指向左滑动
@@ -392,6 +391,7 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
 //                    }
 //                    Log.e(TAG, "---------Up--------------->>" + event.getX() );
                 }
+                Log.e(TAG, "------------ACTION_UP------------->> "  + mScroller.getCurrX() );
                     postInvalidate();
                 try
                 {
@@ -486,6 +486,10 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
     @Override
     public void computeScroll() {
         if(mScroller.computeScrollOffset()) {
+
+
+            Log.e(TAG, "computeScroll: -------------------------->>"+ mScroller.getCurrX() );
+
             updatePageArea(mFlipStatus, mScroller.getCurrX());
             postInvalidate();
         }
