@@ -1,5 +1,6 @@
 package shuhai.readercore.ui.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.NavUtils;
@@ -99,12 +100,19 @@ public class BookAboutActivity extends BaseWVActivity {
              */
             @JavascriptInterface
             public void readBookFromChp(final String articleid,
-                                        final String chaptered, final String chapterorder,
-                                        final String isvip) {
+                                        final String chaptered, final String chapterorder) {
                 mHandler.post(new Runnable() {
                     public void run() {
                         // 处理从目录等位置进入的 具体章节阅读
+                        Intent intent = new Intent();
+                        intent.putExtra("read.book.id",Integer.parseInt(articleid));
+                        intent.setClass(mContext,ReadActivity.class);
+                        startActivity(intent);
                         Toast.makeText(mContext, "阅读", Toast.LENGTH_SHORT).show();
+                        if (mContext instanceof Activity) {
+                            Activity activity = (Activity) mContext;
+                            activity.finish();
+                        }
                     }
                 });
             }
@@ -144,7 +152,7 @@ public class BookAboutActivity extends BaseWVActivity {
                         // 跳转书籍activity
                         Intent intent = new Intent(mContext,
                                 BookAboutActivity.class);
-                        intent.putExtra("url", vurl);
+                        intent.putExtra("url", vurl +"&packagename=com.shuhai.bookos");
                         mContext.startActivity(intent);
                     }
                 });

@@ -118,6 +118,28 @@ public class DataBaseManager {
         }
         return queryBuilder;
     }
+
+
+    /**
+     * 获取章节名字
+     * @param chapterId
+     * @return
+     */
+    public String queryChapterName(int chapterId){
+
+        ChapterEntity queryBuilder;
+        try {
+            queryBuilder = chapterEntityDao.queryBuilder().where(ChapterEntityDao.Properties.Chpid.eq(chapterId)).build().uniqueOrThrow();
+        } catch (Exception e) {
+            queryBuilder = null;
+        }
+
+        if(null == queryBuilder){
+            return "";
+        }
+        return queryBuilder.getChpnamme();
+    }
+
     /**
      * 查询下一章是否有章节信息
      * @param chapterType

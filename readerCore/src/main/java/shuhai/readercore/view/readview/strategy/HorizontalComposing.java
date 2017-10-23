@@ -2,12 +2,15 @@ package shuhai.readercore.view.readview.strategy;
 
 import android.graphics.Paint;
 import android.text.TextUtils;
+import android.util.Log;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
 import shuhai.readercore.manager.ChapterLoader;
+
+import static shuhai.readercore.ui.presenter.BookReadPresenter.TAG;
 
 
 /**
@@ -123,8 +126,12 @@ public class HorizontalComposing implements ComposingStrategy{
         if(TextUtils.isEmpty(str)){
             return null;
         }
+
+
+
         String[] paragraphArr = autoSplitParagraph(str.trim());
         Vector<String> lines = new Vector<>();
+        Map<Integer,Vector<String>> tempList = new HashMap<>();
         int paraSpace = 0;
         int pageSize = 0;
         //计算当前屏幕最多放置多少行文字
@@ -160,7 +167,7 @@ public class HorizontalComposing implements ComposingStrategy{
                  */
                 if(lineSize > mPageLineCount || paragraphArrCount - 1 == i){
                     pageSize++;
-                    pageList.put(pageSize,lines);
+                    tempList.put(pageSize,lines);
                     lines = new Vector<>();
                     paraSpace = 0;
                     mPageLineCount = mVisibleHeight / (mFontSize + mLineSpace);
@@ -169,7 +176,7 @@ public class HorizontalComposing implements ComposingStrategy{
                 }
             }
         }
-        return pageList;
+        return tempList;
     }
 
 
@@ -199,14 +206,23 @@ public class HorizontalComposing implements ComposingStrategy{
      */
     @Override
     public Vector<String> obtainPageContent(int chapterId,int page, String key) {
-
-        if(chapterList.size() <= 0){
-            if(characterTypesetting(chapterId,key)){
-                return null;
-            }
-        }
+//        if(chapterList.size() <= 0 ){
+//            return null;
+//        }
+//        if(chapterList.get(chapterId).isEmpty() || chapterList.get(chapterId).size() <= 0){
+//            characterTypesetting(chapterId,key);
+//        }
+//        pageList.clear();
+//        pageList.putAll(chapterList.get(chapterId));
+//        if(null == pageList ||  pageList.size() <= 0){
+//            return null;
+//        }
+//        return pageList.get(page);
         pageList = chapterList.get(chapterId);
-        if(null == pageList ||  pageList.size() <= 0){
+        if(null == pageList || pageList.size() <= 0 ){
+            if(characterTypesetting(chapterId,key)){
+                return chapterList.get(chapterId).get(page);
+            }
             return null;
         }
         return pageList.get(page);
@@ -241,9 +257,10 @@ public class HorizontalComposing implements ComposingStrategy{
 
     @Override
     public void clearPageCache() {
-        if(null != pageList){
-            pageList.clear();
-        }
+
+
+
+
     }
 
 

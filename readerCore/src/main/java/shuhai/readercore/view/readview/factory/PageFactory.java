@@ -9,6 +9,7 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.ProgressBar;
 
 import java.text.DecimalFormat;
@@ -210,6 +211,7 @@ public class PageFactory extends Factory {
     @Override
     public BookStatus getPageContent(int chapterId,int pageSize,String key) {
         Vector<String> lines = chapterLoader.obtainPageContent(chapterId,pageSize,key);
+        mChapterId = chapterId;
         if(null != lines && lines.size() > 0){
             mLines = lines;
             return BookStatus.LOAD_SUCCESS;
@@ -286,9 +288,9 @@ public class PageFactory extends Factory {
             }else{
                 canvas.drawBitmap(mBookPageBg,null,rectF,null);
             }
-            if(null != mChapterEntity){
-                canvas.drawText(mChapterEntity.getChpnamme(),mMarginWidth,y,mTitlePaint);
-            }
+
+            String titleName = DataBaseManager.getInstance().queryChapterName(mChapterId);
+            canvas.drawText(TextUtils.isEmpty(titleName) ? "" : titleName,mMarginWidth,y,mTitlePaint);
             y += mLineSpace;
             canvas.drawLine(mMarginWidth, y, mWidth - mMarginWidth, y, mTitlePaint);
             y += mFontSize;
@@ -298,12 +300,9 @@ public class PageFactory extends Factory {
                 canvas.drawText(line,mMarginWidth,y,mPaint);
                 y += mFontSize;
             }
-
-
             if(null != batteryBitmap){
                 canvas.drawBitmap(batteryBitmap,mMarginWidth + 2, mHeight - mMarginHeight - ScreenUtils.dpToPxInt(12), mTitlePaint);
             }
-
             float percent = (float) currentPage / pageCount;
             canvas.drawText(currentPage + " / " + pageCount,mMarginWidth, mHeight  - mMarginHeight, mTitlePaint);
 //            canvas.drawText(decimalFormat.format(percent * 100) + "%",mMarginWidth, mHeight  - mMarginHeight, mTitlePaint);

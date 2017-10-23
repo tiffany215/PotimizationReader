@@ -63,6 +63,9 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View{
     public void initData() {
         mBookId = getIntent().getIntExtra("read.book.id",0);
         mChapterId = UserSP.getInstance().getLastReaderChapterId(mBookId);
+
+
+
         mChapterOrder = UserSP.getInstance().getLastReaderChapterOrder(mBookId);
     }
 
