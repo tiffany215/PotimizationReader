@@ -178,6 +178,9 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
      * @param curX
      */
     private void updatePageArea(FlipStatus status,int curX){
+
+
+        Log.e(TAG, "------------------------------>" + curX );
         if(state != STATE_MOVE){
             return;
         }
@@ -197,14 +200,14 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
                 // 向后翻页动作完成，重新绘制显示内容。
                 pageSize++;
                 if(pageSize == pageCount){
-                    Log.e(TAG, mCurChapterId + "-------------------postInvalidateView------1--------------------->" );
+//                    Log.e(TAG, mCurChapterId + "-------------------postInvalidateView------1--------------------->" );
                     postDrawView(mCurChapterId,pageSize,mCurPageCanvas);
                     postDrawView(mCurChapterId,pageSize - 1,mPrePageCanvas);
                     factory.nextChapter();
 
-                    Log.e(TAG, "-------当前章---------------->>" + mCurChapterId  +"-------------当前页--------->>"+ pageSize);
+//                    Log.e(TAG, "-------当前章---------------->>" + mCurChapterId  +"-------------当前页--------->>"+ pageSize);
                 } else if(mFlipStatus == FlipStatus.ON_FLIP_NEXT && pageSize > pageCount){
-                    Log.e(TAG, mCurChapterId + "-------------------postInvalidateView--------2------------------->" );
+//                    Log.e(TAG, mCurChapterId + "-------------------postInvalidateView--------2------------------->" );
                     if(mBookStatus == BookStatus.NEXT_CHAPTER_LOAD_SUCCESS){
                         postDrawView(mCurChapterId,pageSize - 1,mPrePageCanvas);
                         pageSize = 1;
@@ -213,16 +216,15 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
                         postDrawView(mNextChapterId,pageSize + 1,mNextPageCanvas);
                         mPreChapterId = mCurChapterId;
                         mCurChapterId = mNextChapterId;
-                        Log.e(TAG, "-------当前章---------------->>" + mCurChapterId  +"-------------当前页--------->>"+ pageSize);
+//                        Log.e(TAG, "-------当前章---------------->>" + mCurChapterId  +"-------------当前页--------->>"+ pageSize);
                     }else if(mBookStatus == BookStatus.NEXT_CHAPTER_LOAD_FAILURE){
 
                     }
                 }else if(pageSize > 1 && pageSize < pageCount){
-                    Log.e(TAG, mCurChapterId + "-------------------postInvalidateView---------3------------------>" );
-                    Log.e(TAG, "-------当前章---------------->>" + mCurChapterId  +"-------------当前页--------->>"+ pageSize);
+//                    Log.e(TAG, mCurChapterId + "-------------------postInvalidateView---------3------------------>" );
+//                    Log.e(TAG, "-------当前章---------------->>" + mCurChapterId  +"-------------当前页--------->>"+ pageSize);
                     postInvalidateView(mCurChapterId,pageSize);
                 }
-
             }
         }
 
@@ -238,7 +240,7 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
                     postDrawView(mCurChapterId,pageSize + 1,mNextPageCanvas);
                     factory.preChapter();
                     mBookStatus = BookStatus.PRE_CHAPTER_LOAD_SUCCESS;
-                    Log.e(TAG, "-------当前章---------------->>" + mCurChapterId  +"-------------当前页--------->>"+ pageSize);
+//                    Log.e(TAG, "-------当前章---------------->>" + mCurChapterId  +"-------------当前页--------->>"+ pageSize);
                 }else if(mFlipStatus == FlipStatus.ON_FLIP_PRE && pageSize < 1){
 
                     //完成章节跳转，绘制
@@ -251,10 +253,10 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
                     mNextChapterId =  mCurChapterId;
                     mCurChapterId = mPreChapterId;
 
-                    Log.e(TAG, "-------当前章---------------->>" + mCurChapterId  +"-------------当前页--------->>"+ pageSize);
+//                    Log.e(TAG, "-------当前章---------------->>" + mCurChapterId  +"-------------当前页--------->>"+ pageSize);
                 }else if(pageSize > 1 && pageSize < pageCount){
                     postInvalidateView(mCurChapterId,pageSize);
-                    Log.e(TAG, "-------当前章---------------->>" + mCurChapterId  +"-------------当前页--------->>"+ pageSize);
+//                    Log.e(TAG, "-------当前章---------------->>" + mCurChapterId  +"-------------当前页--------->>"+ pageSize);
 
                 }
             }
@@ -288,6 +290,9 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
+                if(state == STATE_MOVE){
+                    return false;
+                }
                 lastX = event.getX();
                 try
                 {
@@ -365,8 +370,27 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
                     speed = 0;
                 if(speed < 0){
                     mScroller.startScroll(currPageLeft,0,-mScreenWidth - currPageLeft,0,500);
-                }else{
+                }else if(speed > 0){
                     mScroller.startScroll(mScreenWidth  + prePageLeft ,0, Math.abs(mScreenWidth - (mScreenWidth  + prePageLeft)),0,500);
+                }else if(speed == 0){
+                    switch (mFlipStatus) {
+                        case ON_FLIP_PRE:
+                            mScroller.startScroll(mScreenWidth  + prePageLeft ,0, Math.abs(mScreenWidth - (mScreenWidth  + prePageLeft)),0,500);
+                            break;
+
+                        case ON_FLIP_NEXT:
+                            mScroller.startScroll(currPageLeft,0,-mScreenWidth - currPageLeft,0,500);
+                            break;
+                    }
+
+//                    if(event.getX() > mScreenWidth / 2){
+//                        mFlipStatus = FlipStatus.ON_FLIP_NEXT;
+//                        mScroller.startScroll(currPageLeft,0,-mScreenWidth - currPageLeft,0,500);
+//                    }else{
+//                        mFlipStatus = FlipStatus.ON_FLIP_PRE;
+//                        mScroller.startScroll(mScreenWidth  + prePageLeft ,0, Math.abs(mScreenWidth - (mScreenWidth  + prePageLeft)),0,500);
+//                    }
+//                    Log.e(TAG, "---------Up--------------->>" + event.getX() );
                 }
                     postInvalidate();
                 try
