@@ -3,7 +3,8 @@ package shuhai.readercore.view.readview.pagewidget;
 import android.content.Context;
 
 import shuhai.readercore.view.readview.displayview.GLHorizontalBaseReadView;
-import shuhai.readercore.view.readview.FlipStatus;
+import shuhai.readercore.view.readview.displayview.OnReadStateChangeListener;
+import shuhai.readercore.view.readview.status.FlipStatus;
 
 /**
  * @author 55345364
@@ -13,8 +14,8 @@ import shuhai.readercore.view.readview.FlipStatus;
 public class GLRealFlipPageWidget extends GLHorizontalBaseReadView {
 
 
-    public GLRealFlipPageWidget(Context context,int bookId, int chapterId) {
-        super(context,bookId,chapterId);
+    public GLRealFlipPageWidget(Context context,int bookId, int chapterId,OnReadStateChangeListener listener) {
+        super(context,bookId,chapterId,listener);
     }
 
     @Override
@@ -31,11 +32,5 @@ public class GLRealFlipPageWidget extends GLHorizontalBaseReadView {
     public void restoreAnimation() {
 
     }
-
-    @Override
-    public void openBook(int articleId, int chapterId, int chapterOrder, FlipStatus status) {
-
-    }
-
 
 }

@@ -9,7 +9,6 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.ProgressBar;
 
 import java.text.DecimalFormat;
@@ -24,11 +23,11 @@ import shuhai.readercore.manager.ChapterLoader;
 import shuhai.readercore.manager.DataBaseManager;
 import shuhai.readercore.utils.ScreenUtils;
 import shuhai.readercore.utils.StringUtils;
-import shuhai.readercore.view.readview.BookStatus;
+import shuhai.readercore.view.readview.status.BookStatus;
 import shuhai.readercore.view.readview.dataloader.ChapterLoaderImpl;
 import shuhai.readercore.view.readview.dataloader.HorizontalScrollChapterLoader;
 import shuhai.readercore.view.readview.displayview.OnReadStateChangeListener;
-import shuhai.readercore.view.readview.FlipStatus;
+import shuhai.readercore.view.readview.status.FlipStatus;
 import shuhai.readercore.view.readview.strategy.HorizontalComposing;
 
 /**

@@ -1,9 +1,6 @@
 package shuhai.readercore.view.readview.strategy;
 
-import java.util.Map;
 import java.util.Vector;
-
-import shuhai.readercore.view.readview.FlipStatus;
 
 /**
  * @author 55345364

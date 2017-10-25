@@ -3,8 +3,6 @@ package shuhai.readercore.view.readview.strategy;
 
 import java.util.Vector;
 
-import shuhai.readercore.view.readview.FlipStatus;
-
 /**
  * @author 55345364
  * @date 2017/7/13.

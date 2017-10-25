@@ -8,7 +8,7 @@ import android.graphics.RectF;
 import android.graphics.Shader;
 import android.util.Log;
 
-import shuhai.readercore.view.readview.FlipStatus;
+import shuhai.readercore.view.readview.status.FlipStatus;
 import shuhai.readercore.view.readview.displayview.HorizontalBaseReadView;
 import shuhai.readercore.view.readview.displayview.OnReadStateChangeListener;
 import shuhai.readercore.view.readview.factory.Factory;

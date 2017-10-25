@@ -5,14 +5,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import shuhai.readercore.net.api.CommonApi;
 import shuhai.readercore.net.callback.ApiCallback;
 import shuhai.readercore.utils.AppUtils;
 import shuhai.readercore.utils.TimeFromatUtile;
-import shuhai.readercore.view.readview.FlipStatus;
+import shuhai.readercore.view.readview.status.FlipStatus;
 
 /**
  * @author 55345364

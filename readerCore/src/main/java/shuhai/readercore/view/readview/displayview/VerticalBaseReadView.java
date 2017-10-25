@@ -7,7 +7,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import shuhai.readercore.utils.ScreenUtils;
-import shuhai.readercore.view.readview.FlipStatus;
+import shuhai.readercore.view.readview.status.FlipStatus;
 
 /**
  * @author 55345364

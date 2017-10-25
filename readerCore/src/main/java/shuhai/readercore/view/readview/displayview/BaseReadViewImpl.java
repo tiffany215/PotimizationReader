@@ -1,6 +1,6 @@
 package shuhai.readercore.view.readview.displayview;
 
-import shuhai.readercore.view.readview.FlipStatus;
+import shuhai.readercore.view.readview.status.FlipStatus;
 
 /**
  * @author 55345364

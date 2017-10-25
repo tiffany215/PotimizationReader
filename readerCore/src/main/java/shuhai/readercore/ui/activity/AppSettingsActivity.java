@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -14,7 +15,7 @@ import shuhai.readercore.R;
 import shuhai.readercore.base.BaseActivity;
 import shuhai.readercore.utils.AppUtils;
 
-public class AppSettingsActivity extends BaseActivity {
+public class AppSettingsActivity extends BaseActivity implements View.OnClickListener{
 
     @InjectView(R.id.action_settings_uf)
     public TextView action_settings_uf;
@@ -33,6 +34,7 @@ public class AppSettingsActivity extends BaseActivity {
 
     @InjectView(R.id.action_settings_rs)
     public TextView action_settings_rs;
+
 
     @InjectView(R.id.action_settings_sm)
     public TextView action_settings_sm;
@@ -54,7 +56,7 @@ public class AppSettingsActivity extends BaseActivity {
 
     @Override
     public void initData() {
-
+        action_settings_rs.setOnClickListener(this);
     }
 
 
@@ -203,4 +205,12 @@ public class AppSettingsActivity extends BaseActivity {
     }
 
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.action_settings_rs:
+                startActivity(new Intent(mContext,ReadSettingActivity.class));
+                break;
+        }
+    }
 }

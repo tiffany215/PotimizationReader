@@ -35,4 +35,16 @@ public class Constants {
 
 
 
+    public static final class FLIP_CONFIG{
+        public final static int LEVEL_COVER_FLIP = 0;
+        public final static int LEVEL_SCROLLER_FLIP = 1;
+        public final static int LEVEL_REAL_FLIP = 2;
+        public final static int LEVEL_NO_FLIP = 3;
+
+
+
+    }
+
+
+
 }

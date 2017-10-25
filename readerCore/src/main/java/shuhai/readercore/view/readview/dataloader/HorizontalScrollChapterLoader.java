@@ -1,7 +1,7 @@
 package shuhai.readercore.view.readview.dataloader;
 import java.util.Vector;
 
-import shuhai.readercore.view.readview.FlipStatus;
+import shuhai.readercore.view.readview.status.FlipStatus;
 import shuhai.readercore.view.readview.strategy.ComposingStrategy;
 
 /**

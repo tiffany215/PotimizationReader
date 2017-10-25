@@ -72,9 +72,14 @@
         <activity
             android:name=".ui.activity.BookAboutActivity"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.activity.ReadSettingActivity"
+            android:screenOrientation="portrait"/>
+
         <activity
             android:name=".ui.activity.AppSettingsActivity"
-            android:label="@string/title_activity_app_settings"></activity>
+            android:label="@string/title_activity_app_settings"/>
     </application>
 
 </manifest>

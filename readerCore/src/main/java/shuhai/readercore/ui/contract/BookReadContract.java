@@ -1,7 +1,7 @@
 package shuhai.readercore.ui.contract;
 
 import shuhai.readercore.base.BaseContract;
-import shuhai.readercore.view.readview.FlipStatus;
+import shuhai.readercore.view.readview.status.FlipStatus;
 
 /**
  * @author 55345364

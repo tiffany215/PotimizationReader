@@ -3,9 +3,9 @@ package shuhai.readercore.view.readview.factory;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
-import shuhai.readercore.view.readview.BookStatus;
+import shuhai.readercore.view.readview.status.BookStatus;
 import shuhai.readercore.view.readview.dataloader.ChapterLoaderImpl;
-import shuhai.readercore.view.readview.FlipStatus;
+import shuhai.readercore.view.readview.status.FlipStatus;
 
 /**
  * @author 55345364

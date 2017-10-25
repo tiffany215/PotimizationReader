@@ -14,9 +14,7 @@ import shuhai.readercore.net.callback.ApiCallback;
 import shuhai.readercore.net.exception.ApiException;
 import shuhai.readercore.ui.contract.BookReadContract;
 import shuhai.readercore.ui.sharedp.UserSP;
-import shuhai.readercore.view.readview.FlipStatus;
-
-import static android.content.ContentValues.TAG;
+import shuhai.readercore.view.readview.status.FlipStatus;
 
 /**
  * @author wangxu

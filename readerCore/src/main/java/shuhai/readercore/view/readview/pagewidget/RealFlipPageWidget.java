@@ -5,7 +5,7 @@ import android.graphics.Canvas;
 
 import shuhai.readercore.view.readview.displayview.HorizontalBaseReadView;
 import shuhai.readercore.view.readview.displayview.OnReadStateChangeListener;
-import shuhai.readercore.view.readview.FlipStatus;
+import shuhai.readercore.view.readview.status.FlipStatus;
 import shuhai.readercore.view.readview.factory.Factory;
 
 /**

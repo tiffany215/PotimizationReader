@@ -12,6 +12,7 @@ import com.kingja.loadsir.core.LoadSir;
 import javax.inject.Inject;
 
 import butterknife.InjectView;
+import shuhai.readercore.Constants;
 import shuhai.readercore.R;
 import shuhai.readercore.base.BaseActivity;
 import shuhai.readercore.manager.ChapterLoader;
@@ -19,15 +20,15 @@ import shuhai.readercore.manager.ThemeManager;
 import shuhai.readercore.ui.contract.BookReadContract;
 import shuhai.readercore.ui.dialog.callback.LoadingCallback;
 import shuhai.readercore.ui.presenter.BookReadPresenter;
+import shuhai.readercore.ui.sharedp.ReaderSP;
 import shuhai.readercore.ui.sharedp.UserSP;
 import shuhai.readercore.view.readview.displayview.BaseReadViewImpl;
 import shuhai.readercore.view.readview.displayview.OnReadStateChangeListener;
 import shuhai.readercore.view.readview.pagewidget.GLRealFlipPageWidget;
 import shuhai.readercore.view.readview.pagewidget.LevelCoverFlipPageWidget;
-import shuhai.readercore.view.readview.pagewidget.LevelFadeFlipPageWidget;
 import shuhai.readercore.view.readview.pagewidget.LevelScrollFlipPageWidget;
 import shuhai.readercore.view.readview.pagewidget.NoEffectFlipPageWidget;
-import shuhai.readercore.view.readview.FlipStatus;
+import shuhai.readercore.view.readview.status.FlipStatus;
 
 /**
  *
@@ -63,9 +64,6 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View{
     public void initData() {
         mBookId = getIntent().getIntExtra("read.book.id",0);
         mChapterId = UserSP.getInstance().getLastReaderChapterId(mBookId);
-
-
-
         mChapterOrder = UserSP.getInstance().getLastReaderChapterOrder(mBookId);
     }
 
@@ -96,13 +94,20 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View{
      * 将阅读内容绘制好的View添加到当前容器
      */
     private void initPagerWidget(){
-//        mPageWidget = new LevelCoverFlipPageWidget(this,mBookId,mChapterId,new ReadListener());
-        mPageWidget = new LevelScrollFlipPageWidget(this,mBookId,mChapterId,new ReadListener());
-//        mPageWidget = new NoEffectFlipPageWidget(this,mBookId,mChapterId,new ReadListener());
-//        mPageWidget = new LevelFadeFlipPageWidget(this,mBookId,mChapterId,new ReadListener())
-//
-// ;
-//        mPageWidget = new GLRealFlipPageWidget(this,mBookId,mChapterId);
+        switch (ReaderSP.getInstance().getFlipModel()) {
+            case Constants.FLIP_CONFIG.LEVEL_NO_FLIP:
+                new NoEffectFlipPageWidget(this,mBookId,mChapterId,new ReadListener());
+                break;
+            case Constants.FLIP_CONFIG.LEVEL_COVER_FLIP:
+                mPageWidget = new LevelCoverFlipPageWidget(this,mBookId,mChapterId,new ReadListener());
+                break;
+            case Constants.FLIP_CONFIG.LEVEL_SCROLLER_FLIP:
+                mPageWidget = new LevelScrollFlipPageWidget(this,mBookId,mChapterId,new ReadListener());
+                break;
+            case Constants.FLIP_CONFIG.LEVEL_REAL_FLIP:
+                mPageWidget = new GLRealFlipPageWidget(this,mBookId,mChapterId,new ReadListener());
+                break;
+        }
         mPageWidget.init(ThemeManager.CLASSICAL);
         lsReadWidget.removeAllViews();
         lsReadWidget.addView((View) mPageWidget);
