@@ -8,7 +8,12 @@ public class Constants {
 
 
 
+//    public static final String API_BASE_URL = "http://192.168.3.187:8089/ishuhai/";
+    public static final String API_BASE_URL = "https://appdata.shuhai.com/ishuhai/";
 
+    public static final String SHUHAIREAD_KEY = "shuhaiCache";
+
+    public final static String KEY_SIGN = "yqP6SZMMRCchJAjPg0WtvOSxlpu0Hy"; // 系统秘钥
 
     public static final String BASE_WEB_URL = API_BASE_URL + "/app/";
 

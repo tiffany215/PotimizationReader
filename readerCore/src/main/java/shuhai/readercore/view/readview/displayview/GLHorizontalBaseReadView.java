@@ -41,37 +41,34 @@ import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
  */
 
 @SuppressLint("NewApi")
-public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements GLSurfaceView.Renderer, BaseReadViewImpl,OnPageFlipListener{
+public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements GLSurfaceView.Renderer, BaseReadViewImpl{
 
-    private Bitmap mBitmap;
-    private Canvas mCanvas;
-    private PageFlip mPageFlip;
+    protected Bitmap mBitmap;
+    protected Canvas mCanvas;
+    protected PageFlip mPageFlip;
     private ReentrantLock mDrawLock;
-    final static int MAX_PAGES = 30;
-    private FlipStatus mFlipStatus;
     private BookStatus mBookStatus;
-    private int pageSize;
+    protected int mPageSize;
     private int pageCount;
 
-    private Handler mHandler;
+    public Handler mHandler;
 
-    public final static int MSG_ENDED_DRAWING_FRAME = 1;
+    protected final static int MSG_ENDED_DRAWING_FRAME = 1;
 
-    final static int DRAW_MOVING_FRAME = 0;
-    final static int DRAW_ANIMATING_FRAME = 1;
-    final static int DRAW_FULL_PAGE = 2;
+    protected final static int DRAW_MOVING_FRAME = 0;
+    protected final static int DRAW_ANIMATING_FRAME = 1;
+    protected final static int DRAW_FULL_PAGE = 2;
 
-    int mDrawCommand;
-    private int mBookId;
+    protected int mDrawCommand;
+    protected int mBookId;
     private int mChapterId;
 
-    private Factory factory;
+    protected Factory factory;
 
     public GLHorizontalBaseReadView(Context context,int bookId, int chapterId,OnReadStateChangeListener listener) {
         super(context);
         this.mBookId = bookId;
         this.mChapterId = chapterId;
-
 
         newHandler();
 
@@ -82,7 +79,7 @@ public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements 
                 .setPixelsOfMesh(10)
                 .enableAutoPage(true);
         setEGLContextClientVersion(2);
-        mPageFlip.setListener(this);
+
 
 
 
@@ -104,9 +101,8 @@ public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements 
     }
 
     private void initParams(){
-        mFlipStatus = FlipStatus.ON_FLIP_CUR;
         mBookStatus = BookStatus.START_LOAD_SUCCESS;
-        pageSize = UserSP.getInstance().getLastReaderPage(mBookId);
+        mPageSize = UserSP.getInstance().getLastReaderPage(mBookId);
     }
 
     @Override
@@ -128,25 +124,30 @@ public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements 
                 //如果当前页等于章节第一页,绘制第一页内容和上一章最后一页内容
                 //如果当前页等于章节最后一页，绘制最后一页内容和下一章第一页内容
                 pageCount = factory.getCountPage();
-                drawPage(mChapterId,pageSize);
+                drawPage(mChapterId,mPageSize);
                 break;
             case PRE_CHAPTER_LOAD_SUCCESS:
-                drawPage(mChapterId,pageSize);
+                drawPage(mChapterId,mPageSize);
                 break;
             //下一章内容加载成功后
             case NEXT_CHAPTER_LOAD_SUCCESS:
-                drawPage(mChapterId,pageSize);
+                drawPage(mChapterId,mPageSize);
                 break;
         }
-        mFlipStatus = status;
         requestRender();
     }
 
 
+
+    public abstract void onDrawFrame(int chapterId);
+
+    public abstract boolean onEndedDrawing(int what);
+
+    public abstract  void drawPage(int chapterId,int pageSize);
+
     public synchronized void closeBook(){
 
     }
-
 
 
     @Override
@@ -164,146 +165,6 @@ public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements 
         }
         return true;
     }
-
-
-
-
-    /**
-     * Draw frame
-     */
-    public void onDrawFrame() {
-        // 1. delete unused textures
-        mPageFlip.deleteUnusedTextures();
-        Page page = mPageFlip.getFirstPage();
-
-        // 2. 手指移动和动画触发的处理绘图命令
-        if (mDrawCommand == DRAW_MOVING_FRAME ||  mDrawCommand == DRAW_ANIMATING_FRAME) {
-            // 正向翻转
-            if (mPageFlip.getFlipState() == PageFlipState.FORWARD_FLIP) {
-                // check if second texture of first page is valid, if not,
-                // create new one
-                //检查第一页的第二个纹理是否有效，如果没有，
-                //创建新的
-                if (!page.isSecondTextureSet()) {
-                    drawPage(mChapterId,pageSize ++);
-                    page.setSecondTexture(mBitmap);
-                }
-            }
-            // 在向后翻页，第一页的第一个纹理检查是有效的
-            else if (!page.isFirstTextureSet()) {
-                drawPage(mChapterId,pageSize --);
-                page.setFirstTexture(mBitmap);
-            }
-
-            // draw frame for page flip
-            // 画框翻页
-            mPageFlip.drawFlipFrame();
-        }
-        // 画平静的页面而不翻转
-        else if (mDrawCommand == DRAW_FULL_PAGE) {
-            if (!page.isFirstTextureSet()) {
-                drawPage(mChapterId,pageSize);
-                page.setFirstTexture(mBitmap);
-            }
-            mPageFlip.drawPageFrame();
-        }
-
-        // 3.发送消息给主线程通知绘图结束
-        //如果需要，我们可以继续计算下一个动画帧。
-        //记住：绘图操作始终在GL线程中，而不是
-        // 主线程
-        Message msg = Message.obtain();
-        msg.what = MSG_ENDED_DRAWING_FRAME;
-        msg.arg1 = mDrawCommand;
-        mHandler.sendMessage(msg);
-    }
-
-
-
-    /**
-     * Create message handler to cope with messages from page render,
-     * Page render will send message in GL thread, but we want to handle those
-     * messages in main thread that why we need handler here
-     */
-    private void newHandler() {
-        mHandler = new Handler() {
-            public void handleMessage(Message msg) {
-                switch (msg.what) {
-                    case MSG_ENDED_DRAWING_FRAME:
-                        try {
-                            mDrawLock.lock();
-                            // notify page render to handle ended drawing
-                            // message
-                            if (onEndedDrawing(msg.arg1)) {
-                                requestRender();
-                            }
-                        }
-                        finally {
-                            mDrawLock.unlock();
-                        }
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-        };
-    }
-
-
-
-
-    /**
-     * Handle ended drawing event
-     * In here, we only tackle the animation drawing event, If we need to
-     * continue requesting render, please return true. Remember this function
-     * will be called in main thread
-     *
-     * @param what event type
-     * @return ture if need render again
-     */
-    public boolean onEndedDrawing(int what) {
-
-//        Log.e("dddd", "drawPage: " + "------wwww-------->");
-
-        if (what == DRAW_ANIMATING_FRAME) {
-            boolean isAnimating = mPageFlip.animating();
-            // continue animating
-            if (isAnimating) {
-                mDrawCommand = DRAW_ANIMATING_FRAME;
-                return true;
-            }
-            // animation is finished
-            else {
-                final PageFlipState state = mPageFlip.getFlipState();
-                // update page number for backward flip
-                if (state == PageFlipState.END_WITH_BACKWARD) {
-                    // don't do anything on page number since mPageNo is always
-                    // represents the FIRST_TEXTURE no;
-                }
-                // update page number and switch textures for forward flip
-                else if (state == PageFlipState.END_WITH_FORWARD) {
-                    mPageFlip.getFirstPage().setFirstTextureWithSecond();
-//                    mPageNo++;
-                }
-
-                mDrawCommand = DRAW_FULL_PAGE;
-                return true;
-            }
-        }
-        return false;
-    }
-
-
-
-
-    private void drawPage(int chapterId,int pageSize) {
-        factory.getPageContent(chapterId,pageSize, StringUtils.cacheKeyCreate(mBookId,chapterId));
-        factory.setPageSize(pageSize);
-        factory.onDraw(mCanvas);
-    }
-
-
 
 
     private void onFingerUp(float x,float y){
@@ -366,25 +227,40 @@ public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements 
     public void onDrawFrame(GL10 gl10) {
         try {
             mDrawLock.lock();
-            onDrawFrame();
+            onDrawFrame(mChapterId);
         }finally {
             mDrawLock.unlock();
         }
     }
 
 
-    @Override
-    public boolean canFlipForward() {
-        return (pageSize < MAX_PAGES);
-    }
+    /**
+     *创建消息处理程序来处理来自页面呈现的消息，
+     *页面渲染将在GL线程中发送消息，但我们要处理这些消息
+     *主线程中的消息，为什么我们需要在这里处理程序
+     */
+    private void newHandler() {
+        mHandler = new Handler() {
+            public void handleMessage(Message msg) {
+                switch (msg.what) {
+                    case MSG_ENDED_DRAWING_FRAME:
+                        try {
+                            mDrawLock.lock();
+                            // notify page render to handle ended drawing
+                            // message
+                            if (onEndedDrawing(msg.arg1)) {
+                                requestRender();
+                            }
+                        }
+                        finally {
+                            mDrawLock.unlock();
+                        }
+                        break;
 
-    @Override
-    public boolean canFlipBackward() {
-        if (pageSize > 1) {
-            mPageFlip.getFirstPage().setSecondTextureWithFirst();
-            return true;
-        }else {
-            return false;
-        }
+                    default:
+                        break;
+                }
+            }
+        };
     }
 }
