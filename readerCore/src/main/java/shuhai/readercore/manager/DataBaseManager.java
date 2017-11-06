@@ -13,6 +13,7 @@ import shuhai.readercore.dao.DaoMaster;
 import shuhai.readercore.dao.DaoSession;
 import shuhai.readercore.dao.MarkEntityDao;
 import shuhai.readercore.utils.AppUtils;
+import shuhai.readercore.utils.Utils;
 import shuhai.readercore.view.readview.status.FlipStatus;
 
 /**
@@ -35,7 +36,7 @@ public class DataBaseManager {
 
 
     private DataBaseManager() {
-        devOpenHelper = new DaoMaster.DevOpenHelper(AppUtils.getAppContext(), DB_NAME, null);
+        devOpenHelper = new DaoMaster.DevOpenHelper(Utils.getAppContext(), DB_NAME, null);
         db = devOpenHelper.getWritableDatabase();
         master = new DaoMaster(db);
         session = master.newSession();

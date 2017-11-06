@@ -33,9 +33,9 @@ public class BookStoreHolder extends BaseViewHolder<BookInfoEntity> {
     @Override
     public void setData(BookInfoEntity data) {
         super.setData(data);
-//        Glide.with(getContext()).load(data.getBkbmurl()).into(bookCover);
+        Glide.with(getContext()).load(data.getBkbmurl()).into(bookCover);
 
-        bookCover.setBackgroundResource(R.drawable.cover);
+//        bookCover.setBackgroundResource(R.drawable.cover);
 
         bookName.setText(data.getArticlename());
         readProgress.setText("50%");

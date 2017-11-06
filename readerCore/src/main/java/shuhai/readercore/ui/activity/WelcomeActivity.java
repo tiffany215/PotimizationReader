@@ -54,7 +54,7 @@ public class WelcomeActivity extends AppCompatActivity {
             if(UserSP.getInstance().getRecommendStatue()){
                 startActivity(new Intent(this,MainActivity.class));
             }else{
-                startActivity(new Intent(this,MainActivity.class));
+                startActivity(new Intent(this,SplashActivity.class));
             }
             finish();
         }

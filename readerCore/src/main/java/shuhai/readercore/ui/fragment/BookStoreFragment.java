@@ -1,4 +1,5 @@
 package shuhai.readercore.ui.fragment;
+import android.app.Activity;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
@@ -109,7 +110,16 @@ public class BookStoreFragment extends BaseRVFragment<BookStorePresenter,BookInf
 
     @Override
     public void onItemClick(int position) {
-        startActivity(new Intent(getActivity(), ReadActivity.class));
+
+        Intent intent = new Intent();
+        intent.putExtra("read.book.id",Integer.parseInt(String.valueOf(presenter.getShelfBookList().get(position).getArticleid())));
+        intent.setClass(mContext,ReadActivity.class);
+        startActivity(intent);
+        Toast.makeText(mContext, "阅读", Toast.LENGTH_SHORT).show();
+        if (mContext instanceof Activity) {
+            Activity activity = (Activity) mContext;
+            activity.finish();
+        }
     }
 
 

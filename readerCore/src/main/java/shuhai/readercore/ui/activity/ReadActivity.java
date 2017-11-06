@@ -22,6 +22,7 @@ import shuhai.readercore.ui.dialog.callback.LoadingCallback;
 import shuhai.readercore.ui.presenter.BookReadPresenter;
 import shuhai.readercore.ui.sharedp.ReaderSP;
 import shuhai.readercore.ui.sharedp.UserSP;
+import shuhai.readercore.utils.ActivityUtils;
 import shuhai.readercore.view.readview.displayview.BaseReadViewImpl;
 import shuhai.readercore.view.readview.displayview.OnReadStateChangeListener;
 import shuhai.readercore.view.readview.pagewidget.GLRealFlipPageWidget;
@@ -193,6 +194,7 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View{
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        ActivityUtils.finishActivity(this);
         mPageWidget.closeBook();
     }
 }

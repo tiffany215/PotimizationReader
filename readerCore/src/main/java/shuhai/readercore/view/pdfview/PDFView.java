@@ -6,4 +6,8 @@ package shuhai.readercore.view.pdfview;
  */
 
 public class PDFView {
+
+
+
+
 }

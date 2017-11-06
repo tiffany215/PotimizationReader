@@ -23,7 +23,9 @@ import com.kingja.loadsir.core.LoadSir;
 import butterknife.InjectView;
 import shuhai.readercore.R;
 import shuhai.readercore.ui.dialog.callback.LoadingCallback;
+import shuhai.readercore.utils.AppUtils;
 import shuhai.readercore.utils.NetworkUtils;
+import shuhai.readercore.utils.UrlUtils;
 
 /**
  * @author 55345364
@@ -186,7 +188,7 @@ public abstract  class BaseWVActivity extends BaseActivity {
             return;
         }
 
-        webView.loadUrl(mURl);
+        webView.loadUrl(UrlUtils.markSignUrl(mURl));
     }
 
 }

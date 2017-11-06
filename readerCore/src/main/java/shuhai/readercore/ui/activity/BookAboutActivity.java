@@ -14,7 +14,9 @@ import android.widget.Toast;
 import shuhai.readercore.Constants;
 import shuhai.readercore.R;
 import shuhai.readercore.base.BaseWVActivity;
+import shuhai.readercore.utils.ActivityUtils;
 import shuhai.readercore.utils.AppUtils;
+import shuhai.readercore.utils.UrlUtils;
 
 /**
  * @author 55345364
@@ -43,7 +45,7 @@ public class BookAboutActivity extends BaseWVActivity {
                     public void run() {
                         try {
                             webView.loadUrl("javascript:waves("
-                                    + AppUtils.makeJsonText()
+                                    + UrlUtils.makeJsonText()
                                     + ")");
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -248,12 +250,12 @@ public class BookAboutActivity extends BaseWVActivity {
                 Intent intent = new Intent(mContext, BookAboutActivity.class);
                 intent.putExtra(
                         "url",
-                        AppUtils.makeUserUrl(Constants.BASE_WEB_URL
+                        UrlUtils.markSignUrl(Constants.BASE_WEB_URL
                                 + "bookstore?op=search"));
                 mContext.startActivity(intent);
                 break;
             case R.id.action_home:
-
+                ActivityUtils.finishAllActivities();
                 break;
 
             case android.R.id.home:

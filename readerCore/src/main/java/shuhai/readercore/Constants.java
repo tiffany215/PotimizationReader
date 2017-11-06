@@ -9,7 +9,7 @@ public class Constants {
 
 
 //    public static final String API_BASE_URL = "http://192.168.3.187:8089/ishuhai/";
-    public static final String API_BASE_URL = "http://appdata.shuhai.com/ishuhai/";
+    public static final String API_BASE_URL = "https://appdata.shuhai.com/ishuhai/";
 
     public static final String BASE_WEB_URL = API_BASE_URL + "/app/";
 

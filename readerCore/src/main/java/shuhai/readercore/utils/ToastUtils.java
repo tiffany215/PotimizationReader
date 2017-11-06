@@ -27,7 +27,7 @@ import android.widget.Toast;
 public class ToastUtils {
 
     private static Toast mToast;
-    private static Context context = AppUtils.getAppContext();
+    private static Context context = Utils.getAppContext();
 
     /********************** 非连续弹出的Toast ***********************/
     public static void showSingleToast(int resId) { //R.string.**

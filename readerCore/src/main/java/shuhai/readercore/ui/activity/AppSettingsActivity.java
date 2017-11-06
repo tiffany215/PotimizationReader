@@ -14,6 +14,7 @@ import shuhai.readercore.Constants;
 import shuhai.readercore.R;
 import shuhai.readercore.base.BaseActivity;
 import shuhai.readercore.utils.AppUtils;
+import shuhai.readercore.utils.UrlUtils;
 
 public class AppSettingsActivity extends BaseActivity implements View.OnClickListener{
 
@@ -84,7 +85,7 @@ public class AppSettingsActivity extends BaseActivity implements View.OnClickLis
                 Intent intent = new Intent(mContext, BookAboutActivity.class);
                 intent.putExtra(
                         "url",
-                        AppUtils.makeUserUrl(Constants.BASE_WEB_URL
+                        UrlUtils.markSignUrl(Constants.BASE_WEB_URL
                                 + "bookstore?op=search"));
                 mContext.startActivity(intent);
                 break;
@@ -173,7 +174,7 @@ public class AppSettingsActivity extends BaseActivity implements View.OnClickLis
 
     @OnClick(R.id.action_settings_as)
     public void OnClickAboutShuhai(){
-        new AlertDialog.Builder(mContext).setTitle("书海V" + AppUtils.getPackageInfo().packageName)
+        new AlertDialog.Builder(mContext).setTitle("书海V" + AppUtils.getPackageName())
                 .setMessage(R.string.about_shuhai_prompt)
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override

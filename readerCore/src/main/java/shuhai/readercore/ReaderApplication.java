@@ -6,6 +6,7 @@ import com.kingja.loadsir.core.LoadSir;
 
 import shuhai.readercore.ui.dialog.callback.LoadingCallback;
 import shuhai.readercore.utils.AppUtils;
+import shuhai.readercore.utils.Utils;
 
 /**
  * @author 55345364
@@ -20,7 +21,7 @@ public class ReaderApplication extends Application {
     public void onCreate() {
         super.onCreate();
         sInstance = this;
-        AppUtils.init(this);
+        Utils.init(this);
         LoadSir.beginBuilder().addCallback(new LoadingCallback()).setDefaultCallback(LoadingCallback.class).commit();
 
     }

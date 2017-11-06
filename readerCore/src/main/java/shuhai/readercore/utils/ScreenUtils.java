@@ -52,7 +52,7 @@ public class ScreenUtils {
      * @return
      */
     public static int getScreenWidth() {
-        return AppUtils.getAppContext().getResources().getDisplayMetrics().widthPixels;
+        return Utils.getAppContext().getResources().getDisplayMetrics().widthPixels;
     }
 
     /**
@@ -61,7 +61,7 @@ public class ScreenUtils {
      * @return
      */
     public static int getScreenHeight() {
-        return AppUtils.getAppContext().getResources().getDisplayMetrics().heightPixels;
+        return Utils.getAppContext().getResources().getDisplayMetrics().heightPixels;
     }
 
     /**
@@ -71,7 +71,7 @@ public class ScreenUtils {
      * @return
      */
     public static float dpToPx(float dp) {
-        return dp * AppUtils.getAppContext().getResources().getDisplayMetrics().density;
+        return dp * Utils.getAppContext().getResources().getDisplayMetrics().density;
     }
 
     public static int dpToPxInt(float dp) {
@@ -85,7 +85,7 @@ public class ScreenUtils {
      * @return
      */
     public static float pxToDp(float px) {
-        return px / AppUtils.getAppContext().getResources().getDisplayMetrics().density;
+        return px / Utils.getAppContext().getResources().getDisplayMetrics().density;
     }
 
     public static int pxToDpInt(float px) {
@@ -99,7 +99,7 @@ public class ScreenUtils {
      * @return
      */
     public static float pxToSp(float pxValue) {
-        return pxValue / AppUtils.getAppContext().getResources().getDisplayMetrics().scaledDensity;
+        return pxValue / Utils.getAppContext().getResources().getDisplayMetrics().scaledDensity;
     }
 
     /**
@@ -109,7 +109,7 @@ public class ScreenUtils {
      * @return
      */
     public static float spToPx(float spValue) {
-        return spValue * AppUtils.getAppContext().getResources().getDisplayMetrics().scaledDensity;
+        return spValue * Utils.getAppContext().getResources().getDisplayMetrics().scaledDensity;
     }
 
     public static int getStatusBarHeight(Context context) {
@@ -140,7 +140,7 @@ public class ScreenUtils {
             obj = c.newInstance();
             field = c.getField("status_bar_height");
             x = Integer.parseInt(field.get(obj).toString());
-            sbar = AppUtils.getAppContext().getResources().getDimensionPixelSize(x);
+            sbar = Utils.getAppContext().getResources().getDimensionPixelSize(x);
         } catch (Exception e1) {
             e1.printStackTrace();
         }

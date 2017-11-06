@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 import shuhai.readercore.bean.UserEntity;
 import shuhai.readercore.utils.AppUtils;
+import shuhai.readercore.utils.Utils;
 
 /**
  * @author 55345364
@@ -18,7 +19,7 @@ public class UserSP {
     private static final String FILE_KEY = "shuhai_userinfo_setting_preferences";
 
     private UserSP(){
-        sp = AppUtils.getAppContext().getSharedPreferences(FILE_KEY, Context.MODE_PRIVATE);
+        sp = Utils.getAppContext().getSharedPreferences(FILE_KEY, Context.MODE_PRIVATE);
         ed = sp.edit();
     }
 

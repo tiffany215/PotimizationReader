@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import shuhai.readercore.Constants;
 import shuhai.readercore.utils.AppUtils;
+import shuhai.readercore.utils.Utils;
 
 /**
  * 章节内容缓存加载
@@ -23,7 +24,7 @@ public class ChapterLoader {
         if(!TextUtils.isEmpty(content)){
             return content;
         }
-        content = DiskLruCacheManager.getInstance(AppUtils.getAppContext(), Constants.SHUHAIREAD_KEY).getString(key);
+        content = DiskLruCacheManager.getInstance(Utils.getAppContext(), Constants.SHUHAIREAD_KEY).getString(key);
         if(!TextUtils.isEmpty(content)){
             return content;
         }
@@ -51,8 +52,8 @@ public class ChapterLoader {
         if(TextUtils.isEmpty(MemoryLruCacheManager.getInstance().getString(key))){
             MemoryLruCacheManager.getInstance().put(key,value);
         }
-        if(TextUtils.isEmpty(DiskLruCacheManager.getInstance(AppUtils.getAppContext(), Constants.SHUHAIREAD_KEY).getString(key))){
-            DiskLruCacheManager.getInstance(AppUtils.getAppContext(), Constants.SHUHAIREAD_KEY).put(key,value);
+        if(TextUtils.isEmpty(DiskLruCacheManager.getInstance(Utils.getAppContext(), Constants.SHUHAIREAD_KEY).getString(key))){
+            DiskLruCacheManager.getInstance(Utils.getAppContext(), Constants.SHUHAIREAD_KEY).put(key,value);
         }
     }
 

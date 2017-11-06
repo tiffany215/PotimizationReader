@@ -7,6 +7,7 @@ import android.support.v4.content.ContextCompat;
 import shuhai.readercore.R;
 import shuhai.readercore.utils.AppUtils;
 import shuhai.readercore.utils.ScreenUtils;
+import shuhai.readercore.utils.Utils;
 
 /**
  * @author 55345364
@@ -31,36 +32,36 @@ public class ThemeManager {
         Bitmap bitmap = Bitmap.createBitmap(ScreenUtils.getScreenWidth(),ScreenUtils.getScreenHeight(), Bitmap.Config.ARGB_8888);
         switch (theme) {
             case NORMAL:
-                bitmap.eraseColor(ContextCompat.getColor(AppUtils.getAppContext(), R.color.read_theme_white));
+                bitmap.eraseColor(ContextCompat.getColor(Utils.getAppContext(), R.color.read_theme_white));
                 break;
             case YELLOW:
-                bitmap.eraseColor(ContextCompat.getColor(AppUtils.getAppContext(),R.color.read_theme_yellow));
+                bitmap.eraseColor(ContextCompat.getColor(Utils.getAppContext(),R.color.read_theme_yellow));
                 break;
             case GREEN:
-                bitmap.eraseColor(ContextCompat.getColor(AppUtils.getAppContext(),R.color.read_theme_green));
+                bitmap.eraseColor(ContextCompat.getColor(Utils.getAppContext(),R.color.read_theme_green));
                 break;
             case LEATHER:
-                bitmap.eraseColor(ContextCompat.getColor(AppUtils.getAppContext(),R.color.read_theme_white));
+                bitmap.eraseColor(ContextCompat.getColor(Utils.getAppContext(),R.color.read_theme_white));
                 break;
             case GRAY:
-                bitmap.eraseColor(ContextCompat.getColor(AppUtils.getAppContext(),R.color.read_theme_gray));
+                bitmap.eraseColor(ContextCompat.getColor(Utils.getAppContext(),R.color.read_theme_gray));
                 break;
             case NIGHT:
-                bitmap.eraseColor(ContextCompat.getColor(AppUtils.getAppContext(),R.color.read_theme_night));
+                bitmap.eraseColor(ContextCompat.getColor(Utils.getAppContext(),R.color.read_theme_night));
                 break;
             case PARCHMENT:
-                bitmap = BitmapFactory.decodeResource(AppUtils.getResources(),R.drawable.theme_reader_bg_02);
+                bitmap = BitmapFactory.decodeResource(Utils.getResources(),R.drawable.theme_reader_bg_02);
                 break;
 
             case CLASSICAL:
-                bitmap = BitmapFactory.decodeResource(AppUtils.getResources(),R.drawable.theme_leather_bg);
+                bitmap = BitmapFactory.decodeResource(Utils.getResources(),R.drawable.theme_leather_bg);
                 break;
 
             case MODERN:
-                bitmap = BitmapFactory.decodeResource(AppUtils.getResources(),R.drawable.theme_reader_bg_01);
+                bitmap = BitmapFactory.decodeResource(Utils.getResources(),R.drawable.theme_reader_bg_01);
                 break;
             default:
-                bitmap.eraseColor(ContextCompat.getColor(AppUtils.getAppContext(), R.color.read_theme_white));
+                bitmap.eraseColor(ContextCompat.getColor(Utils.getAppContext(), R.color.read_theme_white));
                 break;
 
         }

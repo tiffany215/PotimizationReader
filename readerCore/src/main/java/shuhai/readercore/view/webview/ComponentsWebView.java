@@ -12,6 +12,7 @@ import shuhai.readercore.R;
 import shuhai.readercore.ui.activity.BookAboutActivity;
 import shuhai.readercore.ui.activity.ReadActivity;
 import shuhai.readercore.utils.AppUtils;
+import shuhai.readercore.utils.UrlUtils;
 
 /**
  * @author 55345364
@@ -46,7 +47,7 @@ public class ComponentsWebView extends BaseWbView {
                     public void run() {
                         try {
                             mWebView.loadUrl("javascript:waves("
-                                    + AppUtils
+                                    + UrlUtils
                                     .makeJsonText()
                                     + ")");
                         } catch (Exception e) {
