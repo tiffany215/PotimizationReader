@@ -11,7 +11,7 @@ import com.flipboard.bottomsheet.BottomSheetLayout;
 import butterknife.InjectView;
 import shuhai.readercore.R;
 import shuhai.readercore.base.BaseRVFragment;
-import shuhai.readercore.dao.BookInfoEntity;
+//import shuhai.readercore.dao.BookInfoEntity;
 import shuhai.readercore.ui.activity.AppSettingsActivity;
 import shuhai.readercore.ui.activity.ReadActivity;
 import shuhai.readercore.ui.adapter.BookStoreAdapter;
@@ -19,7 +19,7 @@ import shuhai.readercore.ui.contract.BookStoreContract;
 import shuhai.readercore.ui.presenter.BookStorePresenter;
 import shuhai.readercore.utils.ToastUtils;
 
-public class BookStoreFragment extends BaseRVFragment<BookStorePresenter,BookInfoEntity> implements BookStoreContract.View{
+public class BookStoreFragment extends BaseRVFragment<BookStorePresenter,Object> implements BookStoreContract.View{
 
 
     private BookStorePresenter presenter = new BookStorePresenter();
@@ -112,7 +112,7 @@ public class BookStoreFragment extends BaseRVFragment<BookStorePresenter,BookInf
     public void onItemClick(int position) {
 
         Intent intent = new Intent();
-        intent.putExtra("read.book.id",Integer.parseInt(String.valueOf(presenter.getShelfBookList().get(position).getArticleid())));
+        intent.putExtra("read.book.id",Integer.parseInt(String.valueOf(presenter.getShelfBookList().get(position).getArticleId())));
         intent.setClass(mContext,ReadActivity.class);
         startActivity(intent);
         Toast.makeText(mContext, "阅读", Toast.LENGTH_SHORT).show();

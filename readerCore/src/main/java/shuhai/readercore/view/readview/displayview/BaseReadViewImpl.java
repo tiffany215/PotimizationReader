@@ -1,5 +1,6 @@
 package shuhai.readercore.view.readview.displayview;
 
+
 import shuhai.readercore.view.readview.status.FlipStatus;
 
 /**
@@ -8,18 +9,12 @@ import shuhai.readercore.view.readview.status.FlipStatus;
  */
 
 public interface BaseReadViewImpl {
-    //开始翻页动画
-    void startAnimation();
-    //终止翻页动画
-    void abortAnimation();
-    //恢复翻页动画
-    void restoreAnimation();
+
     //设置主题
     void init(int theme);
 
     void openBook(int articleId,int chapterId,int chapterOrder,FlipStatus status);
 
     void closeBook();
-
 
 }

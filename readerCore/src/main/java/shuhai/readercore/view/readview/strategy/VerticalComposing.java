@@ -37,4 +37,9 @@ public class VerticalComposing implements ComposingStrategy{
     public void clearPageCache() {
 
     }
+
+    @Override
+    public boolean hasChapter(int articleId, int chapterId) {
+        return false;
+    }
 }

@@ -7,7 +7,7 @@ package shuhai.readercore.view.readview.status;
 
 public enum FlipStatus {
 
-    ON_FLIP_PRE,ON_FLIP_CUR,ON_FLIP_NEXT
+    ON_FLIP_PRE,ON_FLIP_CUR,ON_FLIP_NEXT,ON_NEXT_CHAPTER_FIRST_PAGE,ON_PRE_CHAPTER_LAST_PAGE
 
 
 }

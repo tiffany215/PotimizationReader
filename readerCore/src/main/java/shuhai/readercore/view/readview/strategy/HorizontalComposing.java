@@ -9,8 +9,7 @@ import java.util.Map;
 import java.util.Vector;
 
 import shuhai.readercore.manager.ChapterLoader;
-
-import static shuhai.readercore.ui.presenter.BookReadPresenter.TAG;
+import shuhai.readercore.utils.StringUtils;
 
 
 /**
@@ -206,18 +205,6 @@ public class HorizontalComposing implements ComposingStrategy{
      */
     @Override
     public Vector<String> obtainPageContent(int chapterId,int page, String key) {
-//        if(chapterList.size() <= 0 ){
-//            return null;
-//        }
-//        if(chapterList.get(chapterId).isEmpty() || chapterList.get(chapterId).size() <= 0){
-//            characterTypesetting(chapterId,key);
-//        }
-//        pageList.clear();
-//        pageList.putAll(chapterList.get(chapterId));
-//        if(null == pageList ||  pageList.size() <= 0){
-//            return null;
-//        }
-//        return pageList.get(page);
         pageList = chapterList.get(chapterId);
         if(null == pageList || pageList.size() <= 0 ){
             if(characterTypesetting(chapterId,key)){
@@ -258,9 +245,21 @@ public class HorizontalComposing implements ComposingStrategy{
     @Override
     public void clearPageCache() {
 
+    }
 
+    @Override
+    public boolean hasChapter(int articleId,int chapterId) {
+        //判断Map中是否存在该章节
+        if(null != chapterList && null != chapterList.get(chapterId) && chapterList.get(chapterId).size() > 0 ){
+            return true;
+        }
 
+        //判断缓存中是否有该章节
+        if(characterTypesetting(chapterId, StringUtils.cacheKeyCreate(articleId,chapterId))){
+            return true;
+        }
 
+        return false;
     }
 
 

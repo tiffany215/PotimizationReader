@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import shuhai.readercore.Constants;
 import shuhai.readercore.utils.AppUtils;
+import shuhai.readercore.utils.StringUtils;
 import shuhai.readercore.utils.Utils;
 
 /**
@@ -39,7 +40,7 @@ public class ChapterLoader {
      * @param value 章节内容
      */
     public static void put(int articleId,int chapterId, String value){
-        put(String.valueOf(articleId)+String.valueOf(chapterId),value);
+        put(StringUtils.cacheKeyCreate(articleId,chapterId),value);
     }
 
 

@@ -1,248 +1,151 @@
 package shuhai.readercore.bean;
 
-import java.util.List;
+
+import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.OrderBy;
+import org.greenrobot.greendao.annotation.Transient;
+import org.greenrobot.greendao.annotation.Unique;
+import org.greenrobot.greendao.annotation.Generated;
 
 /**
  * @author 55345364
  * @date 2017/7/19.
  */
-
+@Entity
 public class ChapterEntity {
 
+    @Id
+    private Long id;
 
-    /**
-     * code : 0000
-     * message : [{"chapterid":"2668827","chapterorder":"18","chaptername":"018.徐美惠的眼线真的是无孔不入，该清理了","saleprice":"0","size_c":"2019","jsfree":"0","paytype":"0","content":"    当看到快递送到她办公室的时候，苏曼是醉醉的。\r\n\r\n    她唇角无奈的轻扯，拧起外卖走出办公室，想着晏名爵办公室的方向而去，在路上还顺便捋了捋自己的额角，很有点故意打扮的意味儿。\r\n\r\n    打开门的那一刹那，晏名爵立马站起身来迎接，\u201c亲爱的，辛苦了。\u201d\r\n\r\n    苏曼嘡的一声将门关上，将里面和外面完全的阻隔，然后她拧着外卖走向办公桌，看向晏名爵，说道：\u201c你故意的吧？\u201d\r\n\r\n    晏名爵轻笑：\u201c既然知道，又何必多说。\u201d\r\n\r\n    苏曼抽抽嘴角，说道：\u201c你不觉得这样太假了吗？我们才结婚一天而已。\u201d\r\n\r\n    苏曼认真的看向晏名爵，提醒他。\r\n\r\n    晏名爵扶着下巴，像是在等她说原因，又像是没有。\r\n\r\n    突然，晏名爵说道：\u201c好像是有点，那你回去吧，今天下午我都不会再找你，等到下班的时候我带你回家。\u201d\r\n\r\n    苏曼看向他，惊奇于他的反应。\r\n\r\n    虽然她说的事情是合理的，但是晏名爵明显是要用最短的时间让徐美惠相信他们俩很好，所以不太会同意她的提议。\r\n\r\n    但是晏名爵居然同意了。\r\n\r\n    苏曼却是觉得有些惊奇，苏曼看着晏名爵，说道：\u201c你不怕\u2026\u2026\u201d\r\n\r\n    晏名爵说道，\u201c你说得对，我们这样太恩爱的确是有些假，我同意你的建议。\u201d\r\n\r\n    苏曼有些犹豫的看着，最终还是点了点头，走了出去。\r\n\r\n    晏名爵也没有留她。\r\n\r\n    可是刚走出办公室，她就发现徐美惠的眼线真的是无孔不入。\r\n\r\n    刚刚回到办公室，徐美惠的电话就打来了，\u201c曼曼，你怎么不陪名爵一起吃饭，你是他老婆。\u201d\r\n\r\n    苏曼有些无奈的扶额，说道：\u201c妈，我才跟晏名爵结婚一天，那些亲密的事情我觉得别扭。\u201d\r\n\r\n    徐美惠不悦的开口，\u201c傻孩子，你不这样，怎么培养跟名爵的感情，你赶紧去陪着名爵吧。\u201d说着就挂断了电话。\r\n\r\n    苏曼看着手机，无奈的叹气。\r\n\r\n    徐美惠还真的是管的多。\r\n\r\n    她有些无奈的抽抽嘴角，权衡了一下，最后还是去了晏名爵的办公室。\r\n\r\n    看到她进来，晏名爵有些不解的看了看，却又像是知道了什么，立马又低下了头吃饭，什么也没问。\r\n\r\n    苏曼知道晏名爵知道为什么，晏名爵比她更了解徐美惠，所以徐美惠做了什么她一定知道。\r\n\r\n    苏曼只是不解。\r\n\r\n    苏曼抬头看了下晏名爵，问道：\u201c你手底下的人给徐美惠通风报信，这样深入你的身边，你都不反感吗？\u201d\r\n\r\n    晏名爵轻笑\u201c有人这么关心我，我又何乐不为。\u201d晏名爵从桌上扯过一张纸巾，擦了擦嘴角，看向她。\r\n\r\n    苏曼翻白眼，\u201c晏名爵，你能不能好好说话。\u201d\r\n\r\n    她用脚趾头也能想得出来晏名爵这话说的是反话，当中的苦涩以为她听不出来吗？\r\n\r\n    晏名爵却是轻笑：\u201c你妈本事太大，无论我做了什么都有人给她通风报信，我也无可奈何。\u201d\r\n\r\n    苏曼不高兴的说道：\u201c直接把这告密的人开掉，并且杀鸡儆猴，看以后谁还敢给我妈报信。\u201d\r\n\r\n    晏名爵只是轻笑，无奈摇头，什么都不说。\r\n\r\n    苏曼看向他，说道：\u201c我说的是真的，你真要把你身边告密的人给清理了，以后我们才能有安生日子过。我可不想天天都要想着法的跟你秀恩爱。\u201d\r\n\r\n    晏名爵却是轻笑，什么都不说。\r\n\r\n    苏曼见晏名爵并不动心一般，打定主意，就算晏名爵不干，她也要干。苏曼看向晏名爵，很肯定的说道：\u201c我来把你身边告密的人给揪掉，看谁还敢天天没事的去打小报告。\u201d苏曼是最恨这样的人。\r\n\r\n    苏曼说着，已经走了出去，要去揪这打小报告的人。她是一个说做就做的人。\r\n\r\n    她走后，权叔走进了晏名爵的办公室，问道：\u201c刚刚我在门口听到少夫人要揪这打小报告的人，你真的让她做？\u201d\r\n\r\n    晏名爵扬眉：\u201c怎么不让她做，最好是揪出一两个打小报告的，杀鸡儆猴。\u201d\r\n\r\n    权叔有些忧心的道：\u201c你不怕老爷和夫人那边会有意见。\u201d\r\n\r\n    晏名爵浮现一抹森冷，\u201c我还就怕他们没有意见。我这身边早就该清理一下了。\u201d\r\n\r\n    权叔眼神负责的看了看他，走了出去。\r\n\r\n    晏名爵坐在办公室，脸上寒若冰霜。\r\n\r\n    *************\r\n\r\n    苏曼打定主意要把这打小报告的人给揪出来，她便认真的做起来了。\r\n\r\n    首先，她去了总裁办公室独有的茶水间，因为她知道茶水间一向是个谈天说地，聊八卦，吐苦水的地方，所以这个地方总是能够探到些什么的。\r\n\r\n    可是她去了之后，发现一个人也没有。\r\n\r\n    苏曼坐在茶水间的茶几上，看着玻璃杯中的水，等着，总会有人来的。\r\n\r\n    可是，一整个下午，苏曼都是在孤独无聊中度过的。\r\n\r\n    茶水间有人来接水，可是他们接完就走了。\r\n\r\n    茶水间旁边就是洗手间。\r\n\r\n    苏曼惊奇的发现，晏名爵的助理们也算是训练有素的。\r\n\r\n    他们总是行色匆匆，接完水或者上完洗手间都是立马就闪人，苏曼想找个人聊天都不行。\r\n\r\n    苏曼就郁闷了。\r\n\r\n    就连早上帮着她整理办公室的李雪，今天下午见到她也说自己有事，赶紧的就去忙了。\r\n\r\n    苏曼最后终于死心，落寞的走去了晏名爵的办公室。\r\n\r\n    \u201c晏名爵，我什么都没听到，也没探到。\u201d苏曼有些无奈告诉晏名爵这件事。\r\n\r\n    晏名爵轻笑：\u201c没事，再接再厉\u201d\r\n\r\n    苏曼摇头，\u201c一定是哪里有问题？要么是他们知道我要揪出告密的人，所以都绕着我走了。\u201d苏曼脑洞大开。\r\n\r\n    晏名爵却是摇头，\u201c我想他们只是在不确定你的目的之前，在观察你。\u201d\r\n\r\n    \u201c观察我？\u201d苏曼有些吃惊。\r\n\r\n    晏名爵点头，肯定她的话，说道\u201c你不要灰心，我给你个突破口吧。早上负责你办公室整理的李雪以后就做你的助理吧，你可以从她身上入手。\u201d\r\n\r\n    苏曼惊奇的看向晏名爵，狂喜的站起来：\u201c好好好，你把她给我，我一定从她身上套到话。\u201d苏曼瞬间觉得信心大作。\r\n\r\n    等着吧，看她不把这告密的人揪出来，给徐美惠好看。"}]
-     */
 
-    private String code;
-    private List<MessageBean> message;
+    private int articleId;
 
-    public String getCode() {
-        return code;
+    private int chapterId;
+
+    @OrderBy
+    private int chapterOrder;
+
+    private String chapterName;
+
+    private int chapterType;
+
+    @Transient
+    private int salePrice;
+
+    @Transient
+    private String sizeC;
+
+    @Transient
+    private int jsFree;
+
+    @Transient
+    private int payType;
+
+    @Transient
+    private String content;
+
+    @Generated(hash = 696189237)
+    public ChapterEntity(Long id, int articleId, int chapterId, int chapterOrder,
+            String chapterName, int chapterType) {
+        this.id = id;
+        this.articleId = articleId;
+        this.chapterId = chapterId;
+        this.chapterOrder = chapterOrder;
+        this.chapterName = chapterName;
+        this.chapterType = chapterType;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    @Generated(hash = 1142697545)
+    public ChapterEntity() {
     }
 
-    public List<MessageBean> getMessage() {
-        return message;
+    public Long getId() {
+        return this.id;
     }
 
-    public void setMessage(List<MessageBean> message) {
-        this.message = message;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public static class MessageBean {
-        /**
-         * chapterid : 2668827
-         * chapterorder : 18
-         * chaptername : 018.徐美惠的眼线真的是无孔不入，该清理了
-         * saleprice : 0
-         * size_c : 2019
-         * jsfree : 0
-         * paytype : 0
-         * content :     当看到快递送到她办公室的时候，苏曼是醉醉的。
+    public int getArticleId() {
+        return this.articleId;
+    }
 
-         她唇角无奈的轻扯，拧起外卖走出办公室，想着晏名爵办公室的方向而去，在路上还顺便捋了捋自己的额角，很有点故意打扮的意味儿。
+    public void setArticleId(int articleId) {
+        this.articleId = articleId;
+    }
 
-         打开门的那一刹那，晏名爵立马站起身来迎接，“亲爱的，辛苦了。”
+    public int getChapterId() {
+        return this.chapterId;
+    }
 
-         苏曼嘡的一声将门关上，将里面和外面完全的阻隔，然后她拧着外卖走向办公桌，看向晏名爵，说道：“你故意的吧？”
+    public void setChapterId(int chapterId) {
+        this.chapterId = chapterId;
+    }
 
-         晏名爵轻笑：“既然知道，又何必多说。”
+    public int getChapterOrder() {
+        return this.chapterOrder;
+    }
 
-         苏曼抽抽嘴角，说道：“你不觉得这样太假了吗？我们才结婚一天而已。”
+    public void setChapterOrder(int chapterOrder) {
+        this.chapterOrder = chapterOrder;
+    }
 
-         苏曼认真的看向晏名爵，提醒他。
+    public String getChapterName() {
+        return this.chapterName;
+    }
 
-         晏名爵扶着下巴，像是在等她说原因，又像是没有。
+    public void setChapterName(String chapterName) {
+        this.chapterName = chapterName;
+    }
 
-         突然，晏名爵说道：“好像是有点，那你回去吧，今天下午我都不会再找你，等到下班的时候我带你回家。”
+    public int getChapterType() {
+        return this.chapterType;
+    }
 
-         苏曼看向他，惊奇于他的反应。
+    public void setChapterType(int chapterType) {
+        this.chapterType = chapterType;
+    }
 
-         虽然她说的事情是合理的，但是晏名爵明显是要用最短的时间让徐美惠相信他们俩很好，所以不太会同意她的提议。
 
-         但是晏名爵居然同意了。
+    public int getSalePrice() {
+        return salePrice;
+    }
 
-         苏曼却是觉得有些惊奇，苏曼看着晏名爵，说道：“你不怕……”
+    public void setSalePrice(int salePrice) {
+        this.salePrice = salePrice;
+    }
 
-         晏名爵说道，“你说得对，我们这样太恩爱的确是有些假，我同意你的建议。”
+    public String getSizeC() {
+        return sizeC;
+    }
 
-         苏曼有些犹豫的看着，最终还是点了点头，走了出去。
+    public void setSizeC(String sizeC) {
+        this.sizeC = sizeC;
+    }
 
-         晏名爵也没有留她。
+    public int getJsFree() {
+        return jsFree;
+    }
 
-         可是刚走出办公室，她就发现徐美惠的眼线真的是无孔不入。
+    public void setJsFree(int jsFree) {
+        this.jsFree = jsFree;
+    }
 
-         刚刚回到办公室，徐美惠的电话就打来了，“曼曼，你怎么不陪名爵一起吃饭，你是他老婆。”
+    public int getPayType() {
+        return payType;
+    }
 
-         苏曼有些无奈的扶额，说道：“妈，我才跟晏名爵结婚一天，那些亲密的事情我觉得别扭。”
+    public void setPayType(int payType) {
+        this.payType = payType;
+    }
 
-         徐美惠不悦的开口，“傻孩子，你不这样，怎么培养跟名爵的感情，你赶紧去陪着名爵吧。”说着就挂断了电话。
+    public String getContent() {
+        return content;
+    }
 
-         苏曼看着手机，无奈的叹气。
-
-         徐美惠还真的是管的多。
-
-         她有些无奈的抽抽嘴角，权衡了一下，最后还是去了晏名爵的办公室。
-
-         看到她进来，晏名爵有些不解的看了看，却又像是知道了什么，立马又低下了头吃饭，什么也没问。
-
-         苏曼知道晏名爵知道为什么，晏名爵比她更了解徐美惠，所以徐美惠做了什么她一定知道。
-
-         苏曼只是不解。
-
-         苏曼抬头看了下晏名爵，问道：“你手底下的人给徐美惠通风报信，这样深入你的身边，你都不反感吗？”
-
-         晏名爵轻笑“有人这么关心我，我又何乐不为。”晏名爵从桌上扯过一张纸巾，擦了擦嘴角，看向她。
-
-         苏曼翻白眼，“晏名爵，你能不能好好说话。”
-
-         她用脚趾头也能想得出来晏名爵这话说的是反话，当中的苦涩以为她听不出来吗？
-
-         晏名爵却是轻笑：“你妈本事太大，无论我做了什么都有人给她通风报信，我也无可奈何。”
-
-         苏曼不高兴的说道：“直接把这告密的人开掉，并且杀鸡儆猴，看以后谁还敢给我妈报信。”
-
-         晏名爵只是轻笑，无奈摇头，什么都不说。
-
-         苏曼看向他，说道：“我说的是真的，你真要把你身边告密的人给清理了，以后我们才能有安生日子过。我可不想天天都要想着法的跟你秀恩爱。”
-
-         晏名爵却是轻笑，什么都不说。
-
-         苏曼见晏名爵并不动心一般，打定主意，就算晏名爵不干，她也要干。苏曼看向晏名爵，很肯定的说道：“我来把你身边告密的人给揪掉，看谁还敢天天没事的去打小报告。”苏曼是最恨这样的人。
-
-         苏曼说着，已经走了出去，要去揪这打小报告的人。她是一个说做就做的人。
-
-         她走后，权叔走进了晏名爵的办公室，问道：“刚刚我在门口听到少夫人要揪这打小报告的人，你真的让她做？”
-
-         晏名爵扬眉：“怎么不让她做，最好是揪出一两个打小报告的，杀鸡儆猴。”
-
-         权叔有些忧心的道：“你不怕老爷和夫人那边会有意见。”
-
-         晏名爵浮现一抹森冷，“我还就怕他们没有意见。我这身边早就该清理一下了。”
-
-         权叔眼神负责的看了看他，走了出去。
-
-         晏名爵坐在办公室，脸上寒若冰霜。
-
-         *************
-
-         苏曼打定主意要把这打小报告的人给揪出来，她便认真的做起来了。
-
-         首先，她去了总裁办公室独有的茶水间，因为她知道茶水间一向是个谈天说地，聊八卦，吐苦水的地方，所以这个地方总是能够探到些什么的。
-
-         可是她去了之后，发现一个人也没有。
-
-         苏曼坐在茶水间的茶几上，看着玻璃杯中的水，等着，总会有人来的。
-
-         可是，一整个下午，苏曼都是在孤独无聊中度过的。
-
-         茶水间有人来接水，可是他们接完就走了。
-
-         茶水间旁边就是洗手间。
-
-         苏曼惊奇的发现，晏名爵的助理们也算是训练有素的。
-
-         他们总是行色匆匆，接完水或者上完洗手间都是立马就闪人，苏曼想找个人聊天都不行。
-
-         苏曼就郁闷了。
-
-         就连早上帮着她整理办公室的李雪，今天下午见到她也说自己有事，赶紧的就去忙了。
-
-         苏曼最后终于死心，落寞的走去了晏名爵的办公室。
-
-         “晏名爵，我什么都没听到，也没探到。”苏曼有些无奈告诉晏名爵这件事。
-
-         晏名爵轻笑：“没事，再接再厉”
-
-         苏曼摇头，“一定是哪里有问题？要么是他们知道我要揪出告密的人，所以都绕着我走了。”苏曼脑洞大开。
-
-         晏名爵却是摇头，“我想他们只是在不确定你的目的之前，在观察你。”
-
-         “观察我？”苏曼有些吃惊。
-
-         晏名爵点头，肯定她的话，说道“你不要灰心，我给你个突破口吧。早上负责你办公室整理的李雪以后就做你的助理吧，你可以从她身上入手。”
-
-         苏曼惊奇的看向晏名爵，狂喜的站起来：“好好好，你把她给我，我一定从她身上套到话。”苏曼瞬间觉得信心大作。
-
-         等着吧，看她不把这告密的人揪出来，给徐美惠好看。
-         */
-
-        private String chapterid;
-        private String chapterorder;
-        private String chaptername;
-        private String saleprice;
-        private String size_c;
-        private String jsfree;
-        private String paytype;
-        private String content;
-
-        public String getChapterid() {
-            return chapterid;
-        }
-
-        public void setChapterid(String chapterid) {
-            this.chapterid = chapterid;
-        }
-
-        public String getChapterorder() {
-            return chapterorder;
-        }
-
-        public void setChapterorder(String chapterorder) {
-            this.chapterorder = chapterorder;
-        }
-
-        public String getChaptername() {
-            return chaptername;
-        }
-
-        public void setChaptername(String chaptername) {
-            this.chaptername = chaptername;
-        }
-
-        public String getSaleprice() {
-            return saleprice;
-        }
-
-        public void setSaleprice(String saleprice) {
-            this.saleprice = saleprice;
-        }
-
-        public String getSize_c() {
-            return size_c;
-        }
-
-        public void setSize_c(String size_c) {
-            this.size_c = size_c;
-        }
-
-        public String getJsfree() {
-            return jsfree;
-        }
-
-        public void setJsfree(String jsfree) {
-            this.jsfree = jsfree;
-        }
-
-        public String getPaytype() {
-            return paytype;
-        }
-
-        public void setPaytype(String paytype) {
-            this.paytype = paytype;
-        }
-
-        public String getContent() {
-            return content;
-        }
-
-        public void setContent(String content) {
-            this.content = content;
-        }
+    public void setContent(String content) {
+        this.content = content;
     }
 }

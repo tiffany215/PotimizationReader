@@ -5,7 +5,6 @@
       <module fileurl="file://$PROJECT_DIR$/PotimizationReader.iml" filepath="$PROJECT_DIR$/PotimizationReader.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/readerCore/readerCore.iml" filepath="$PROJECT_DIR$/readerCore/readerCore.iml" />
-      <module fileurl="file://$PROJECT_DIR$/readerdaogenerator/readerdaogenerator.iml" filepath="$PROJECT_DIR$/readerdaogenerator/readerdaogenerator.iml" />
     </modules>
   </component>
 </project>

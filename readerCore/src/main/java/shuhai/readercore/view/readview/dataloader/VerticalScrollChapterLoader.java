@@ -2,7 +2,6 @@ package shuhai.readercore.view.readview.dataloader;
 
 import java.util.Vector;
 
-import shuhai.readercore.view.readview.status.FlipStatus;
 import shuhai.readercore.view.readview.strategy.ComposingStrategy;
 
 /**
@@ -10,7 +9,7 @@ import shuhai.readercore.view.readview.strategy.ComposingStrategy;
  * @date 2017/7/6.
  */
 
-public class VerticalScrollChapterLoader implements ChapterLoaderImpl{
+public class VerticalScrollChapterLoader implements ChapterLoaderStrategyImpl {
 
 
     @Override
@@ -18,15 +17,6 @@ public class VerticalScrollChapterLoader implements ChapterLoaderImpl{
         return 0;
     }
 
-    @Override
-    public void clearPageCache() {
-
-    }
-
-    @Override
-    public void characterTypesetting(int chapterId, String key, FlipStatus status) {
-
-    }
 
     @Override
     public void setComposingStrategy(ComposingStrategy composingStrategy) {
@@ -36,5 +26,10 @@ public class VerticalScrollChapterLoader implements ChapterLoaderImpl{
     @Override
     public Vector<String> obtainPageContent(int chapterId, int page, String key) {
         return null;
+    }
+
+    @Override
+    public boolean hasChapter(int articleId, int chapterId) {
+        return false;
     }
 }

@@ -36,4 +36,8 @@ public interface ComposingStrategy {
     void clearPageCache();
 
 
+    boolean hasChapter(int articleId,int chapterId);
+
+
+
 }

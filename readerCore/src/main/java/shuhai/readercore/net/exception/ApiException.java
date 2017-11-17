@@ -2,7 +2,6 @@ package shuhai.readercore.net.exception;
 
 import android.net.ParseException;
 
-import com.google.gson.JsonParseException;
 
 import org.json.JSONException;
 
@@ -91,7 +90,7 @@ public class ApiException extends Exception{
                     break;
             }
             return ex;
-        } else if (e instanceof JsonParseException || e instanceof JSONException || e instanceof ParseException) {
+        } else if (e instanceof com.alibaba.fastjson.JSONException || e instanceof JSONException || e instanceof ParseException) {
             ex = new ApiException(e, ApiCode.Request.PARSE_ERROR);
             ex.message = "PARSE_ERROR";
             return ex;

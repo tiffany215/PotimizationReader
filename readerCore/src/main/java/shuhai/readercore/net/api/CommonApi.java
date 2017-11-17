@@ -11,14 +11,12 @@ import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.fastjson.FastJsonConverterFactory;
 import rx.Observable;
-import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import shuhai.readercore.Constants;
-import shuhai.readercore.bean.ChapterEntity;
 import shuhai.readercore.net.callback.ApiCallback;
 import shuhai.readercore.net.func.ApiErrorFunc;
 import shuhai.readercore.net.func.ApiFunc;
@@ -170,7 +168,9 @@ public class CommonApi {
 
         private String baseUrl;
 
-        private GsonConverterFactory gsonConverterFactory;
+//        private GsonConverterFactory gsonConverterFactory;
+        private FastJsonConverterFactory fastJsonConverterFactory;
+
         private RxJavaCallAdapterFactory rxJavaCallAdapterFactory;
         private HttpLoggingInterceptor httpLoggingInterceptor;
         private FixedParameterInterceptor fixedParameterInterceptor;
@@ -268,10 +268,10 @@ public class CommonApi {
 //                okHttpBuilder.addInterceptor(fixedParameterInterceptor);
 //            }
 
-            if(null == gsonConverterFactory){
-                gsonConverterFactory =  GsonConverterFactory.create();
+            if(null == fastJsonConverterFactory){
+                fastJsonConverterFactory =  FastJsonConverterFactory.create();
             }
-            retrofitBuild.addConverterFactory(gsonConverterFactory);
+            retrofitBuild.addConverterFactory(fastJsonConverterFactory);
 
             if(null == rxJavaCallAdapterFactory){
                 rxJavaCallAdapterFactory = RxJavaCallAdapterFactory.create();

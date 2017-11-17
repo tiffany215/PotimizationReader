@@ -1,10 +1,8 @@
 package shuhai.readercore.net.interceptor;
 
 
-import android.util.Log;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
+import com.alibaba.fastjson.JSON;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -21,9 +19,6 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import okio.Buffer;
 import shuhai.readercore.Constants;
-import shuhai.readercore.utils.StringUtils;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * @author 55345364
@@ -32,12 +27,12 @@ import static android.content.ContentValues.TAG;
 
 public class FixedParameterInterceptor implements Interceptor {
 
-    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-    private Gson mGson;
-
-    public FixedParameterInterceptor(){
-        mGson = new Gson();
-    }
+    public static final MediaType MT = MediaType.parse("application/json; charset=utf-8");
+//    private JSON mGson;
+//
+//    public FixedParameterInterceptor(){
+//        jsonToken = new Gson();
+//    }
 
     @Override
     public Response intercept(Chain chain) throws IOException {
@@ -70,7 +65,7 @@ public class FixedParameterInterceptor implements Interceptor {
                         String oldParamJson = mHttpUrl.queryParameter(Constants.PARAM);
                         //原始参数转hashmap
                         if (oldParamJson != null) {
-                            HashMap<String, Object> p = mGson.fromJson(oldParamJson, HashMap.class);
+                            HashMap<String, Object> p = com.alibaba.fastjson.JSON.parseObject(oldParamJson, HashMap.class);
                             if (p != null) {
                                 for (Map.Entry<String, Object> entry : p.entrySet()) {
                                       rootMap.put(entry.getKey(), entry.getValue());
@@ -84,7 +79,7 @@ public class FixedParameterInterceptor implements Interceptor {
                 //加上公共参数 hashmap
                 rootMap.put("publicParams", commonParamsMap);
                 //新的json参数
-                String newParamJson = mGson.toJson(rootMap);
+                String newParamJson = JSON.toJSONString(rootMap);
                 String url = mHttpUrl.toString();
                 int index = url.indexOf("?");
                 if (index > 0) {
@@ -102,8 +97,8 @@ public class FixedParameterInterceptor implements Interceptor {
                         commonParamsMap.put(((FormBody) body).encodedName(i), ((FormBody) body).encodedValue(i));
 
                     }
-                    newJsonParams = mGson.toJson(commonParamsMap);
-                    request = request.newBuilder().post(RequestBody.create(JSON,newJsonParams)).build();
+                    newJsonParams = JSON.toJSONString(commonParamsMap);
+                    request = request.newBuilder().post(RequestBody.create(MT,newJsonParams)).build();
                 }else if(body instanceof MultipartBody){
 //                    for (int i = 0; i <((MultipartBody)body).size() ; i++) {
 //                        commonParamsMap.put("" + i,  ((MultipartBody)body).part(0).toString());
@@ -117,12 +112,12 @@ public class FixedParameterInterceptor implements Interceptor {
                     Buffer buffer = new Buffer();
                     body.writeTo(buffer);
                     String oldJsonParams = buffer.readUtf8();
-                    commonParamsMap = mGson.fromJson(oldJsonParams, HashMap.class); // 原始参数
+                    commonParamsMap = JSON.parseObject(oldJsonParams, HashMap.class); // 原始参数
                     commonParamsMap.put("publicParams", commonParamsMap.toString()); // 重新组装
                 }
 
             }
-        } catch (JsonSyntaxException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return chain.proceed(request);

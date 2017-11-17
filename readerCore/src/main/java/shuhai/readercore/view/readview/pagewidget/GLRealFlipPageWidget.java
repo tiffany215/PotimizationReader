@@ -6,11 +6,9 @@ import android.os.Message;
 import com.eschao.android.widget.pageflip.OnPageFlipListener;
 import com.eschao.android.widget.pageflip.Page;
 import com.eschao.android.widget.pageflip.PageFlipState;
+import com.kingja.loadsir.core.LoadService;
 
-import shuhai.readercore.utils.StringUtils;
 import shuhai.readercore.view.readview.displayview.GLHorizontalBaseReadView;
-import shuhai.readercore.view.readview.displayview.OnReadStateChangeListener;
-import shuhai.readercore.view.readview.status.FlipStatus;
 
 /**
  * @author 55345364
@@ -18,28 +16,11 @@ import shuhai.readercore.view.readview.status.FlipStatus;
  */
 
 public class GLRealFlipPageWidget extends GLHorizontalBaseReadView implements OnPageFlipListener {
-    private int pageSize = 1;
-    public GLRealFlipPageWidget(Context context,int bookId, int chapterId,OnReadStateChangeListener listener) {
-        super(context,bookId,chapterId,listener);
+
+    public GLRealFlipPageWidget(Context context,LoadService loadService) {
+        super(context,loadService);
         mPageFlip.setListener(this);
-        this.pageSize = mPageSize;
     }
-
-    @Override
-    public void startAnimation() {
-
-    }
-
-    @Override
-    public void abortAnimation() {
-
-    }
-
-    @Override
-    public void restoreAnimation() {
-
-    }
-
 
 
     /**
@@ -67,12 +48,13 @@ public class GLRealFlipPageWidget extends GLHorizontalBaseReadView implements On
                 if (state == PageFlipState.END_WITH_BACKWARD) {
                     // don't do anything on page number since mPageNo is always
                     // represents the FIRST_TEXTURE no;
-                    pageSize --;
+//                    mPageFlip.getSecondPage().setSecondTextureWithFirst();
+                    factory.autoReduce();
                 }
                 // update page number and switch textures for forward flip
                 else if (state == PageFlipState.END_WITH_FORWARD) {
                     mPageFlip.getFirstPage().setFirstTextureWithSecond();
-                    pageSize ++;
+                    factory.autoIncrease();
                 }
 
                 mDrawCommand = DRAW_FULL_PAGE;
@@ -88,7 +70,7 @@ public class GLRealFlipPageWidget extends GLHorizontalBaseReadView implements On
      * Draw frame
      */
     @Override
-    public void onDrawFrame(int chapterId) {
+    public void onDrawFrames() {
         // 1. delete unused textures
         mPageFlip.deleteUnusedTextures();
         Page page = mPageFlip.getFirstPage();
@@ -102,13 +84,13 @@ public class GLRealFlipPageWidget extends GLHorizontalBaseReadView implements On
                 //检查第一页的第二个纹理是否有效，如果没有，
                 //创建新的
                 if (!page.isSecondTextureSet()) {
-                    drawPage(chapterId,pageSize + 1);
+                    factory.nextPage(mCanvas);
                     page.setSecondTexture(mBitmap);
                 }
             }
             // 在向后翻页，第一页的第一个纹理检查是有效的
             else if (!page.isFirstTextureSet()) {
-                drawPage(chapterId, pageSize  - 1);
+                factory.prePage(mCanvas);
                 page.setFirstTexture(mBitmap);
             }
 
@@ -118,8 +100,8 @@ public class GLRealFlipPageWidget extends GLHorizontalBaseReadView implements On
         }
         // 画平静的页面而不翻转
         else if (mDrawCommand == DRAW_FULL_PAGE) {
-            if (!page.isFirstTextureSet()) {
-                drawPage(chapterId,pageSize);
+            if (!page.isFirstTextureSet() || !page.isSecondTextureSet()) {
+                factory.curPage(mCanvas);
                 page.setFirstTexture(mBitmap);
             }
             mPageFlip.drawPageFrame();
@@ -135,22 +117,16 @@ public class GLRealFlipPageWidget extends GLHorizontalBaseReadView implements On
         mHandler.sendMessage(msg);
     }
 
-    @Override
-    public void drawPage(int chapterId,int pageSize) {
-        factory.getPageContent(chapterId,pageSize, StringUtils.cacheKeyCreate(mBookId,chapterId));
-        factory.setPageSize(pageSize);
-        factory.onDraw(mCanvas);
-    }
 
 
     @Override
     public boolean canFlipForward() {
-        return (pageSize < factory.getCountPage());
+        return (factory.getPageSize() <= factory.getCountPage());
     }
 
     @Override
     public boolean canFlipBackward() {
-        if (pageSize > 1) {
+        if (factory.getPageSize() >= 1) {
             mPageFlip.getFirstPage().setSecondTextureWithFirst();
             return true;
         }else {

@@ -42,8 +42,22 @@ public class Constants {
         public final static int LEVEL_SCROLLER_FLIP = 1;
         public final static int LEVEL_REAL_FLIP = 2;
         public final static int LEVEL_NO_FLIP = 3;
+    }
+
+    /**
+     * 章节类型 0代表章节 1代表分卷
+     */
+    public static final class CHAP_TYPE{
+        public final static int CHAPTER = 0;
+        public final static int VOLUME = 1;
+    }
 
 
+    public static final class RESPONSE_CODE{
+
+        public final static String LOAD_SUCCESS = "0000";
+        public final static String LOAD_FAILURE = "0001";
+        public final static String NO_PRE_PAGE = "0017";
 
     }
 

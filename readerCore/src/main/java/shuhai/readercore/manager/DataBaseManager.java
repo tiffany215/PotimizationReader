@@ -2,17 +2,17 @@ package shuhai.readercore.manager;
 
 import android.database.sqlite.SQLiteDatabase;
 
+import org.greenrobot.greendao.query.Query;
+
 import java.util.List;
 
-import de.greenrobot.dao.query.Query;
-import shuhai.readercore.dao.BookInfoEntity;
-import shuhai.readercore.dao.BookInfoEntityDao;
-import shuhai.readercore.dao.ChapterEntity;
-import shuhai.readercore.dao.ChapterEntityDao;
-import shuhai.readercore.dao.DaoMaster;
-import shuhai.readercore.dao.DaoSession;
-import shuhai.readercore.dao.MarkEntityDao;
-import shuhai.readercore.utils.AppUtils;
+import shuhai.readercore.bean.BookEntity;
+import shuhai.readercore.bean.ChapterEntity;
+import shuhai.readercore.greendao.gen.BookEntityDao;
+import shuhai.readercore.greendao.gen.BookMarkEntityDao;
+import shuhai.readercore.greendao.gen.ChapterEntityDao;
+import shuhai.readercore.greendao.gen.DaoMaster;
+import shuhai.readercore.greendao.gen.DaoSession;
 import shuhai.readercore.utils.Utils;
 import shuhai.readercore.view.readview.status.FlipStatus;
 
@@ -28,9 +28,9 @@ public class DataBaseManager {
     private DaoMaster.DevOpenHelper devOpenHelper;
     private SQLiteDatabase db;
 
-    private BookInfoEntityDao bookInfoEntityDao;
+    private BookEntityDao bookEntityDao;
     private ChapterEntityDao chapterEntityDao;
-    private MarkEntityDao markEntityDao;
+    private BookMarkEntityDao markEntityDao;
 
     private static final String DB_NAME = "shuhaios.db";
 
@@ -41,9 +41,9 @@ public class DataBaseManager {
         master = new DaoMaster(db);
         session = master.newSession();
 
-        bookInfoEntityDao = session.getBookInfoEntityDao();
+        bookEntityDao = session.getBookEntityDao();
         chapterEntityDao = session.getChapterEntityDao();
-        markEntityDao = session.getMarkEntityDao();
+        markEntityDao = session.getBookMarkEntityDao();
 
     }
 
@@ -73,14 +73,15 @@ public class DataBaseManager {
     public DaoMaster getDaoMaster() {
         return master;
     }
+
+
     /**
      * 书籍基本信息插入
-     *
-     * @param bookInfoEntity
+     * @param bookEntity
      * @return
      */
-    public long insertBookInfo(BookInfoEntity bookInfoEntity) {
-        return bookInfoEntityDao.insertOrReplace(bookInfoEntity);
+    public long insertBookInfo(BookEntity bookEntity) {
+        return bookEntityDao.insertOrReplace(bookEntity);
     }
 
 
@@ -88,8 +89,8 @@ public class DataBaseManager {
      * 查询书籍信息
      * @return
      */
-    public List<BookInfoEntity> queryBookInfoList(){
-        Query<BookInfoEntity> queryBuilder = bookInfoEntityDao.queryBuilder().build();
+    public List<BookEntity> queryBookInfoList(){
+        Query<BookEntity> queryBuilder = bookEntityDao.queryBuilder().build();
         return queryBuilder.list();
     }
 
@@ -113,7 +114,7 @@ public class DataBaseManager {
     public ChapterEntity queryChapterInfo(int order) {
         ChapterEntity queryBuilder;
         try {
-            queryBuilder = chapterEntityDao.queryBuilder().where(ChapterEntityDao.Properties.Chiporder.eq(order)).build().uniqueOrThrow();
+            queryBuilder = chapterEntityDao.queryBuilder().where(ChapterEntityDao.Properties.ChapterOrder.eq(order)).build().uniqueOrThrow();
         } catch (Exception e) {
             queryBuilder = null;
         }
@@ -130,7 +131,7 @@ public class DataBaseManager {
 
         ChapterEntity queryBuilder;
         try {
-            queryBuilder = chapterEntityDao.queryBuilder().where(ChapterEntityDao.Properties.Chpid.eq(chapterId)).build().uniqueOrThrow();
+            queryBuilder = chapterEntityDao.queryBuilder().where(ChapterEntityDao.Properties.ChapterId.eq(chapterId)).build().uniqueOrThrow();
         } catch (Exception e) {
             queryBuilder = null;
         }
@@ -138,38 +139,38 @@ public class DataBaseManager {
         if(null == queryBuilder){
             return "";
         }
-        return queryBuilder.getChpnamme();
+        return queryBuilder.getChapterName();
     }
 
     /**
      * 查询下一章是否有章节信息
      * @param chapterType
-     * @param articleid
+     * @param articleId
      * @param chapterOrder
      * @param status
      * @return
      */
-    public ChapterEntity queryNextChapterInfo(int chapterType, int articleid, int chapterOrder, FlipStatus status) {
+    public ChapterEntity queryNextChapterInfo(int chapterType, int articleId, int chapterOrder, FlipStatus status) {
 
         String where;
         switch (status) {
             case ON_FLIP_PRE:
-                where = " where CHPTYPE = ? and ARTICLEID = ? and CHIPORDER < ? order by CHIPORDER desc limit 1 ";
+                where = " where CHAPTER_TYPE = ? and ARTICLE_ID = ? and CHAPTER_ORDER < ? order by CHAPTER_ORDER desc limit 1 ";
                 break;
             case ON_FLIP_CUR:
-                where = " where CHPTYPE = ? and  ARTICLEID = ? and CHIPORDER = ? ";
+                where = " where CHAPTER_TYPE = ? and  ARTICLE_ID = ? and CHAPTER_ORDER = ? ";
                 break;
 
             case ON_FLIP_NEXT:
-                where = " where CHPTYPE = ? and ARTICLEID = ? and CHIPORDER > ? order by CHIPORDER asc limit 1 ";
+                where = " where CHAPTER_TYPE = ? and ARTICLE_ID = ? and CHAPTER_ORDER > ? order by CHAPTER_ORDER asc limit 1 ";
                 break;
 
             default:
-                where = "where CHPTYPE = ? and ARTICLEID = ? and CHIPORDER < ? order by CHIPORDER desc limit 1 ";
+                where = "where CHAPTER_TYPE = ? and ARTICLE_ID = ? and CHAPTER_ORDER < ? order by CHAPTER_ORDER desc limit 1 ";
                 break;
         }
         List<ChapterEntity> list = DataBaseManager.getInstance().getDaoSession().queryRaw(ChapterEntity.class, where, new String[]{
-                String.valueOf(chapterType), String.valueOf(articleid), String.valueOf(chapterOrder)});
+                String.valueOf(chapterType), String.valueOf(articleId), String.valueOf(chapterOrder)});
         if (null == list || list.size() == 0) {
             return null;
         }

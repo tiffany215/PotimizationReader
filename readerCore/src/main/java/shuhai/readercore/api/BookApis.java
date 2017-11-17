@@ -78,6 +78,13 @@ public class BookApis {
             case ON_FLIP_NEXT:
                 params.put("order", formatParams(2));
                 break;
+            case ON_NEXT_CHAPTER_FIRST_PAGE:
+                params.put("order", formatParams(2));
+                break;
+
+            case ON_PRE_CHAPTER_LAST_PAGE:
+                params.put("order", formatParams(1));
+                break;
 
         }
         params.put("articleid", formatParams(articleId));

@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'org.greenrobot.greendao'
 
 android {
     compileSdkVersion 26
@@ -7,7 +8,7 @@ android {
     defaultConfig {
         applicationId "shuhai.readercore"
         minSdkVersion 16
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
 
@@ -38,6 +39,13 @@ android {
         }
     }
 
+    greendao {
+        schemaVersion 1
+        daoPackage 'shuhai.readercore.greendao.gen'
+        targetGenDir 'src/main/java'
+        //targetGenDirTest：设置生成单元测试目录
+        //generateTests：设置自动生成单元测试用例
+    }
 }
 
 
@@ -61,7 +69,7 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.jakewharton:disklrucache:2.0.2'
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+//    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile 'com.squareup.retrofit2:converter-scalars:2.1.0'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.0.1'
     compile 'com.squareup.okhttp3:okhttp:3.2.0'
@@ -69,10 +77,16 @@ dependencies {
     compile 'io.reactivex:rxjava:1.1.5'
     compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
     compile 'javax.inject:javax.inject:1'
-    compile 'de.greenrobot:greendao:2.1.0'
+
+    compile 'org.greenrobot:greendao:3.2.2'
+
+    compile 'com.alibaba:fastjson:1.1.65.android'
+    compile 'org.ligboy.retrofit2:converter-fastjson-android:2.1.0'
+
+
     compile 'com.jude:easyrecyclerview:4.4.0'
     compile 'com.github.bumptech.glide:glide:3.6.1'
-    compile 'com.android.support:appcompat-v7:26.0.0-alpha1'
+    compile 'com.android.support:appcompat-v7:26.0.0-beta1'
     compile 'com.android.support:recyclerview-v7:26.0.0-alpha1'
     compile 'com.android.support:cardview-v7:26.0.0-alpha1'
     compile 'com.android.support:design:26.0.0-alpha1'
@@ -84,6 +98,5 @@ dependencies {
     compile 'com.github.eschao:android-PageFlip:1.0.2'
     compile 'com.kingja.loadsir:loadsir:1.2.0'
     testCompile 'junit:junit:4.12'
-
 
 }

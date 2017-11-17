@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import shuhai.readercore.utils.AppUtils;
 import shuhai.readercore.utils.Utils;
 
+import static shuhai.readercore.Constants.FLIP_CONFIG.LEVEL_COVER_FLIP;
+
 /**
  * @author 55345364
  * @date 2017/10/24.
@@ -48,7 +50,7 @@ public class ReaderSP {
      * @return
      */
     public int getFlipModel(){
-        return sp.getInt("read_flip_mode",0);
+        return sp.getInt("read_flip_mode",LEVEL_COVER_FLIP);
     }
 
 

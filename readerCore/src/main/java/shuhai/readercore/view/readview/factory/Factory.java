@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
 import shuhai.readercore.view.readview.status.BookStatus;
-import shuhai.readercore.view.readview.dataloader.ChapterLoaderImpl;
+import shuhai.readercore.view.readview.dataloader.ChapterLoaderStrategyImpl;
 import shuhai.readercore.view.readview.status.FlipStatus;
 
 /**
@@ -21,23 +21,32 @@ public abstract class Factory {
      * @param <T>
      * @return
      */
-    public abstract <T extends ChapterLoaderImpl> T createChapterLoader(Class<T> clz);
+    public static <T extends ChapterLoaderStrategyImpl> T createChapterLoader(Class<T> clz) {
+        ChapterLoaderStrategyImpl chapterLoader = null;
+        try {
+            chapterLoader = (ChapterLoaderStrategyImpl) Class.forName(clz.getName()).newInstance();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return (T) chapterLoader;
+    }
 
-    /**
-     * 获取上一章内容
-     */
-    public abstract void preChapter();
 
-    /**
-     * 获取当前章节内容
-     */
-    public abstract void curChapter();
+    public abstract boolean prePage(Canvas canvas);
 
-    /**
-     * 获取下一章节内容
-     */
-    public abstract void nextChapter();
+    public abstract boolean curPage(Canvas canvas);
 
+    public abstract boolean nextPage(Canvas canvas);
+
+    public abstract void autoIncrease();
+
+    public abstract void autoReduce();
+
+    public abstract void postInvalidatePage(Canvas canvas,FlipStatus status);
 
     /**
      * 绘制章节内容到指定的Canvas中
@@ -62,29 +71,23 @@ public abstract class Factory {
     public abstract BookStatus openBook(int articleID, int chapterId, int chapterOrder,FlipStatus status);
 
 
-    /**
-     * 获取当前章中页数
-     * @return
-     */
+//    /**
+//     * 获取当前章中页数
+//     * @return
+//     */
     public abstract int getCountPage();
 
+
+    public abstract int getPageSize();
+//
+//
+//    public abstract String getChapterName();
 
     public abstract void setAlpha(int alpha);
 
 
-    /**
-     * 设置当前页码
-     */
-    public abstract void setPageSize(int pageSize);
 
 
-    /**
-     * 获取指定页码内容
-     * @param pageSize 指定页码
-     * @param key 获取缓存内容 需要的键值
-     * @return 获取缓存的状态，获取成功或失败！
-     */
-    public abstract BookStatus getPageContent(int chapterId,int pageSize,String key);
 
 
 }

@@ -3,8 +3,9 @@ package shuhai.readercore.view.readview.pagewidget;
 import android.content.Context;
 import android.graphics.Canvas;
 
+import com.kingja.loadsir.core.LoadService;
+
 import shuhai.readercore.view.readview.displayview.HorizontalBaseReadView;
-import shuhai.readercore.view.readview.displayview.OnReadStateChangeListener;
 import shuhai.readercore.view.readview.status.FlipStatus;
 import shuhai.readercore.view.readview.factory.Factory;
 
@@ -20,8 +21,8 @@ import shuhai.readercore.view.readview.factory.Factory;
 public class NoEffectFlipPageWidget extends HorizontalBaseReadView {
 
 
-    public NoEffectFlipPageWidget(Context context, int bookId, int chapterId,OnReadStateChangeListener listener) {
-        super(context, bookId, chapterId,listener);
+    public NoEffectFlipPageWidget(Context context,LoadService loadService) {
+        super(context,loadService);
     }
 
     @Override
@@ -48,23 +49,6 @@ public class NoEffectFlipPageWidget extends HorizontalBaseReadView {
     protected void fadePageArea(Factory factory) {
 
     }
-
-    @Override
-    public void startAnimation() {
-
-    }
-
-    @Override
-    public void abortAnimation() {
-
-    }
-
-    @Override
-    public void restoreAnimation() {
-
-    }
-
-
 
 
     @Override

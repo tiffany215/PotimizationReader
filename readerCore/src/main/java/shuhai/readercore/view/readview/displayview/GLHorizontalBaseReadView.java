@@ -17,6 +17,7 @@ import com.eschao.android.widget.pageflip.Page;
 import com.eschao.android.widget.pageflip.PageFlip;
 import com.eschao.android.widget.pageflip.PageFlipException;
 import com.eschao.android.widget.pageflip.PageFlipState;
+import com.kingja.loadsir.core.LoadService;
 
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -24,9 +25,11 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import shuhai.readercore.manager.ThemeManager;
+import shuhai.readercore.ui.dialog.callback.LoadingCallback;
 import shuhai.readercore.ui.sharedp.UserSP;
 import shuhai.readercore.utils.ScreenUtils;
 import shuhai.readercore.utils.StringUtils;
+import shuhai.readercore.view.readview.dataloader.HorizontalScrollChapterLoader;
 import shuhai.readercore.view.readview.factory.Factory;
 import shuhai.readercore.view.readview.factory.PageFactory;
 import shuhai.readercore.view.readview.status.BookStatus;
@@ -60,18 +63,14 @@ public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements 
     protected final static int DRAW_FULL_PAGE = 2;
 
     protected int mDrawCommand;
-    protected int mBookId;
-    private int mChapterId;
 
     protected Factory factory;
+    private LoadService mLoadService;
 
-    public GLHorizontalBaseReadView(Context context,int bookId, int chapterId,OnReadStateChangeListener listener) {
+    public GLHorizontalBaseReadView(Context context, LoadService loadService) {
         super(context);
-        this.mBookId = bookId;
-        this.mChapterId = chapterId;
-
+        this.mLoadService = loadService;
         newHandler();
-
         mPageFlip = new PageFlip(context);
         mPageFlip.setSemiPerimeterRatio(0.8f)
                 .setShadowWidthOfFoldEdges(5, 60, 0.3f)
@@ -79,10 +78,6 @@ public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements 
                 .setPixelsOfMesh(10)
                 .enableAutoPage(true);
         setEGLContextClientVersion(2);
-
-
-
-
 
         mDrawLock = new ReentrantLock();
         setRenderer(this);
@@ -92,18 +87,14 @@ public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements 
         mCanvas = new Canvas(mBitmap);
         mDrawCommand = DRAW_FULL_PAGE;
 
-        factory = new PageFactory(context);
-        ((PageFactory)factory).setChapterLoader();
-        ((PageFactory)factory).setComposingStrategy();
-        ((PageFactory) factory).setOnReadStateChangeListener(listener);
+        factory = new PageFactory.Builder(context)
+                .setLoadStrategy(HorizontalScrollChapterLoader.class)
+                .setComposingStrategy()
+                .setOnReaderLoadingListener(new GLOnReaderLoadingListener())
+                .builder();
 
-        initParams();
     }
 
-    private void initParams(){
-        mBookStatus = BookStatus.START_LOAD_SUCCESS;
-        mPageSize = UserSP.getInstance().getLastReaderPage(mBookId);
-    }
 
     @Override
     public void init(int theme) {
@@ -117,33 +108,15 @@ public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements 
             Toast.makeText(getContext(),"章节内容打开失败！",Toast.LENGTH_LONG).show();
             return;
         }
-
-        switch (mBookStatus) {
-            //第一次打开书籍
-            case CUR_CHAPTER_LOAD_SUCCESS:
-                //如果当前页等于章节第一页,绘制第一页内容和上一章最后一页内容
-                //如果当前页等于章节最后一页，绘制最后一页内容和下一章第一页内容
-                pageCount = factory.getCountPage();
-                drawPage(mChapterId,mPageSize);
-                break;
-            case PRE_CHAPTER_LOAD_SUCCESS:
-                drawPage(mChapterId,mPageSize);
-                break;
-            //下一章内容加载成功后
-            case NEXT_CHAPTER_LOAD_SUCCESS:
-                drawPage(mChapterId,mPageSize);
-                break;
-        }
+        factory.curPage(mCanvas);
         requestRender();
     }
 
 
 
-    public abstract void onDrawFrame(int chapterId);
+    public abstract void onDrawFrames();
 
     public abstract boolean onEndedDrawing(int what);
-
-    public abstract  void drawPage(int chapterId,int pageSize);
 
     public synchronized void closeBook(){
 
@@ -227,9 +200,45 @@ public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements 
     public void onDrawFrame(GL10 gl10) {
         try {
             mDrawLock.lock();
-            onDrawFrame(mChapterId);
+            onDrawFrames();
         }finally {
             mDrawLock.unlock();
+        }
+    }
+
+    /**
+     * 阅读章节加载状态监听器
+     */
+    private class GLOnReaderLoadingListener implements OnReaderLoadingListener{
+
+        @Override
+        public void postInvalidatePage() {
+            postInvalidate();
+        }
+
+        @Override
+        public void onStartLoading() {
+            if(null != mLoadService){
+                mLoadService.showCallback(LoadingCallback.class);
+            }
+        }
+
+        @Override
+        public void onEndLoading() {
+            if(null != mLoadService){
+                mLoadService.showSuccess();
+            }
+        }
+
+
+        @Override
+        public void onDrawPositionPage(FlipStatus flipStatus) {
+            factory.postInvalidatePage(mCanvas,flipStatus);
+        }
+
+        @Override
+        public void onPageStatus(BookStatus bookStatus) {
+
         }
     }
 

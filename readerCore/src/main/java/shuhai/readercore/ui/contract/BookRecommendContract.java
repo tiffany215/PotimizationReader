@@ -12,7 +12,7 @@ public interface BookRecommendContract {
 
 
     interface View extends BaseContract.BaseView{
-
+        void postView();
     }
 
 

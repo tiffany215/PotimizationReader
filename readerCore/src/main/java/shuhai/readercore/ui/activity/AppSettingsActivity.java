@@ -13,6 +13,7 @@ import butterknife.OnClick;
 import shuhai.readercore.Constants;
 import shuhai.readercore.R;
 import shuhai.readercore.base.BaseActivity;
+import shuhai.readercore.utils.ActivityUtils;
 import shuhai.readercore.utils.AppUtils;
 import shuhai.readercore.utils.UrlUtils;
 
@@ -90,7 +91,7 @@ public class AppSettingsActivity extends BaseActivity implements View.OnClickLis
                 mContext.startActivity(intent);
                 break;
             case R.id.action_home:
-
+                ActivityUtils.finishAllActivities();
                 break;
 
             case android.R.id.home:

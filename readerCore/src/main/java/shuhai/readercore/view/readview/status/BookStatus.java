@@ -1,5 +1,4 @@
 package shuhai.readercore.view.readview.status;
-
 /**
  * @author 55345364
  * @date 2017/7/6.
@@ -8,6 +7,7 @@ package shuhai.readercore.view.readview.status;
 public enum BookStatus {
 
     NO_PRE_PAGE,
+    NO_CUR_PAGE,
     NO_NEXT_PAGE,
 
 
@@ -20,8 +20,10 @@ public enum BookStatus {
     NEXT_CHAPTER_LOAD_FAILURE,
     NEXT_CHAPTER_LOAD_SUCCESS,
 
-    START_LOAD_SUCCESS,
-    LOAD_SUCCESS
+    LOAD_START,
+    LOAD_COMPLETE,
+    LOAD_SUCCESS,
+    LOAD_ERROR
 
 
 }

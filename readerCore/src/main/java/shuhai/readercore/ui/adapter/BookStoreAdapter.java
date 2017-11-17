@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
 import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
 
-import shuhai.readercore.bean.BookInfoEntity;
+import shuhai.readercore.bean.BookEntity;
 import shuhai.readercore.ui.holder.BookStoreHolder;
 
 /**
@@ -14,7 +14,7 @@ import shuhai.readercore.ui.holder.BookStoreHolder;
  * @date 2017/8/3.
  */
 
-public class BookStoreAdapter extends RecyclerArrayAdapter<BookInfoEntity.MessageBean>{
+public class BookStoreAdapter extends RecyclerArrayAdapter<BookEntity>{
 
 
     public BookStoreAdapter(Context context) {

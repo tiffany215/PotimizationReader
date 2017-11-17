@@ -7,8 +7,9 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.Shader;
 
+import com.kingja.loadsir.core.LoadService;
+
 import shuhai.readercore.view.readview.displayview.HorizontalBaseReadView;
-import shuhai.readercore.view.readview.displayview.OnReadStateChangeListener;
 import shuhai.readercore.view.readview.status.FlipStatus;
 import shuhai.readercore.view.readview.factory.Factory;
 
@@ -24,8 +25,8 @@ public class LevelCoverFlipPageWidget extends HorizontalBaseReadView {
 
     private static final String TAG = "LevelCoverFlipPageWidget";
 
-    public LevelCoverFlipPageWidget(Context context, int bookId, int chapterId, OnReadStateChangeListener listener) {
-        super(context, bookId, chapterId,listener);
+    public LevelCoverFlipPageWidget(Context context, LoadService loadService) {
+       super(context,loadService);
     }
 
     @Override
@@ -64,21 +65,6 @@ public class LevelCoverFlipPageWidget extends HorizontalBaseReadView {
 
     @Override
     protected void fadePageArea(Factory factory) {
-
-    }
-
-    @Override
-    public void startAnimation() {
-
-    }
-
-    @Override
-    public void abortAnimation() {
-
-    }
-
-    @Override
-    public void restoreAnimation() {
 
     }
 

@@ -1,1 +1,1 @@
-include ':app', ':readerCore', ':readerdaogenerator'
+include ':app', ':readerCore'

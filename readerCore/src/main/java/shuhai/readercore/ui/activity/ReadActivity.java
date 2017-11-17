@@ -1,6 +1,5 @@
 package shuhai.readercore.ui.activity;
 
-import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -15,16 +14,13 @@ import butterknife.InjectView;
 import shuhai.readercore.Constants;
 import shuhai.readercore.R;
 import shuhai.readercore.base.BaseActivity;
-import shuhai.readercore.manager.ChapterLoader;
 import shuhai.readercore.manager.ThemeManager;
 import shuhai.readercore.ui.contract.BookReadContract;
-import shuhai.readercore.ui.dialog.callback.LoadingCallback;
 import shuhai.readercore.ui.presenter.BookReadPresenter;
 import shuhai.readercore.ui.sharedp.ReaderSP;
 import shuhai.readercore.ui.sharedp.UserSP;
 import shuhai.readercore.utils.ActivityUtils;
 import shuhai.readercore.view.readview.displayview.BaseReadViewImpl;
-import shuhai.readercore.view.readview.displayview.OnReadStateChangeListener;
 import shuhai.readercore.view.readview.pagewidget.GLRealFlipPageWidget;
 import shuhai.readercore.view.readview.pagewidget.LevelCoverFlipPageWidget;
 import shuhai.readercore.view.readview.pagewidget.LevelScrollFlipPageWidget;
@@ -81,13 +77,13 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View{
             @Override
             public void onReload(View v) {
 //              loadService.showCallback(LoadingCallback.class);
-//                loadService.showSuccess();
+//              loadService.showSuccess();
             }
         });
         mFlipMark = 0;
         initPagerWidget();
         mPresenter.attachView(this);
-        mPresenter.getBookMixAToc();
+        mPageWidget.openBook(mBookId,mChapterId,UserSP.getInstance().getLastReaderChapterOrder(mBookId),FlipStatus.ON_FLIP_CUR);
     }
 
 
@@ -97,16 +93,16 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View{
     private void initPagerWidget(){
         switch (ReaderSP.getInstance().getFlipModel()) {
             case Constants.FLIP_CONFIG.LEVEL_NO_FLIP:
-                new NoEffectFlipPageWidget(this,mBookId,mChapterId,new ReadListener());
+                new NoEffectFlipPageWidget(this,loadService);
                 break;
             case Constants.FLIP_CONFIG.LEVEL_COVER_FLIP:
-                mPageWidget = new LevelCoverFlipPageWidget(this,mBookId,mChapterId,new ReadListener());
+                mPageWidget = new LevelCoverFlipPageWidget(this,loadService);
                 break;
             case Constants.FLIP_CONFIG.LEVEL_SCROLLER_FLIP:
-                mPageWidget = new LevelScrollFlipPageWidget(this,mBookId,mChapterId,new ReadListener());
+                mPageWidget = new LevelScrollFlipPageWidget(this,loadService);
                 break;
             case Constants.FLIP_CONFIG.LEVEL_REAL_FLIP:
-                mPageWidget = new GLRealFlipPageWidget(this,mBookId,mChapterId,new ReadListener());
+                mPageWidget = new GLRealFlipPageWidget(this,loadService);
                 break;
         }
         mPageWidget.init(ThemeManager.CLASSICAL);
@@ -115,22 +111,11 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View{
     }
 
 
-    /**
-     * 获取当前章节内容
-     */
-    public void readCurrentChapter(){
-        String str = ChapterLoader.getChapter(mBookId+""+mChapterId);
-        if(!TextUtils.isEmpty(str)){
-            showChapterRead(mChapterId,FlipStatus.ON_FLIP_CUR);
-        }else{
-            mPresenter.getChapterRead(mBookId,mChapterId,mChapterOrder,FlipStatus.ON_FLIP_CUR);
-        }
-    }
 
 
     @Override
     public void showBookToc() {
-        readCurrentChapter();
+
     }
 
 
@@ -157,38 +142,6 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View{
     @Override
     public void complete() {
 
-    }
-
-
-
-    /**
-     * 阅读状态监听
-     */
-    private class ReadListener implements OnReadStateChangeListener{
-
-        @Override
-        public void onChapterChanged(int chapterId,int chapterOrder,FlipStatus status) {
-            mPresenter.getChapterRead(mBookId,chapterId,chapterOrder,status);
-        }
-
-        @Override
-        public void onPageChanged(int chapterId,int chapterOrder, FlipStatus status) {
-            mPageWidget.openBook(mBookId,chapterId, chapterOrder,status);
-        }
-
-        @Override
-        public void onStartLoadChapter() {
-            if(null != loadService){
-                loadService.showCallback(LoadingCallback.class);
-            }
-        }
-
-        @Override
-        public void onSuccessLoadChapter() {
-            if(null != loadService){
-                loadService.showSuccess();
-            }
-        }
     }
 
     @Override

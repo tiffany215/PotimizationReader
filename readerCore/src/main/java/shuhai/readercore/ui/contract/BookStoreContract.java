@@ -3,7 +3,9 @@ package shuhai.readercore.ui.contract;
 import java.util.List;
 
 import shuhai.readercore.base.BaseContract;
-import shuhai.readercore.dao.BookInfoEntity;
+import shuhai.readercore.bean.BookBean;
+import shuhai.readercore.bean.BookEntity;
+//import shuhai.readercore.dao.BookInfoEntity;
 
 /**
  * @author 55345364
@@ -23,7 +25,7 @@ public interface BookStoreContract {
 
     interface Presenter<T> extends BaseContract.BasePresenter<T>{
 
-        List<BookInfoEntity> getShelfBookList();
+        List<BookEntity> getShelfBookList();
 
     }
 

@@ -2,7 +2,6 @@ package com.example;
 
 import de.greenrobot.daogenerator.DaoGenerator;
 import de.greenrobot.daogenerator.Entity;
-import de.greenrobot.daogenerator.Property;
 import de.greenrobot.daogenerator.Schema;
 
 public class MyClass {
@@ -13,38 +12,38 @@ public class MyClass {
 
 
         Entity bookInfoEntity = schema.addEntity("BookInfoEntity");
-        bookInfoEntity.addLongProperty("articleid").primaryKey().notNull();
-        bookInfoEntity.addStringProperty("articlename");
+        bookInfoEntity.addIntProperty("articleId").unique();
+        bookInfoEntity.addStringProperty("articleName");
         bookInfoEntity.addStringProperty("author");
-        bookInfoEntity.addStringProperty("bkbmurl");
-        bookInfoEntity.addIntProperty("endtype");
-        bookInfoEntity.addStringProperty("newchpname");
+        bookInfoEntity.addStringProperty("bkUrl");
+        bookInfoEntity.addIntProperty("endType");
+        bookInfoEntity.addStringProperty("newChpName");
         bookInfoEntity.addStringProperty("owner");
-        bookInfoEntity.addIntProperty("readtime");
-        bookInfoEntity.addIntProperty("lastreadchporder");
-        bookInfoEntity.addIntProperty("bktype");
-        bookInfoEntity.addIntProperty("newchporder");
+        bookInfoEntity.addIntProperty("readTime");
+        bookInfoEntity.addIntProperty("lastReadChpOrder");
+        bookInfoEntity.addIntProperty("bkType");
+        bookInfoEntity.addIntProperty("newChpOrder");
         
 
         Entity chapterEntity = schema.addEntity("ChapterEntity");
-        chapterEntity.addIntProperty("articleid");
-        chapterEntity.addLongProperty("chpid").primaryKey().notNull();
-        chapterEntity.addStringProperty("chpnamme");
-        chapterEntity.addIntProperty("chptype");
-        chapterEntity.addIntProperty("chiporder");
+        chapterEntity.addIntProperty("articleId");
+        chapterEntity.addIntProperty("chpId");
+        chapterEntity.addStringProperty("chpName");
+        chapterEntity.addIntProperty("chpType");
+        chapterEntity.addIntProperty("chpOrder");
 
 
 
         Entity markEntity = schema.addEntity("MarkEntity");
-        markEntity.addIntProperty("articleid");
-        markEntity.addIntProperty("chpid");
+        markEntity.addIntProperty("articleId");
+        markEntity.addIntProperty("chpId");
         markEntity.addIntProperty("begin");
         markEntity.addStringProperty("word");
         markEntity.addIntProperty("time");
-        markEntity.addIntProperty("chporder");
-        markEntity.addIntProperty("isfree");
+        markEntity.addIntProperty("chpOrder");
+        markEntity.addIntProperty("isFree");
         markEntity.addStringProperty("owner");
-        markEntity.addStringProperty("chpname");
+        markEntity.addStringProperty("chpName");
         
 
         

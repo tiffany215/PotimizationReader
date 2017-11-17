@@ -56,6 +56,7 @@ public abstract class VerticalBaseReadView extends View implements BaseReadViewI
 
     }
 
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 

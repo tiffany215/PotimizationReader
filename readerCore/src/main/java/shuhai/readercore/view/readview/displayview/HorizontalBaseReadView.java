@@ -11,10 +11,13 @@ import android.view.ViewConfiguration;
 import android.widget.Scroller;
 import android.widget.Toast;
 
+import com.kingja.loadsir.core.LoadService;
+
 import shuhai.readercore.manager.ThemeManager;
-import shuhai.readercore.ui.sharedp.UserSP;
+import shuhai.readercore.ui.dialog.callback.LoadingCallback;
 import shuhai.readercore.utils.ScreenUtils;
-import shuhai.readercore.utils.StringUtils;
+import shuhai.readercore.utils.ToastUtils;
+import shuhai.readercore.view.readview.dataloader.HorizontalScrollChapterLoader;
 import shuhai.readercore.view.readview.status.BookStatus;
 import shuhai.readercore.view.readview.factory.Factory;
 import shuhai.readercore.view.readview.factory.PageFactory;
@@ -56,37 +59,34 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
 
     private float lastX;
 
+    // 手指滑动的距离
+    public  float moveLength;
+
+    /**
+     * 过滤多点触碰的控制变量
+     */
+    private int mEvents;
+
 
     // 滑动的时候存在两页可滑动，要判断是哪一页在滑动
     private boolean isPreMoving = true, isCurrMoving = true;
 
-    private Factory factory;
+    private PageFactory factory;
 
     public Scroller mScroller;
-
-//    public boolean isPrepare;
-
-    private int mBookId;
-    private int mPreChapterId,mCurChapterId,mNextChapterId;
-
-
-    private int pageSize;
-    private int pageCount;
-
-    OnReadStateChangeListener listener;
 
     private FlipStatus mFlipStatus;
 
     private BookStatus mBookStatus;
 
+    private LoadService mLoadService;
 
 
-    public HorizontalBaseReadView(Context context,int bookId,int chapterId,OnReadStateChangeListener listener) {
+    public HorizontalBaseReadView(Context context,LoadService loadService) {
         super(context);
-        this.mBookId = bookId;
-        this.mCurChapterId = chapterId;
-        this.listener = listener;
+//        this.listener = listener;
 
+        this.mLoadService = loadService;
         mScreenWidth = ScreenUtils.getScreenWidth();
         mScreenHeight = ScreenUtils.getScreenHeight();
 
@@ -100,10 +100,11 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
 
         mScroller = new Scroller(getContext());
 
-        factory = new PageFactory(context);
-        ((PageFactory)factory).setChapterLoader();
-        ((PageFactory)factory).setComposingStrategy();
-        ((PageFactory) factory).setOnReadStateChangeListener(listener);
+        factory = new PageFactory.Builder(context)
+                .setLoadStrategy(HorizontalScrollChapterLoader.class)
+                .setComposingStrategy()
+                .setOnReaderLoadingListener(new MyOnReaderLoadingListener())
+                .builder();
 
         ViewConfiguration configuration = ViewConfiguration.get(context);
         speed_shake = ViewConfigurationCompat.getScaledPagingTouchSlop(configuration);
@@ -113,60 +114,113 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
     }
 
 
+    /**
+     * 初始化参数
+     */
     private void initParams(){
         mFlipStatus = FlipStatus.ON_FLIP_CUR;
-        mBookStatus = BookStatus.START_LOAD_SUCCESS;
+        mBookStatus = BookStatus.LOAD_START;
         prePageLeft = -mScreenWidth;
         currPageLeft = 0;
-        pageSize = UserSP.getInstance().getLastReaderPage(mBookId);
-
-
     }
 
 
+    /**
+     * 主题设置
+     * @param theme
+     */
     public synchronized void init(int theme){
         factory.setBgBitmap(ThemeManager.getThemeDrawable(theme));
     }
 
 
+    @Override
     public synchronized void openBook(int articleId,int chapterId,int chapterOrder,FlipStatus status){
         mBookStatus = factory.openBook(articleId,chapterId,chapterOrder,status);
-        if(mBookStatus == BookStatus.CUR_CHAPTER_LOAD_FAILURE){
-            Toast.makeText(getContext(),"章节内容打开失败！",Toast.LENGTH_LONG).show();
-            return;
-        }
         switch (mBookStatus) {
-            //第一次打开书籍
-            case CUR_CHAPTER_LOAD_SUCCESS:
-                mCurChapterId = chapterId;
-                //如果当前页等于章节第一页,绘制第一页内容和上一章最后一页内容
-                //如果当前页等于章节最后一页，绘制最后一页内容和下一章第一页内容
-                pageCount = factory.getCountPage();
-                if(pageSize == 1){
-                    postDrawView(mCurChapterId,pageSize,mCurPageCanvas);
-                    postDrawView(mCurChapterId,pageSize + 1,mNextPageCanvas);
-                }else if(pageSize == factory.getCountPage()){
-                    postDrawView(mCurChapterId,pageSize - 1,mPrePageCanvas);
-                    postDrawView(mCurChapterId,pageSize,mCurPageCanvas);
-                }else if(pageSize > 1 && pageSize < factory.getCountPage()){
-                    postInvalidateView(mCurChapterId,pageSize);
+            case LOAD_ERROR:
+                Toast.makeText(getContext(),"章节内容打开失败！",Toast.LENGTH_LONG).show();
+                break;
+            case LOAD_SUCCESS:
+                if(null != mLoadService){
+                    mLoadService.showSuccess();
                 }
+                factory.prePage(mPrePageCanvas);
+                factory.curPage(mCurPageCanvas);
+                factory.nextPage(mNextPageCanvas);
+                state = STATE_STOP;
+                mFlipStatus = status;
+                postInvalidate();
                 break;
-            case PRE_CHAPTER_LOAD_SUCCESS:
-                mPreChapterId = chapterId;
-                postDrawView(mPreChapterId,factory.getCountPage(),mPrePageCanvas);
-                break;
-            //下一章内容加载成功后
-            case NEXT_CHAPTER_LOAD_SUCCESS:
-                mNextChapterId = chapterId;
-                postDrawView(mNextChapterId,1,mNextPageCanvas);
-                break;
+        }
+    }
+
+
+    /**
+     * 阅读章节加载状态监听器
+     */
+    private class MyOnReaderLoadingListener implements OnReaderLoadingListener{
+
+        @Override
+        public void postInvalidatePage() {
+            postInvalidate();
         }
 
-        state = STATE_STOP;
-        mFlipStatus = status;
-        postInvalidate();
+        @Override
+        public void onStartLoading() {
+            if(null != mLoadService){
+                mLoadService.showCallback(LoadingCallback.class);
+            }
+        }
+
+        @Override
+        public void onEndLoading() {
+            if(null != mLoadService){
+                mLoadService.showSuccess();
+            }
+        }
+
+
+        @Override
+        public void onDrawPositionPage(FlipStatus flipStatus) {
+            state = STATE_STOP;
+            switch (flipStatus) {
+                case ON_FLIP_PRE:
+                    factory.postInvalidatePage(mPrePageCanvas,flipStatus);
+                    break;
+                case ON_FLIP_CUR:
+                    factory.postInvalidatePage(mCurPageCanvas,flipStatus);
+                    break;
+                case ON_FLIP_NEXT:
+                    factory.postInvalidatePage(mNextPageCanvas,flipStatus);
+                    break;
+                case ON_PRE_CHAPTER_LAST_PAGE:
+                    factory.postInvalidatePage(mPrePageCanvas,flipStatus);
+                    break;
+                case ON_NEXT_CHAPTER_FIRST_PAGE:
+                    factory.postInvalidatePage(mNextPageCanvas,flipStatus);
+                    break;
+            }
+        }
+
+        @Override
+        public void onPageStatus(BookStatus bookStatus) {
+
+            mBookStatus = BookStatus.LOAD_SUCCESS;
+//            mBookStatus = bookStatus;
+
+            switch (mBookStatus) {
+                case LOAD_ERROR:
+//                    ToastUtils.showToast("章节加载失败！");
+                    break;
+
+                case NO_PRE_PAGE:
+//                    ToastUtils.showToast("没有上一章了！");
+                    break;
+            }
+        }
     }
+
 
 
     /**
@@ -189,53 +243,26 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
         }
 
         //手指向左滑动
-        else if(speed < 0 && pageSize <= factory.getCountPage()) {
+        else if(speed < 0 ) {
             moveLeft(status, curX);
             if (currPageLeft == -mScreenWidth) {
-                // 向后翻页动作完成，重新绘制显示内容。
-                pageSize++;
-                if(pageSize == pageCount){
-                    postDrawView(mCurChapterId,pageSize,mCurPageCanvas);
-                    postDrawView(mCurChapterId,pageSize - 1,mPrePageCanvas);
-                    factory.nextChapter();
-                } else if(mFlipStatus == FlipStatus.ON_FLIP_NEXT && pageSize > pageCount){
-                    postDrawView(mCurChapterId,pageSize - 1,mPrePageCanvas);
-                    pageSize = 1;
-                    pageCount = factory.getCountPage();
-                    postDrawView(mNextChapterId,pageSize,mCurPageCanvas);
-                    postDrawView(mNextChapterId,pageSize + 1,mNextPageCanvas);
-                    mPreChapterId = mCurChapterId;
-                    mCurChapterId = mNextChapterId;
-                }else if(pageSize > 1 && pageSize < pageCount){
-                    postInvalidateView(mCurChapterId,pageSize);
-                }
+                factory.autoIncrease();
+                factory.prePage(mPrePageCanvas);
+                factory.curPage(mCurPageCanvas);
+                factory.nextPage(mNextPageCanvas);
+                mFlipStatus = FlipStatus.ON_FLIP_NEXT;
             }
         }
 
         //手指向右滑动
-        else if(speed > 0 && pageSize >= 1){
+        else if(speed > 0 ){
             moveRight(status,curX);
             if(prePageLeft == 0){
-                // 向前翻页动作完成，重新绘制显示内容。
-                pageSize--;
-                if(pageSize == 1){
-                    //翻页到当前章节的第一页，重新绘制当前页和下一页，预加载上一章的最后一页再绘制
-                    postDrawView(mCurChapterId,pageSize,mCurPageCanvas);
-                    postDrawView(mCurChapterId,pageSize + 1,mNextPageCanvas);
-                    factory.preChapter();
-                    mBookStatus = BookStatus.PRE_CHAPTER_LOAD_SUCCESS;
-                }else if(mFlipStatus == FlipStatus.ON_FLIP_PRE && pageSize < 1){
-                    //完成章节跳转，绘制
-                    postDrawView(mCurChapterId,1,mNextPageCanvas);
-                    pageSize = factory.getCountPage();
-                    pageCount = factory.getCountPage();
-                    postDrawView(mPreChapterId,pageSize,mCurPageCanvas);
-                    postDrawView(mPreChapterId,pageSize - 1,mPrePageCanvas);
-                    mNextChapterId =  mCurChapterId;
-                    mCurChapterId = mPreChapterId;
-                }else if(pageSize > 1 && pageSize < pageCount){
-                    postInvalidateView(mCurChapterId,pageSize);
-                }
+                factory.autoReduce();
+                factory.nextPage(mNextPageCanvas);
+                factory.curPage(mCurPageCanvas);
+                factory.prePage(mPrePageCanvas);
+                mFlipStatus = FlipStatus.ON_FLIP_PRE;
             }
         }
         if(right == 0 || right == mScreenWidth){
@@ -243,25 +270,21 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
             prePageLeft = -mScreenWidth;
             currPageLeft = 0;
             releaseMoving();
+            postInvalidate();
         }
     }
 
 
-    public void closeBook(){
-        UserSP.getInstance().setLastReaderPage(mBookId,pageSize);
-    }
+//    public void closeBook(){
+//        UserSP.getInstance().setLastReaderPage(mBookId,pageSize);
+//    }
 
-
-    // 手指滑动的距离
-    public  float moveLength;
 
     /**
-     * 过滤多点触碰的控制变量
+     * 手指触摸屏幕事件处理
+     * @param event
+     * @return
      */
-    private int mEvents;
-
-
-
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getActionMasked()) {
@@ -300,7 +323,7 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
                     mFlipStatus = FlipStatus.ON_FLIP_PRE;
                     isPreMoving = true;
                     isCurrMoving = false;
-                    if(pageSize < 1){
+                    if(mBookStatus == BookStatus.NO_PRE_PAGE){
                         state = STATE_STOP;
                         releaseMoving();
                     }else{
@@ -321,7 +344,7 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
                     mFlipStatus = FlipStatus.ON_FLIP_NEXT;
                     isPreMoving = false;
                     isCurrMoving = true;
-                    if(pageSize > factory.getCountPage()){
+                    if(mBookStatus == BookStatus.NO_NEXT_PAGE){
                         state = STATE_STOP;
                         releaseMoving();
                     }else{
@@ -361,6 +384,10 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
     }
 
 
+    /**
+     * 手指抬起 页面滚动状态设置
+     * @param speed
+     */
     private void startScroller(float speed){
         if(speed == 0)
         {
@@ -391,6 +418,7 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
 
     }
 
+
     @Override
     protected void onDraw(Canvas canvas) {
         drawPageArea(canvas,mFlipStatus);
@@ -407,15 +435,15 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
     /**
      * 释放动作，不限制手滑动方向
      */
+
     private void releaseMoving()
     {
         isPreMoving = true;
         isCurrMoving = true;
-
     }
 
     /**
-     *
+     * 手指左滑坐标计算
      * @param status
      * @param curX
      */
@@ -438,7 +466,7 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
     }
 
     /**
-     *
+     * 手指右滑坐标计算
      * @param status
      * @param curX
      */
@@ -459,41 +487,19 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
         }
     }
 
+
     @Override
     public void computeScroll() {
         if(mScroller.computeScrollOffset()) {
             updatePageArea(mFlipStatus, mScroller.getCurrX());
             postInvalidate();
-        }
+}
     }
 
+    @Override
+    public void closeBook() {
 
-    /**
-     * 刷新显示页面
-     * @param chapterId
-     * @param pageSize
-     */
-    private void postInvalidateView(final int chapterId,int pageSize){
-        Canvas[] canvases = {mPrePageCanvas,mCurPageCanvas,mNextPageCanvas};
-        int[] pageSizes = {pageSize - 1,pageSize,pageSize + 1};
-        for (int i = 0; i < canvases.length; i++) {
-            factory.getPageContent(chapterId,pageSizes[i],StringUtils.cacheKeyCreate(mBookId,chapterId));
-            factory.setPageSize(pageSizes[i]);
-            factory.onDraw(canvases[i]);
-        }
     }
-
-    /**
-     * 绘制指定页面
-     * @param pageSize
-     * @param canvas
-     */
-    private void postDrawView(int chapterId,int pageSize,Canvas canvas){
-        factory.getPageContent(chapterId,pageSize,StringUtils.cacheKeyCreate(mBookId,chapterId));
-        factory.setPageSize(pageSize);
-        factory.onDraw(canvas);
-    }
-
 }
 
 

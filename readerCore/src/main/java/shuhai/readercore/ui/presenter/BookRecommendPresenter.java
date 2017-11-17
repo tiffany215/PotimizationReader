@@ -1,12 +1,21 @@
 package shuhai.readercore.ui.presenter;
+import android.util.Log;
+
+import com.alibaba.fastjson.JSON;
+
 import shuhai.readercore.api.BookApis;
 import shuhai.readercore.base.RxPresenter;
-import shuhai.readercore.bean.BookInfoEntity;
+//import shuhai.readercore.bean.BookInfoEntity;
+////import shuhai.readercore.manager.DataBaseManager;
+import shuhai.readercore.bean.BookBean;
+import shuhai.readercore.bean.BookEntity;
+import shuhai.readercore.bean.MessageBean;
 import shuhai.readercore.manager.DataBaseManager;
 import shuhai.readercore.net.callback.ApiCallback;
 import shuhai.readercore.net.exception.ApiException;
 import shuhai.readercore.ui.contract.BookRecommendContract;
 import shuhai.readercore.ui.sharedp.UserSP;
+import shuhai.readercore.utils.FastJsonUtils;
 
 /**
  * @author 55345364
@@ -21,7 +30,7 @@ public class BookRecommendPresenter extends RxPresenter<BookRecommendContract.Vi
     @Override
     public void getRecommendBook(int sex,int pageSize) {
 
-        BookApis.getInstance().obtainRecommendBook(sex,pageSize,new ApiCallback<BookInfoEntity>() {
+        BookApis.getInstance().obtainRecommendBook(sex,pageSize,new ApiCallback<MessageBean>() {
 
             @Override
             public void onStart() {
@@ -39,30 +48,17 @@ public class BookRecommendPresenter extends RxPresenter<BookRecommendContract.Vi
             }
 
             @Override
-            public void onNext(BookInfoEntity bookInfoEntity) {
-                //将推荐书籍存入库中
-                if(null != bookInfoEntity && null != bookInfoEntity.getMessage()){
-                    for (int i = 0; i < bookInfoEntity.getMessage().size(); i++) {
-                        shuhai.readercore.dao.BookInfoEntity bkbaseinfo = new shuhai.readercore.dao.BookInfoEntity();
-                        bkbaseinfo.setArticleid(Long.parseLong(bookInfoEntity.getMessage().get(i).getArticleid()));
-                        bkbaseinfo.setArticlename(bookInfoEntity.getMessage().get(i).getArticlename());
-                        bkbaseinfo.setAuthor(bookInfoEntity.getMessage().get(i).getAuthor());
-                        bkbaseinfo.setBkbmurl(bookInfoEntity.getMessage().get(i).getCover());
-                        bkbaseinfo.setEndtype(1);
-                        bkbaseinfo.setNewchpname(bookInfoEntity.getMessage().get(i).getChapters());
-                        bkbaseinfo.setOwner(bookInfoEntity.getMessage().get(i).getAuthor());
-                        bkbaseinfo.setReadtime(Integer.valueOf(bookInfoEntity.getMessage().get(i).getLastupdate()));
-                        bkbaseinfo.setLastreadchporder(0);
-                        bkbaseinfo.setBktype(2);
-                        bkbaseinfo.setNewchporder(Integer.valueOf(bookInfoEntity.getMessage().get(i).getLastchapterid()));
-                        DataBaseManager.getInstance().insertBookInfo(bkbaseinfo);
-                        UserSP.getInstance().setRecommendStatue(true);
+            public void onNext(MessageBean messageBean) {
+                BookBean bookBean  = FastJsonUtils.textToJson(messageBean.getMessage(),BookBean.class);
+                if(null != bookBean && null != bookBean.getList() && bookBean.getList().size() > 0){
+                    for (int i = 0; i < bookBean.getList().size(); i++) {
+                        DataBaseManager.getInstance().insertBookInfo(bookBean.getList().get(i));
                     }
+                    UserSP.getInstance().setRecommendStatue(true);
                 }
+
+                mView.postView();
             }
         });
-
-
-
     }
 }

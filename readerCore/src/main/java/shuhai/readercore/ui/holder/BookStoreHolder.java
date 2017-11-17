@@ -8,14 +8,15 @@ import com.bumptech.glide.Glide;
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
 
 import shuhai.readercore.R;
-import shuhai.readercore.dao.BookInfoEntity;
+import shuhai.readercore.bean.BookEntity;
+//import shuhai.readercore.dao.BookInfoEntity;
 
 /**
  * @author 55345364
  * @date 2017/8/3.
  */
 
-public class BookStoreHolder extends BaseViewHolder<BookInfoEntity> {
+public class BookStoreHolder extends BaseViewHolder<BookEntity> {
 
     private ImageView bookCover;
     private TextView bookName;
@@ -31,13 +32,11 @@ public class BookStoreHolder extends BaseViewHolder<BookInfoEntity> {
 
 
     @Override
-    public void setData(BookInfoEntity data) {
-        super.setData(data);
-        Glide.with(getContext()).load(data.getBkbmurl()).into(bookCover);
-
-//        bookCover.setBackgroundResource(R.drawable.cover);
-
-        bookName.setText(data.getArticlename());
+    public void setData(BookEntity entity) {
+        super.setData(entity);
+        Glide.with(getContext()).load(entity.getCover()).into(bookCover);
+        bookCover.setBackgroundResource(R.drawable.cover);
+        bookName.setText(entity.getArticleName());
         readProgress.setText("50%");
     }
 }
