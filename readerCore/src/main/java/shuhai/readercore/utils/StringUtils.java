@@ -40,7 +40,7 @@ public class StringUtils {
     public static String cacheKeyCreate(Object... str){
         StringBuffer buffer = new StringBuffer();
         for(Object value : str){
-            buffer.append(value.toString());
+            buffer.append(value.toString().trim());
         }
         return buffer.toString();
     }

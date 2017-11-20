@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 按下状态 -->
+    <item android:state_pressed="true" android:state_focused="true">
+        <layer-list>
+            <item android:id="@+id/thumb_01">
+                <shape android:shape="oval" android:useLevel="false">
+                    <solid android:color="#55ffffff" />
+                    <size android:height="30dp" android:width="30dp" />
+                </shape>
+            </item>
+
+            <item android:id="@+id/thumb_02" android:bottom="5dp" android:left="5dp" android:right="5dp" android:top="5dp">
+                <shape android:shape="oval" android:useLevel="false">
+                    <solid android:color="#323335" />
+                    <stroke android:width="1dp" android:color="#959595" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+
+    <item android:state_pressed="true" android:state_focused="false">
+        <layer-list>
+            <item android:id="@+id/thumb_03">
+                <shape android:shape="oval" android:useLevel="false">
+                    <solid android:color="#55ffffff" />
+                    <size android:height="30dp" android:width="30dp" />
+                </shape>
+            </item>
+
+            <item android:id="@+id/thumb_04" android:bottom="5dp" android:left="5dp" android:right="5dp" android:top="5dp">
+                <shape android:shape="oval" android:useLevel="false">
+                    <solid android:color="#323335" />
+                    <stroke android:width="1dp" android:color="#959595" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+
+
+    <!-- 未选中状态 -->
+    <item android:state_pressed="false" android:state_focused="false">
+        <layer-list>
+            <item android:id="@+id/thumb_05">
+                <shape android:shape="oval" android:useLevel="false">
+                    <solid android:color="@android:color/transparent" />
+                    <size android:height="30dp" android:width="30dp" />
+                </shape>
+            </item>
+
+            <item android:id="@+id/thumb_06" android:bottom="5dp" android:left="5dp" android:right="5dp" android:top="5dp">
+                <shape android:shape="oval" android:useLevel="false">
+                    <solid android:color="#323335" />
+                    <stroke android:width="1dp" android:color="#959595" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+
+    <item android:state_pressed="false" android:state_focused="true">
+
+        <layer-list>
+            <item android:id="@+id/thumb_07">
+                <shape android:shape="oval" android:useLevel="false">
+                    <solid android:color="@android:color/transparent" />
+                    <size android:height="30dp" android:width="30dp" />
+                </shape>
+            </item>
+
+            <item android:id="@+id/thumb_08" android:bottom="5dp" android:left="5dp" android:right="5dp" android:top="5dp">
+                <shape android:shape="oval" android:useLevel="false">
+                    <solid android:color="#323335" />
+                    <stroke android:width="1dp" android:color="#959595" />
+                </shape>
+            </item>
+        </layer-list>
+
+    </item>
+
+
+</selector>

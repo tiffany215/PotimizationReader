@@ -18,6 +18,7 @@ import java.util.Vector;
 import shuhai.readercore.Constants;
 import shuhai.readercore.bean.ChapterEntity;
 import shuhai.readercore.manager.DataBaseManager;
+import shuhai.readercore.ui.sharedp.UserSP;
 import shuhai.readercore.utils.ScreenUtils;
 import shuhai.readercore.view.readview.dataloader.ChapterLoadManager;
 import shuhai.readercore.view.readview.dataloader.ChapterLoaderModel;
@@ -27,6 +28,7 @@ import shuhai.readercore.view.readview.status.BookStatus;
 import shuhai.readercore.view.readview.dataloader.ChapterLoaderStrategyImpl;
 import shuhai.readercore.view.readview.dataloader.HorizontalScrollChapterLoader;
 import shuhai.readercore.view.readview.status.FlipStatus;
+import shuhai.readercore.view.readview.strategy.ComposingStrategy;
 import shuhai.readercore.view.readview.strategy.HorizontalComposing;
 
 /**
@@ -192,8 +194,8 @@ public class PageFactory extends Factory {
         /**
          * 设置数据加载类的策略
          */
-        public PageFactory.Builder setComposingStrategy(){
-            mChapterLoaderStrategy.setComposingStrategy(new HorizontalComposing(mWidth,mHeight,mMarginWidth,mMarginHeight,mFontSize,mNumFontSize,mLineSpace,mPaint));
+        public PageFactory.Builder setComposingStrategy(ComposingStrategy strategy){
+            mChapterLoaderStrategy.setComposingStrategy(strategy);
             return this;
         }
 
@@ -238,6 +240,8 @@ public class PageFactory extends Factory {
             if(TextUtils.isEmpty(mFontPath)){
                 mFontPath = "fonts/HYQiHei-50S.otf";
             }
+
+            mChapterLoaderStrategy.setComposingStrategy(new HorizontalComposing(mWidth,mHeight,mMarginWidth,mMarginHeight,mFontSize,mNumFontSize,mLineSpace,mPaint));
             return new PageFactory();
         }
 
@@ -254,13 +258,15 @@ public class PageFactory extends Factory {
         chapterLoadManager = new ChapterLoadManager.Builder()
                 .setLoaderStrategy(mChapterLoaderStrategy)
                 .setChapterLoaderListener(new MyChapterLoadListener())
-                .setParams(mArticleId,mChapterOrder)
+                .setParams(mArticleId,mChapterId,mChapterOrder)
+                .setPageSize(UserSP.getInstance().getLastReaderPage(mArticleId))
+                .setPageCount(mChapterLoaderStrategy.getCountPage(mChapterId))
                 .builder();
         if(chapterLoadManager.hasLocalData() && mChapterLoaderStrategy.hasChapter(mArticleId,mChapterId)){
                 return BookStatus.LOAD_SUCCESS;
         }
         chapterLoadManager.obtainChapter(mArticleId,mChapterId,mChapterOrder,FlipStatus.ON_FLIP_CUR);
-            return BookStatus.LOAD_ERROR;
+            return BookStatus.LOAD_START;
     }
 
     @Override
@@ -472,4 +478,8 @@ public class PageFactory extends Factory {
     }
 
 
+    @Override
+    public void closeBook() {
+        UserSP.getInstance().setLastReaderPage(mArticleId,getPageSize());
+    }
 }

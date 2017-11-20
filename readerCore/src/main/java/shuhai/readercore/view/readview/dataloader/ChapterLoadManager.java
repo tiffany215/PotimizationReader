@@ -24,6 +24,7 @@ import shuhai.readercore.view.readview.status.FlipStatus;
 
 public class ChapterLoadManager {
     private static int mArticleId;
+    private static int mChapterId;
     private static int pageCount;
     private static int pageSize;
     private static ChapterEntity mChapterEntity;
@@ -60,8 +61,9 @@ public class ChapterLoadManager {
             return this;
         }
 
-        public ChapterLoadManager.Builder setParams(int articleId,int chapterOrder){
+        public ChapterLoadManager.Builder setParams(int articleId,int chapterId,int chapterOrder){
             mArticleId = articleId;
+            mChapterId = chapterId;
             mChapterEntity = DataBaseManager.getInstance().queryNextChapterInfo(Constants.CHAP_TYPE.CHAPTER,articleId,chapterOrder,FlipStatus.ON_FLIP_CUR);
             return this;
         }
@@ -92,6 +94,12 @@ public class ChapterLoadManager {
             dataSource = new ChapterDataSource(mLoaderStrategy);
             if(null == dataSource){
                 throw new IllegalStateException("章节加载 dataSource 不能为 null");
+            }
+
+            if(pageCount == 0){
+                if(mLoaderStrategy.hasChapter(mArticleId,mChapterId)){
+                   pageCount = mLoaderStrategy.getCountPage(mChapterId);
+                }
             }
 
             if(pageSize == 0){
@@ -138,6 +146,8 @@ public class ChapterLoadManager {
                 if(mChapterLoader.hasChapter(mChapterEntity.getArticleId(),mChapterEntity.getChapterId())){
                     pageSize = 1;
                     pageCount = mChapterLoader.getCountPage(mChapterEntity.getChapterId());
+                    UserSP.getInstance().setLastReaderChapterId(mArticleId,mChapterEntity.getChapterId());
+                    UserSP.getInstance().setLastReaderChapterOrder(mArticleId,mChapterEntity.getChapterOrder());
                 }else{
                     return null;
                 }
@@ -151,6 +161,8 @@ public class ChapterLoadManager {
                 if(null != mChapterEntity) {
                     pageSize = mChapterLoader.getCountPage(mChapterEntity.getChapterId());
                     pageCount = mChapterLoader.getCountPage(mChapterEntity.getChapterId());
+                    UserSP.getInstance().setLastReaderChapterId(mArticleId,mChapterEntity.getChapterId());
+                    UserSP.getInstance().setLastReaderChapterOrder(mArticleId,mChapterEntity.getChapterOrder());
                 }else{
                     return null;
                 }
@@ -247,6 +259,9 @@ public class ChapterLoadManager {
         return pageCount;
     }
 
+    public void setPageCount(int ps){
+        pageSize = ps;
+    }
 
 
     public synchronized void obtainChapter(final int articleId, final int chapterId, final int chapterOrder, final FlipStatus status){

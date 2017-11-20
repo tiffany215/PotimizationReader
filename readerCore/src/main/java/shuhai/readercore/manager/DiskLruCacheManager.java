@@ -384,6 +384,17 @@ public class DiskLruCacheManager {
     }
 
 
+    /**
+     * 获取缓存大小
+     * @return
+     */
+    public long getSize(){
+        long size =  0L;
+        if(null != mDiskLruCache){
+            size = mDiskLruCache.size();
+        }
+        return size;
+    }
 
 
 

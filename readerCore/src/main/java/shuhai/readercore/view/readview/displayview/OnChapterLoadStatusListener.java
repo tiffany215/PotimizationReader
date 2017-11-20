@@ -17,8 +17,4 @@ public interface OnChapterLoadStatusListener {
     void onStartLoading();
 
     void onEndLoading();
-
-
-
-
 }

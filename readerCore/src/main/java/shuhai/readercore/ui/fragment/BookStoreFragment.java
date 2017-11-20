@@ -1,5 +1,4 @@
 package shuhai.readercore.ui.fragment;
-import android.app.Activity;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
@@ -11,7 +10,6 @@ import com.flipboard.bottomsheet.BottomSheetLayout;
 import butterknife.InjectView;
 import shuhai.readercore.R;
 import shuhai.readercore.base.BaseRVFragment;
-//import shuhai.readercore.dao.BookInfoEntity;
 import shuhai.readercore.ui.activity.AppSettingsActivity;
 import shuhai.readercore.ui.activity.ReadActivity;
 import shuhai.readercore.ui.adapter.BookStoreAdapter;
@@ -110,16 +108,15 @@ public class BookStoreFragment extends BaseRVFragment<BookStorePresenter,Object>
 
     @Override
     public void onItemClick(int position) {
-
         Intent intent = new Intent();
         intent.putExtra("read.book.id",Integer.parseInt(String.valueOf(presenter.getShelfBookList().get(position).getArticleId())));
         intent.setClass(mContext,ReadActivity.class);
         startActivity(intent);
         Toast.makeText(mContext, "阅读", Toast.LENGTH_SHORT).show();
-        if (mContext instanceof Activity) {
-            Activity activity = (Activity) mContext;
-            activity.finish();
-        }
+//        if (mContext instanceof Activity) {
+//            Activity activity = (Activity) mContext;
+//            activity.finish();
+//        }
     }
 
 

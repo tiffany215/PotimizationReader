@@ -101,8 +101,14 @@ public class DataBaseManager {
      * @param chapterEntity
      * @return
      */
-    public long insertChapterInfo(ChapterEntity chapterEntity) {
-        return chapterEntityDao.insertOrReplace(chapterEntity);
+    public void insertChapterInfo(ChapterEntity chapterEntity) {
+        ChapterEntity entity = queryChapterInfo(chapterEntity.getArticleId(),chapterEntity.getChapterId());
+        if(null == entity){
+            chapterEntityDao.save(chapterEntity);
+        }else{
+            chapterEntity.setId(entity.getId());
+            chapterEntityDao.update(chapterEntity);
+        }
     }
 
 
@@ -120,6 +126,20 @@ public class DataBaseManager {
         }
         return queryBuilder;
     }
+    public ChapterEntity queryChapterInfo(int articleId,int chapterId){
+
+        ChapterEntity queryBuilder;
+        try{
+            queryBuilder = chapterEntityDao.queryBuilder().where(ChapterEntityDao.Properties.ArticleId.eq(articleId),ChapterEntityDao.Properties.ChapterId.eq(chapterId)).unique();
+        }catch (Exception e){
+            queryBuilder = null;
+        }
+        return queryBuilder;
+
+
+
+    }
+
 
 
     /**

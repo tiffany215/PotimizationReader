@@ -89,7 +89,7 @@ public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements 
 
         factory = new PageFactory.Builder(context)
                 .setLoadStrategy(HorizontalScrollChapterLoader.class)
-                .setComposingStrategy()
+//                .setComposingStrategy()
                 .setOnReaderLoadingListener(new GLOnReaderLoadingListener())
                 .builder();
 
@@ -104,12 +104,18 @@ public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements 
     @Override
     public synchronized void openBook(int articleId, int chapterId, int chapterOrder, FlipStatus status) {
         mBookStatus = factory.openBook(articleId,chapterId,chapterOrder,status);
-        if(mBookStatus == BookStatus.CUR_CHAPTER_LOAD_FAILURE){
-            Toast.makeText(getContext(),"章节内容打开失败！",Toast.LENGTH_LONG).show();
-            return;
+        switch (mBookStatus) {
+            case LOAD_ERROR:
+                Toast.makeText(getContext(),"开始加载本书！",Toast.LENGTH_LONG).show();
+                break;
+            case LOAD_SUCCESS:
+                if(null != mLoadService){
+                    mLoadService.showSuccess();
+                }
+                factory.curPage(mCanvas);
+                requestRender();
+                break;
         }
-        factory.curPage(mCanvas);
-        requestRender();
     }
 
 

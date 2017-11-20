@@ -23,12 +23,15 @@ public class NoEffectFlipPageWidget extends HorizontalBaseReadView {
 
     public NoEffectFlipPageWidget(Context context,LoadService loadService) {
         super(context,loadService);
+        scrollerSpeed = 100;
     }
 
     @Override
     protected void drawPageArea(Canvas canvas, FlipStatus status) {
         switch (status){
             case ON_FLIP_PRE:
+                canvas.drawBitmap(mNextPageBitmap,0,0,null);
+                canvas.drawBitmap(mCurPageBitmap,0,0,null);
                 canvas.drawBitmap(mPrePageBitmap,0,0,null);
                 break;
             case ON_FLIP_CUR:
@@ -36,6 +39,8 @@ public class NoEffectFlipPageWidget extends HorizontalBaseReadView {
                 break;
             case ON_FLIP_NEXT:
                 canvas.drawBitmap(mNextPageBitmap,0,0,null);
+                canvas.drawBitmap(mCurPageBitmap,0,0,null);
+                canvas.drawBitmap(mPrePageBitmap,0,0,null);
                 break;
         }
     }

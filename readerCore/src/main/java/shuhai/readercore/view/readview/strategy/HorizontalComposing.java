@@ -126,8 +126,6 @@ public class HorizontalComposing implements ComposingStrategy{
             return null;
         }
 
-
-
         String[] paragraphArr = autoSplitParagraph(str.trim());
         Vector<String> lines = new Vector<>();
         Map<Integer,Vector<String>> tempList = new HashMap<>();
@@ -140,7 +138,13 @@ public class HorizontalComposing implements ComposingStrategy{
 
         for (int i = 0; i < paragraphArrCount; i++)
         {
-            String strParagraph = paragraphArr[i];
+            String strParagraph;
+            if(TextUtils.isEmpty(paragraphArr[i])){
+                 continue;
+            }else{
+                 strParagraph =  "\u0020\u0020" + paragraphArr[i];
+
+            }
             if(TextUtils.isEmpty(strParagraph.trim())){
                 continue;
             }

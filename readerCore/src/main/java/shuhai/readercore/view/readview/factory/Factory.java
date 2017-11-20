@@ -85,6 +85,7 @@ public abstract class Factory {
 
     public abstract void setAlpha(int alpha);
 
+    public abstract void closeBook();
 
 
 

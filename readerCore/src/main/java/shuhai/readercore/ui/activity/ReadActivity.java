@@ -93,7 +93,7 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View{
     private void initPagerWidget(){
         switch (ReaderSP.getInstance().getFlipModel()) {
             case Constants.FLIP_CONFIG.LEVEL_NO_FLIP:
-                new NoEffectFlipPageWidget(this,loadService);
+                mPageWidget = new NoEffectFlipPageWidget(this,loadService);
                 break;
             case Constants.FLIP_CONFIG.LEVEL_COVER_FLIP:
                 mPageWidget = new LevelCoverFlipPageWidget(this,loadService);
