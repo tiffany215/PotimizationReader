@@ -3,6 +3,7 @@ package shuhai.readercore.ui.sharedp;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import shuhai.readercore.manager.ThemeManager;
 import shuhai.readercore.utils.AppUtils;
 import shuhai.readercore.utils.Utils;
 
@@ -53,6 +54,26 @@ public class ReaderSP {
         return sp.getInt("read_flip_mode",LEVEL_COVER_FLIP);
     }
 
+
+
+    public int getReaderTheme(){
+        return sp.getInt("read_theme", ThemeManager.READ_STYLE_THEME_15);
+    }
+
+    public void setReaderTheme(int theme){
+        ed.putInt("read_theme",theme);
+        ed.commit();
+    }
+
+
+    public boolean getReaderDayOrNight(){
+        return sp.getBoolean("read_theme_day_or_night",true);
+    }
+
+    public void setReaderDayOrNight(boolean status){
+        ed.putBoolean("read_theme_day_or_night",status);
+        ed.commit();
+    }
 
 
 }

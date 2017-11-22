@@ -52,6 +52,10 @@
     <string name="settings_hc">帮助中心</string>
     <string name="settings_as">关于书海</string>
 
+
+    <string name="max_imun">已经是最大了</string>
+    <string name="mix_imun">已经是最小了</string>
+
     <string name="about_shuhai_prompt">\u3000\u3000欢迎使用书海阅读，如果您在使用过程中遇到问题或产品有建议，请通过微信公众号【书海小说】联系我们，我们会在第一时间给您提供服务，感谢您对书海阅读的支持！</string>
 
 </resources>

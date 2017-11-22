@@ -266,5 +266,10 @@ public class HorizontalComposing implements ComposingStrategy{
         return false;
     }
 
+    @Override
+    public void setTextSize(int textSize) {
+        this.mFontSize = textSize;
+    }
+
 
 }

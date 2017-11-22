@@ -79,13 +79,17 @@ public abstract class Factory {
 
 
     public abstract int getPageSize();
-//
-//
-//    public abstract String getChapterName();
 
     public abstract void setAlpha(int alpha);
 
     public abstract void closeBook();
+
+    public abstract void setTheme(int theme);
+
+    public abstract void setTextColor(int color);
+
+    public abstract void setTextSize(int size);
+
 
 
 

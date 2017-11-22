@@ -1,4 +1,4 @@
-package shuhai.readercore.ui.dialog.callback;
+package shuhai.readercore.ui.dialog;
 
 import com.kingja.loadsir.callback.Callback;
 

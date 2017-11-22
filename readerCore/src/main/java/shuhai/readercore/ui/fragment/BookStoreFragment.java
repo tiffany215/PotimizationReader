@@ -1,11 +1,13 @@
 package shuhai.readercore.ui.fragment;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
 
 import com.flipboard.bottomsheet.BottomSheetLayout;
+import com.flipboard.bottomsheet.OnSheetDismissedListener;
 
 import butterknife.InjectView;
 import shuhai.readercore.R;
@@ -65,14 +67,21 @@ public class BookStoreFragment extends BaseRVFragment<BookStorePresenter,Object>
             sheetView.findViewById(R.id.bookstore_menu_about_ours).setOnClickListener(onClickListener);
         }
         mBottomSheetLayout.setPeekOnDismiss(true);
-
-
     }
 
 
+    private String TAG;
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            mBottomSheetLayout.dismissSheet();
+            mBottomSheetLayout.addOnSheetDismissedListener(new OnSheetDismissedListener() {
+                @Override
+                public void onDismissed(BottomSheetLayout bottomSheetLayout) {
+
+                }
+            });
+
             switch (view.getId()) {
                 case R.id.bookstore_menu_night_model:
                     ToastUtils.showSingleToast("1");
@@ -87,7 +96,8 @@ public class BookStoreFragment extends BaseRVFragment<BookStorePresenter,Object>
                     startActivity(new Intent().setClass(mContext,AppSettingsActivity.class));
                     break;
             }
-            mBottomSheetLayout.dismissSheet();
+
+//            mBottomSheetLayout.dismissSheet();
         }
     };
 

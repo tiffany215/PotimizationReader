@@ -10,7 +10,6 @@ import java.util.Vector;
 
 public class ChapterLoaderModel {
 
-
     private int chapterId;
 
     private String chapterName;

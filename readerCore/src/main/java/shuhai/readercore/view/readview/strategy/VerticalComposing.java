@@ -42,4 +42,9 @@ public class VerticalComposing implements ComposingStrategy{
     public boolean hasChapter(int articleId, int chapterId) {
         return false;
     }
+
+    @Override
+    public void setTextSize(int textSize) {
+
+    }
 }

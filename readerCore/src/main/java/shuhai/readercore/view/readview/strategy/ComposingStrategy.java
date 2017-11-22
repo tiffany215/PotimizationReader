@@ -38,6 +38,8 @@ public interface ComposingStrategy {
 
     boolean hasChapter(int articleId,int chapterId);
 
+    void setTextSize(int textSize);
+
 
 
 }

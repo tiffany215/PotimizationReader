@@ -18,6 +18,8 @@
     <color name="primary_text1">#b79e66</color>
     <color name="color_b2">#b2b2b2</color>
 
+    <color name="title_color">#3dcbb3</color>
+    <color name="trans_color">#00000000</color>
 
 
 
@@ -28,4 +30,71 @@
     <color name="read_theme_yellow">#e6dbbf</color>
     <color name="read_theme_gray">#AAAAAA</color>
     <color name="read_theme_night">#000000</color>
+
+
+    <color name="read_style_theme_00">#fef9e6</color>
+    <color name="read_style_theme_01">#f0e7ca</color>
+    <color name="read_style_theme_02">#e6d5aa</color>
+    <color name="read_style_theme_03">#ddcfb2</color>
+    <color name="read_style_theme_04">#a7a195</color>
+    <color name="read_style_theme_05">#000000</color>
+    <color name="read_style_theme_06">#e1e4b5</color>
+    <color name="read_style_theme_07">#c8e8b7</color>
+    <color name="read_style_theme_08">#354f42</color>
+    <color name="read_style_theme_09">#263240</color>
+    <color name="read_style_theme_10">#0a0d14</color>
+    <color name="read_style_theme_11">#d5bb96</color>
+    <color name="read_style_theme_12">#fef9e6</color>
+    <color name="read_style_theme_13">#fef9e6</color>
+    <color name="read_style_theme_14">#fef9e6</color>
+    <color name="read_style_theme_15">#fef9e6</color>
+    <color name="read_style_theme_16">#fef9e6</color>
+    <color name="read_style_theme_17">#fef9e6</color>
+    <color name="read_style_theme_18">#fef9e6</color>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </resources>

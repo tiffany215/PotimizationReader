@@ -6,16 +6,10 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-
-import com.kingja.loadsir.callback.Callback;
 import com.kingja.loadsir.core.LoadService;
-import com.kingja.loadsir.core.LoadSir;
 
 import butterknife.ButterKnife;
 import shuhai.readercore.R;
-import shuhai.readercore.ui.dialog.callback.LoadingCallback;
 
 /**
  * @author 55345364

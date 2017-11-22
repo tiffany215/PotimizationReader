@@ -14,7 +14,8 @@ import android.widget.Toast;
 import com.kingja.loadsir.core.LoadService;
 
 import shuhai.readercore.manager.ThemeManager;
-import shuhai.readercore.ui.dialog.callback.LoadingCallback;
+import shuhai.readercore.ui.dialog.BookReadSettingDialog;
+import shuhai.readercore.ui.dialog.LoadingCallback;
 import shuhai.readercore.utils.ScreenUtils;
 import shuhai.readercore.utils.ToastUtils;
 import shuhai.readercore.view.readview.dataloader.HorizontalScrollChapterLoader;
@@ -22,7 +23,6 @@ import shuhai.readercore.view.readview.status.BookStatus;
 import shuhai.readercore.view.readview.factory.Factory;
 import shuhai.readercore.view.readview.factory.PageFactory;
 import shuhai.readercore.view.readview.status.FlipStatus;
-import shuhai.readercore.view.readview.strategy.HorizontalComposing;
 
 /**
  * @author 55345364
@@ -133,7 +133,7 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
 
 
     /**
-     * 主题设置
+     * 主题设置OnChapterLoadStatusListener
      * @param theme
      */
     public synchronized void init(int theme){
@@ -170,6 +170,9 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
 
         @Override
         public void postInvalidatePage() {
+            factory.onDraw(mPrePageCanvas);
+            factory.onDraw(mCurPageCanvas);
+            factory.onDraw(mNextPageCanvas);
             postInvalidate();
         }
 
@@ -373,7 +376,7 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
                     speed = 0;
                 startScroller(speed);
                 if(getTouchLocal(event.getX(),event.getY()) == SETTING_AREA && Math.abs(speed) < 100 && state != STATE_MOVE){
-                    Toast.makeText(getContext(),"tttt",Toast.LENGTH_LONG).show();
+                    new BookReadSettingDialog(getContext(), factory).show();
                     return true;
                 }
                 postInvalidate();

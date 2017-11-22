@@ -2,13 +2,18 @@ package shuhai.readercore.view.readview.pagewidget;
 
 import android.content.Context;
 import android.os.Message;
+import android.util.Log;
 
 import com.eschao.android.widget.pageflip.OnPageFlipListener;
 import com.eschao.android.widget.pageflip.Page;
 import com.eschao.android.widget.pageflip.PageFlipState;
 import com.kingja.loadsir.core.LoadService;
 
+import shuhai.readercore.utils.ScreenUtils;
 import shuhai.readercore.view.readview.displayview.GLHorizontalBaseReadView;
+import shuhai.readercore.view.readview.status.BookStatus;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * @author 55345364
@@ -49,12 +54,26 @@ public class GLRealFlipPageWidget extends GLHorizontalBaseReadView implements On
                     // don't do anything on page number since mPageNo is always
                     // represents the FIRST_TEXTURE no;
 //                    mPageFlip.getSecondPage().setSecondTextureWithFirst();
-                    factory.autoReduce();
+                        Log.e(TAG, "-----------------向前翻页完成-------------------->>"  );
+                        factory.autoReduce();
+                        factory.nextPage(mNextPageCanvas);
+                        factory.curPage(mCurPageCanvas);
+                        if(factory.prePage(mPrePageCanvas)){
+                            mBookStatus = BookStatus.LOAD_SUCCESS;
+                        }
+
+
                 }
                 // update page number and switch textures for forward flip
                 else if (state == PageFlipState.END_WITH_FORWARD) {
+                    Log.e(TAG, "-----------------向后翻页完成-------------------->>"  );
                     mPageFlip.getFirstPage().setFirstTextureWithSecond();
                     factory.autoIncrease();
+                    factory.prePage(mPrePageCanvas);
+                    factory.curPage(mCurPageCanvas);
+                    if(factory.nextPage(mNextPageCanvas)){
+                        mBookStatus = BookStatus.LOAD_SUCCESS;
+                    }
                 }
 
                 mDrawCommand = DRAW_FULL_PAGE;
@@ -84,14 +103,12 @@ public class GLRealFlipPageWidget extends GLHorizontalBaseReadView implements On
                 //检查第一页的第二个纹理是否有效，如果没有，
                 //创建新的
                 if (!page.isSecondTextureSet()) {
-                    factory.nextPage(mCanvas);
-                    page.setSecondTexture(mBitmap);
+                    page.setSecondTexture(mNextPageBitmap);
                 }
             }
             // 在向后翻页，第一页的第一个纹理检查是有效的
             else if (!page.isFirstTextureSet()) {
-                factory.prePage(mCanvas);
-                page.setFirstTexture(mBitmap);
+                page.setFirstTexture(mPrePageBitmap);
             }
 
             // draw frame for page flip
@@ -101,8 +118,7 @@ public class GLRealFlipPageWidget extends GLHorizontalBaseReadView implements On
         // 画平静的页面而不翻转
         else if (mDrawCommand == DRAW_FULL_PAGE) {
             if (!page.isFirstTextureSet() || !page.isSecondTextureSet()) {
-                factory.curPage(mCanvas);
-                page.setFirstTexture(mBitmap);
+                page.setFirstTexture(mCurPageBitmap);
             }
             mPageFlip.drawPageFrame();
         }
@@ -121,12 +137,12 @@ public class GLRealFlipPageWidget extends GLHorizontalBaseReadView implements On
 
     @Override
     public boolean canFlipForward() {
-        return (factory.getPageSize() <= factory.getCountPage());
+        return factory.getPageSize() <= factory.getCountPage();
     }
 
     @Override
     public boolean canFlipBackward() {
-        if (factory.getPageSize() >= 1) {
+        if (mBookStatus != BookStatus.NO_PRE_PAGE || factory.getPageSize() > 1) {
             mPageFlip.getFirstPage().setSecondTextureWithFirst();
             return true;
         }else {

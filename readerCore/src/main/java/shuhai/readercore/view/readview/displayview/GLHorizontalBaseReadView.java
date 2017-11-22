@@ -7,16 +7,11 @@ import android.graphics.Canvas;
 import android.opengl.GLSurfaceView;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.MotionEvent;
-import android.widget.Scroller;
 import android.widget.Toast;
 
-import com.eschao.android.widget.pageflip.OnPageFlipListener;
-import com.eschao.android.widget.pageflip.Page;
 import com.eschao.android.widget.pageflip.PageFlip;
 import com.eschao.android.widget.pageflip.PageFlipException;
-import com.eschao.android.widget.pageflip.PageFlipState;
 import com.kingja.loadsir.core.LoadService;
 
 import java.util.concurrent.locks.ReentrantLock;
@@ -25,17 +20,14 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import shuhai.readercore.manager.ThemeManager;
-import shuhai.readercore.ui.dialog.callback.LoadingCallback;
-import shuhai.readercore.ui.sharedp.UserSP;
+import shuhai.readercore.ui.dialog.LoadingCallback;
 import shuhai.readercore.utils.ScreenUtils;
-import shuhai.readercore.utils.StringUtils;
+import shuhai.readercore.utils.ToastUtils;
 import shuhai.readercore.view.readview.dataloader.HorizontalScrollChapterLoader;
 import shuhai.readercore.view.readview.factory.Factory;
 import shuhai.readercore.view.readview.factory.PageFactory;
 import shuhai.readercore.view.readview.status.BookStatus;
 import shuhai.readercore.view.readview.status.FlipStatus;
-
-import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
 
 
 /**
@@ -46,18 +38,13 @@ import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
 @SuppressLint("NewApi")
 public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements GLSurfaceView.Renderer, BaseReadViewImpl{
 
-    protected Bitmap mBitmap;
-    protected Canvas mCanvas;
+    protected Bitmap mPrePageBitmap,mCurPageBitmap,mNextPageBitmap;
+    protected Canvas mPrePageCanvas,mCurPageCanvas,mNextPageCanvas;
     protected PageFlip mPageFlip;
     private ReentrantLock mDrawLock;
-    private BookStatus mBookStatus;
-    protected int mPageSize;
-    private int pageCount;
-
+    protected BookStatus mBookStatus;
     public Handler mHandler;
-
     protected final static int MSG_ENDED_DRAWING_FRAME = 1;
-
     protected final static int DRAW_MOVING_FRAME = 0;
     protected final static int DRAW_ANIMATING_FRAME = 1;
     protected final static int DRAW_FULL_PAGE = 2;
@@ -83,8 +70,13 @@ public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements 
         setRenderer(this);
         setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
 
-        mBitmap = Bitmap.createBitmap(ScreenUtils.getScreenWidth(),ScreenUtils.getScreenHeight(), Bitmap.Config.ARGB_8888);
-        mCanvas = new Canvas(mBitmap);
+        mPrePageBitmap = Bitmap.createBitmap(ScreenUtils.getScreenWidth(),ScreenUtils.getScreenHeight(), Bitmap.Config.ARGB_8888);
+        mCurPageBitmap = Bitmap.createBitmap(ScreenUtils.getScreenWidth(),ScreenUtils.getScreenHeight(), Bitmap.Config.ARGB_8888);
+        mNextPageBitmap = Bitmap.createBitmap(ScreenUtils.getScreenWidth(),ScreenUtils.getScreenHeight(), Bitmap.Config.ARGB_8888);
+
+        mPrePageCanvas =  new Canvas(mPrePageBitmap);
+        mCurPageCanvas =  new Canvas(mCurPageBitmap);
+        mNextPageCanvas =  new Canvas(mNextPageBitmap);
         mDrawCommand = DRAW_FULL_PAGE;
 
         factory = new PageFactory.Builder(context)
@@ -105,14 +97,16 @@ public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements 
     public synchronized void openBook(int articleId, int chapterId, int chapterOrder, FlipStatus status) {
         mBookStatus = factory.openBook(articleId,chapterId,chapterOrder,status);
         switch (mBookStatus) {
-            case LOAD_ERROR:
+            case LOAD_START:
                 Toast.makeText(getContext(),"开始加载本书！",Toast.LENGTH_LONG).show();
                 break;
             case LOAD_SUCCESS:
                 if(null != mLoadService){
                     mLoadService.showSuccess();
                 }
-                factory.curPage(mCanvas);
+                factory.prePage(mPrePageCanvas);
+                factory.curPage(mCurPageCanvas);
+                factory.nextPage(mNextPageCanvas);
                 requestRender();
                 break;
         }
@@ -125,7 +119,7 @@ public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements 
     public abstract boolean onEndedDrawing(int what);
 
     public synchronized void closeBook(){
-
+        factory.closeBook();
     }
 
 
@@ -163,6 +157,7 @@ public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements 
 
     private void onFingerMove(float x,float y){
         if(mPageFlip.isAnimating()){
+
         }else if(mPageFlip.canAnimate(x,y)){
             onFingerUp(x,y);
         }else if(mPageFlip.onFingerMove(x,y)){
@@ -219,7 +214,7 @@ public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements 
 
         @Override
         public void postInvalidatePage() {
-            postInvalidate();
+            requestRender();
         }
 
         @Override
@@ -239,12 +234,37 @@ public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements 
 
         @Override
         public void onDrawPositionPage(FlipStatus flipStatus) {
-            factory.postInvalidatePage(mCanvas,flipStatus);
+            switch (flipStatus) {
+                case ON_FLIP_PRE:
+                    factory.postInvalidatePage(mPrePageCanvas,flipStatus);
+                    break;
+                case ON_FLIP_CUR:
+                    factory.postInvalidatePage(mCurPageCanvas,flipStatus);
+                    break;
+                case ON_FLIP_NEXT:
+                    factory.postInvalidatePage(mNextPageCanvas,flipStatus);
+                    break;
+                case ON_PRE_CHAPTER_LAST_PAGE:
+                    factory.postInvalidatePage(mPrePageCanvas,flipStatus);
+                    break;
+                case ON_NEXT_CHAPTER_FIRST_PAGE:
+                    factory.postInvalidatePage(mNextPageCanvas,flipStatus);
+                    break;
+            }
         }
 
         @Override
         public void onPageStatus(BookStatus bookStatus) {
+            mBookStatus = bookStatus;
+            switch (mBookStatus) {
+                case LOAD_ERROR:
+                    ToastUtils.showToast("章节加载失败！");
+                    break;
 
+                case NO_PRE_PAGE:
+                    ToastUtils.showToast("没有上一章了！");
+                    break;
+            }
         }
     }
 

@@ -4,8 +4,7 @@ import android.app.Application;
 
 import com.kingja.loadsir.core.LoadSir;
 
-import shuhai.readercore.ui.dialog.callback.LoadingCallback;
-import shuhai.readercore.utils.AppUtils;
+import shuhai.readercore.ui.dialog.LoadingCallback;
 import shuhai.readercore.utils.Utils;
 
 /**

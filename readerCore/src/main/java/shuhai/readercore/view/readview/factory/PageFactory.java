@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.widget.ProgressBar;
 
@@ -16,8 +17,10 @@ import java.util.Date;
 import java.util.Vector;
 
 import shuhai.readercore.Constants;
+import shuhai.readercore.R;
 import shuhai.readercore.bean.ChapterEntity;
 import shuhai.readercore.manager.DataBaseManager;
+import shuhai.readercore.manager.ThemeManager;
 import shuhai.readercore.ui.sharedp.UserSP;
 import shuhai.readercore.utils.ScreenUtils;
 import shuhai.readercore.view.readview.dataloader.ChapterLoadManager;
@@ -76,6 +79,7 @@ public class PageFactory extends Factory {
     private static Paint mTitlePaint;
 
     private Bitmap mBookPageBg;
+    private static int textColor;
 
     private DecimalFormat decimalFormat = new DecimalFormat("0.00");
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
@@ -117,13 +121,15 @@ public class PageFactory extends Factory {
             mPaint.setAntiAlias(true);
             mPaint.setStyle(Paint.Style.FILL);
 
-//            mPaint.setColor(ContextCompat.getColor(context, R.color.primary_text));
+            mPaint.setColor(ContextCompat.getColor(context, R.color.primary_text));
 //            mPaint.setShadowLayer(1f, 0.5f, 0.5f, Color.WHITE);//设置阴影层，这是关键
 
             mTitlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
             mTitlePaint.setStyle(Paint.Style.FILL);//设置填充样式
             mTitlePaint.setStrokeWidth(1);//设置画笔宽度
+            mTitlePaint.setColor(ContextCompat.getColor(context, R.color.primary_text));
+
         }
 
 
@@ -241,6 +247,10 @@ public class PageFactory extends Factory {
                 mFontPath = "fonts/HYQiHei-50S.otf";
             }
 
+            if(textColor == 0){
+                textColor = ContextCompat.getColor(mContext, R.color.primary_text);
+            }
+
             mChapterLoaderStrategy.setComposingStrategy(new HorizontalComposing(mWidth,mHeight,mMarginWidth,mMarginHeight,mFontSize,mNumFontSize,mLineSpace,mPaint));
             return new PageFactory();
         }
@@ -277,6 +287,10 @@ public class PageFactory extends Factory {
     @Override
     public int getPageSize() {
         return chapterLoadManager.getPageSize();
+    }
+
+    public int getArticleId(){
+        return mArticleId;
     }
 
 
@@ -481,5 +495,26 @@ public class PageFactory extends Factory {
     @Override
     public void closeBook() {
         UserSP.getInstance().setLastReaderPage(mArticleId,getPageSize());
+    }
+
+    @Override
+    public void setTheme(int theme) {
+        setBgBitmap(ThemeManager.getThemeDrawable(theme));
+        if(null != mOnReaderLoadingListener){
+            mOnReaderLoadingListener.postInvalidatePage();
+        }
+    }
+
+    @Override
+    public void setTextColor(int color) {
+        textColor = ContextCompat.getColor(mContext, color);
+    }
+
+    @Override
+    public void setTextSize(int size) {
+        mPaint.setTextSize(size);
+        if(null != mOnReaderLoadingListener){
+            mOnReaderLoadingListener.postInvalidatePage();
+        }
     }
 }

@@ -223,7 +223,7 @@ public class ChapterLoadManager {
      * @return
      */
     public ChapterLoaderModel getPreChapterLastPage() {
-        ChapterEntity entity = DataBaseManager.getInstance().queryNextChapterInfo(Constants.CHAP_TYPE.CHAPTER,mArticleId,mChapterEntity.getChapterOrder(), FlipStatus.ON_FLIP_NEXT);
+        ChapterEntity entity = DataBaseManager.getInstance().queryNextChapterInfo(Constants.CHAP_TYPE.CHAPTER,mArticleId,mChapterEntity.getChapterOrder(), FlipStatus.ON_FLIP_PRE);
         if(null == entity){
             return  null;
         }

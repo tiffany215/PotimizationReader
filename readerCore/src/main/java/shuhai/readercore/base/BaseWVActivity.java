@@ -17,13 +17,11 @@ import android.webkit.WebViewClient;
 
 
 import com.kingja.loadsir.callback.Callback;
-import com.kingja.loadsir.core.LoadService;
 import com.kingja.loadsir.core.LoadSir;
 
 import butterknife.InjectView;
 import shuhai.readercore.R;
-import shuhai.readercore.ui.dialog.callback.LoadingCallback;
-import shuhai.readercore.utils.AppUtils;
+import shuhai.readercore.ui.dialog.LoadingCallback;
 import shuhai.readercore.utils.NetworkUtils;
 import shuhai.readercore.utils.UrlUtils;
 
