@@ -108,6 +108,8 @@ public class BookAboutActivity extends BaseWVActivity {
                         // 处理从目录等位置进入的 具体章节阅读
                         Intent intent = new Intent();
                         intent.putExtra("read.book.id",Integer.parseInt(articleid));
+                        intent.putExtra("read.chapter.id",Integer.parseInt(chaptered));
+                        intent.putExtra("read.chapter.order",Integer.parseInt(chapterorder));
                         intent.setClass(mContext,ReadActivity.class);
                         startActivity(intent);
                         Toast.makeText(mContext, "阅读", Toast.LENGTH_SHORT).show();

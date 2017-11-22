@@ -60,8 +60,12 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View{
     @Override
     public void initData() {
         mBookId = getIntent().getIntExtra("read.book.id",0);
-        mChapterId = UserSP.getInstance().getLastReaderChapterId(mBookId);
-        mChapterOrder = UserSP.getInstance().getLastReaderChapterOrder(mBookId);
+        mChapterId = getIntent().getIntExtra("read.chapter.id",0);
+        mChapterOrder = getIntent().getIntExtra("read.chapter.order",0);
+        if(mChapterId  == 0 || mChapterOrder == 0){
+            mChapterId = UserSP.getInstance().getLastReaderChapterId(mBookId);
+            mChapterOrder = UserSP.getInstance().getLastReaderChapterOrder(mBookId);
+        }
     }
 
     @Override
@@ -83,7 +87,7 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View{
         mFlipMark = 0;
         initPagerWidget();
         mPresenter.attachView(this);
-        mPageWidget.openBook(mBookId,mChapterId,UserSP.getInstance().getLastReaderChapterOrder(mBookId),FlipStatus.ON_FLIP_CUR);
+        mPageWidget.openBook(mBookId,mChapterId,mChapterOrder,FlipStatus.ON_FLIP_CUR);
     }
 
 
