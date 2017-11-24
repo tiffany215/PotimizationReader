@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="main_menu_height">60dp</dimen>
+    <dimen name="app_layout_height">45dp</dimen>
+
+    <dimen name="view_height">1px</dimen>
+    <dimen name="read_more_margins">20dp</dimen>
+    <dimen name="read_more_layout_height">12dp</dimen>
+
+    <!-- 阅读页面最大字体 -->
+    <dimen name="chapter_font_max_size">35dp</dimen>
+    <!-- 阅读页面最小字体 -->
+    <dimen name="chapter_font_mix_size">15dp</dimen>
+
+</resources>

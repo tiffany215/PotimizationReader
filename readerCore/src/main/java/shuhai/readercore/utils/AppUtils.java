@@ -28,7 +28,7 @@ public final class AppUtils {
      * 获取版本号
      * @return
      */
-    public static int getAppVersion(){
+    public static int getAppVersionCode(){
         PackageInfo packageInfo = Utils.getPackageInfo();
         if(null != packageInfo){
             return packageInfo.versionCode;

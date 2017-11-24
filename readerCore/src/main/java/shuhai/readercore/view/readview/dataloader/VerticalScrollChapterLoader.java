@@ -32,4 +32,14 @@ public class VerticalScrollChapterLoader implements ChapterLoaderStrategyImpl {
     public boolean hasChapter(int articleId, int chapterId) {
         return false;
     }
+
+    @Override
+    public void setFontSize(int fontSize) {
+
+    }
+
+    @Override
+    public void characterTypesetting(int chapterId, String key) {
+
+    }
 }

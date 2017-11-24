@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/top_menu_layout"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/primary_text"
+        android:gravity="center_vertical" >
+
+        <ImageButton
+            android:id="@+id/system_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="15dp"
+            android:background="@drawable/read_setting_back_white_24dp"
+            />
+
+
+        <ImageButton
+            android:id="@+id/read_top_mark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="15dp"
+            android:background="@drawable/read_setting_bookmark_white_24dp"
+            />
+
+        <ImageButton
+            android:id="@+id/read_more_book_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_margin="15dp"
+            android:layout_toLeftOf="@id/read_top_mark"
+            android:background="@drawable/read_setting_details_white_24dp"
+            />
+
+        <ImageButton
+            android:id="@+id/read_download_chapter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_margin="15dp"
+            android:layout_toLeftOf="@id/read_more_book_detail"
+            android:background="@drawable/read_setting_file_download_white_24dp"
+            />
+
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/null_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <LinearLayout
+        android:id="@+id/bottom_menu_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/read_night"
+            android:layout_width="58dp"
+            android:layout_height="58dp"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:src="@drawable/read_setting_btn_day_or_night_brightness_4_black_24dp"
+            app:fabSize="auto"
+            app:backgroundTint="@color/colorPrimary"
+            app:layout_behavior="com.nan.advancedui.fab.anim.behavior.FabBehavior"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            />
+
+
+        <!-- 阅读进度 -->
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/app_layout_height"
+            android:background="@color/primary_text"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="进度"
+                android:textColor="@color/colorPrimary"
+                android:textSize="12sp" />
+
+            <SeekBar
+                android:id="@+id/read_progress_seekbar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
+                android:layout_weight="1"
+                android:max="100"
+                android:maxHeight="2dp"
+                android:minHeight="2dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:progressDrawable="@drawable/seek_bar_background"
+                android:thumb="@drawable/seek_bar_thumb"
+                android:thumbOffset="12dp" />
+
+            <TextView
+                android:id="@+id/read_progress_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0%"
+                android:textColor="#25c4a6" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/read_bottom_operation"
+            android:layout_width="fill_parent"
+            android:layout_height="70dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/primary_text"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/read_catalog"
+                style="@style/bookstore_menu_button"
+                android:drawableTop="@drawable/read_setting_catalog_white_24dp"
+                android:text="目录" />
+            <Button
+                android:id="@+id/read_setting"
+                style="@style/bookstore_menu_button"
+                android:drawableTop="@drawable/read_setting_settings_white_24dp"
+                android:text="设置" />
+            <Button
+                android:id="@+id/speech_book"
+                style="@style/bookstore_menu_button"
+                android:drawableTop="@drawable/read_setting_speech_book_headset_mic_black_24dp"
+                android:text="听书" />
+            <Button
+                android:id="@+id/bookstore_menu_night_model"
+                style="@style/bookstore_menu_button"
+                android:drawableTop="@drawable/read_setting_reviews_mode_comment_black_24dp"
+                android:text="护眼" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

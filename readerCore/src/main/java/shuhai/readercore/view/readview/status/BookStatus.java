@@ -23,7 +23,9 @@ public enum BookStatus {
     LOAD_START,
     LOAD_COMPLETE,
     LOAD_SUCCESS,
-    LOAD_ERROR
+    LOAD_ERROR,
+    LOAD_NET_WORT_ERROR,
+    NEED_BUY_CHAPTER
 
 
 }

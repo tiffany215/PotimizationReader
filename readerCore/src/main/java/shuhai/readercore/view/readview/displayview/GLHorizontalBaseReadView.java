@@ -7,7 +7,10 @@ import android.graphics.Canvas;
 import android.opengl.GLSurfaceView;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.view.ViewConfigurationCompat;
 import android.view.MotionEvent;
+import android.view.VelocityTracker;
+import android.view.ViewConfiguration;
 import android.widget.Toast;
 
 import com.eschao.android.widget.pageflip.PageFlip;
@@ -20,6 +23,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import shuhai.readercore.manager.ThemeManager;
+import shuhai.readercore.ui.dialog.BookReadSettingDialog;
 import shuhai.readercore.ui.dialog.LoadingCallback;
 import shuhai.readercore.utils.ScreenUtils;
 import shuhai.readercore.utils.ToastUtils;
@@ -49,13 +53,28 @@ public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements 
     protected final static int DRAW_ANIMATING_FRAME = 1;
     protected final static int DRAW_FULL_PAGE = 2;
 
+    // 点击页面区域
+    private static final int PREVIOUS_AREA = 1;
+    private static final int NEXT_AREA = 2;
+    private static final int SETTING_AREA = 3;
+
+    //获取滑动速度
+    private VelocityTracker vt;
+    //当前的滑动速度
+    private float speed;
+    //防止抖动
+    private float speed_shake;
+
     protected int mDrawCommand;
 
-    protected Factory factory;
+    protected PageFactory factory;
     private LoadService mLoadService;
+
+    private Context mContext;
 
     public GLHorizontalBaseReadView(Context context, LoadService loadService) {
         super(context);
+
         this.mLoadService = loadService;
         newHandler();
         mPageFlip = new PageFlip(context);
@@ -84,6 +103,11 @@ public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements 
 //                .setComposingStrategy()
                 .setOnReaderLoadingListener(new GLOnReaderLoadingListener())
                 .builder();
+
+        ViewConfiguration configuration = ViewConfiguration.get(context);
+        speed_shake = ViewConfigurationCompat.getScaledPagingTouchSlop(configuration);
+
+        this.mContext = context;
 
     }
 
@@ -127,13 +151,44 @@ public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements 
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()){
             case MotionEvent.ACTION_DOWN:
+                try
+                {
+                    if (vt == null)
+                    {
+                        vt = VelocityTracker.obtain();
+                    } else
+                    {
+                        vt.clear();
+                    }
+                } catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+                vt.addMovement(event);
                 onFingerDown(event.getX(),event.getY());
                 break;
             case MotionEvent.ACTION_MOVE:
+                vt.addMovement(event);
+                vt.computeCurrentVelocity(500);
+                speed = vt.getXVelocity();
                 onFingerMove(event.getX(), event.getY());
                 break;
             case MotionEvent.ACTION_UP:
+                if (Math.abs(speed) < speed_shake)
+                    speed = 0;
+                if(getTouchLocal(event.getX(),event.getY()) == SETTING_AREA && Math.abs(speed) < 100 ){
+                    new BookReadSettingDialog(mContext,factory).show();
+                    return true;
+                }
                 onFingerUp(event.getX(), event.getY());
+                try
+                {
+                    vt.clear();
+                    vt.recycle();
+                } catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
                 break;
         }
         return true;
@@ -212,8 +267,13 @@ public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements 
      */
     private class GLOnReaderLoadingListener implements OnReaderLoadingListener{
 
+
+
         @Override
         public void postInvalidatePage() {
+            factory.onDraw(mPrePageCanvas);
+            factory.onDraw(mCurPageCanvas);
+            factory.onDraw(mNextPageCanvas);
             requestRender();
         }
 
@@ -264,6 +324,12 @@ public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements 
                 case NO_PRE_PAGE:
                     ToastUtils.showToast("没有上一章了！");
                     break;
+                case NEED_BUY_CHAPTER:
+                    ToastUtils.showToast("此章节需要付费！");
+                    break;
+            }
+            if(null != mLoadService){
+                mLoadService.showSuccess();
             }
         }
     }
@@ -297,5 +363,23 @@ public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements 
                 }
             }
         };
+    }
+
+
+    /**
+     * 判断点击的区域
+     *
+     * @param x
+     * @param y
+     * @return
+     */
+    private int getTouchLocal(float x, float y) {
+        if (x > ScreenUtils.getScreenWidth() / 4 && x < ScreenUtils.getScreenWidth() * 3 / 4
+                && y > ScreenUtils.getScreenHeight() / 4 && y < ScreenUtils.getScreenHeight() * 3 / 4) {
+            return SETTING_AREA;
+        } else if (x > ScreenUtils.getScreenWidth() / 2) {
+            return NEXT_AREA;
+        }
+        return PREVIOUS_AREA;
     }
 }

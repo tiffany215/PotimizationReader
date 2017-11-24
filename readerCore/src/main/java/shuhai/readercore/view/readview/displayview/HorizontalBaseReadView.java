@@ -148,6 +148,13 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
             case LOAD_START:
                 Toast.makeText(getContext(),"开始加载章节内容！",Toast.LENGTH_LONG).show();
                 break;
+            case LOAD_NET_WORT_ERROR:
+                ToastUtils.getSingleToast("网络异常，请稍后重试！",Toast.LENGTH_SHORT).show();
+                if(null != mLoadService){
+                    mLoadService.showSuccess();
+                }
+                break;
+
             case LOAD_SUCCESS:
                 if(null != mLoadService){
                     mLoadService.showSuccess();
@@ -170,9 +177,9 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
 
         @Override
         public void postInvalidatePage() {
-            factory.onDraw(mPrePageCanvas);
-            factory.onDraw(mCurPageCanvas);
-            factory.onDraw(mNextPageCanvas);
+//            factory.onDraw(mPrePageCanvas);
+//            factory.onDraw(mCurPageCanvas);
+//            factory.onDraw(mNextPageCanvas);
             postInvalidate();
         }
 
@@ -216,7 +223,6 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
         @Override
         public void onPageStatus(BookStatus bookStatus) {
             mBookStatus = bookStatus;
-
             switch (mBookStatus) {
                 case LOAD_ERROR:
                     ToastUtils.showToast("章节加载失败！");
@@ -225,6 +231,12 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
                 case NO_PRE_PAGE:
                     ToastUtils.showToast("没有上一章了！");
                     break;
+                case NEED_BUY_CHAPTER:
+                    ToastUtils.showToast("此章节需要付费！");
+                    break;
+            }
+            if(null != mLoadService){
+                mLoadService.showSuccess();
             }
         }
     }

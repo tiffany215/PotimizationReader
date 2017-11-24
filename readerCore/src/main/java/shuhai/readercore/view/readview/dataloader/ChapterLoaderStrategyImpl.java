@@ -31,5 +31,9 @@ public interface ChapterLoaderStrategyImpl {
 
     boolean hasChapter(int articleId, int chapterId);
 
+    void setFontSize(int fontSize);
+
+    void characterTypesetting(int chapterId,String key);
+
 
 }

@@ -22,7 +22,9 @@ import shuhai.readercore.bean.ChapterEntity;
 import shuhai.readercore.manager.DataBaseManager;
 import shuhai.readercore.manager.ThemeManager;
 import shuhai.readercore.ui.sharedp.UserSP;
+import shuhai.readercore.utils.NetworkUtils;
 import shuhai.readercore.utils.ScreenUtils;
+import shuhai.readercore.utils.StringUtils;
 import shuhai.readercore.view.readview.dataloader.ChapterLoadManager;
 import shuhai.readercore.view.readview.dataloader.ChapterLoaderModel;
 import shuhai.readercore.view.readview.displayview.OnChapterLoadStatusListener;
@@ -272,11 +274,15 @@ public class PageFactory extends Factory {
                 .setPageSize(UserSP.getInstance().getLastReaderPage(mArticleId))
                 .setPageCount(mChapterLoaderStrategy.getCountPage(mChapterId))
                 .builder();
+
         if(chapterLoadManager.hasLocalData() && mChapterLoaderStrategy.hasChapter(mArticleId,mChapterId)){
                 return BookStatus.LOAD_SUCCESS;
         }
+        if(!NetworkUtils.isAvailable(mContext)){
+            return BookStatus.LOAD_NET_WORT_ERROR;
+        }
         chapterLoadManager.obtainChapter(mArticleId,mChapterId,mChapterOrder,FlipStatus.ON_FLIP_CUR);
-            return BookStatus.LOAD_START;
+        return BookStatus.LOAD_START;
     }
 
     @Override
@@ -512,9 +518,16 @@ public class PageFactory extends Factory {
 
     @Override
     public void setTextSize(int size) {
-        mPaint.setTextSize(size);
+        ChapterEntity chapterEntity = chapterLoadManager.getChapterEntity();
+        if(null != mChapterLoaderStrategy && null != chapterEntity){
+            mFontSize = size;
+            mPaint.setTextSize(mFontSize);
+            mChapterLoaderStrategy.setFontSize(mFontSize);
+            mChapterLoaderStrategy.characterTypesetting(mArticleId, StringUtils.cacheKeyCreate(mArticleId,chapterEntity.getChapterId()));
+        }
+
         if(null != mOnReaderLoadingListener){
-            mOnReaderLoadingListener.postInvalidatePage();
+            mOnReaderLoadingListener.onDrawPositionPage(FlipStatus.ON_FLIP_CUR);
         }
     }
 }

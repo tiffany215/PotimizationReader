@@ -45,7 +45,7 @@ public final  class UrlUtils {
                 vStr = vStr.replaceAll("&sign=" + uri.getQueryParameter("sign"), "&sign=" +  MD5Utils.string2MD5(AppUtils.getPackageName() + TimeFromatUtile.getCurrentDateTimeSeconds() + PhoneUtils.getUUID() + Constants.KEY_SIGN));
             }
             if(!collection.contains("version") || TextUtils.isEmpty(uri.getQueryParameter("version"))){
-                vStr += "&version=" + AppUtils.getAppVersion();
+                vStr += "&version=" + AppUtils.getAppVersionCode();
             }
             if(!collection.contains("uid") || TextUtils.isEmpty(uri.getQueryParameter("uid"))){
                 vStr += "&uid=" + UserSP.getInstance().getUid();
@@ -80,10 +80,10 @@ public final  class UrlUtils {
         String url = "";
         try {
             url = vstr
-                    + "&version=" + AppUtils.getAppVersion()
+                    + "&version=" + AppUtils.getAppVersionCode()
                     + "&source=shuhai&packagename=" + AppUtils.getPackageName();
         } catch (Exception e) {
-            url = vstr + "&version=" + AppUtils.getAppVersion()
+            url = vstr + "&version=" + AppUtils.getAppVersionCode()
                     + "&source=shuhai&packagename=" + AppUtils.getPackageName();
         }
         return url;
@@ -106,13 +106,13 @@ public final  class UrlUtils {
                     + UserSP.getInstance().getPass()
                     + "&username="
                     + URLEncoder.encode(URLEncoder.encode(UserSP.getInstance().getUserName(), "UTF-8"), "UTF-8")
-                    + "&version=" + AppUtils.getAppVersion()
+                    + "&version=" + AppUtils.getAppVersionCode()
                     + "&source="
                     + AppUtils.getChannel("UMENG_CHANNEL")
                     + "&packagename=" + AppUtils.getPackageName();
         } catch (Exception e) {
             url = vstr + "&uid=" + UserSP.getInstance().getUid() + "&username=" + ""+"&pass=" + ""
-                    + "&version=" + AppUtils.getAppVersion()
+                    + "&version=" + AppUtils.getAppVersionCode()
                     + "&source="
                     + AppUtils.getChannel("UMENG_CHANNEL")
                     + "&packagename=" + AppUtils.getPackageName();
@@ -132,7 +132,7 @@ public final  class UrlUtils {
                 + "" + "\"imei\":\"" + PhoneUtils.getIMEI() + "\","
                 + "\"uuid\":\"" + PhoneUtils.getUUID() + "\","
                 + "\"source\":\""+AppUtils.getChannel("UMENG_CHANNEL")+ "\","
-                + "\"version\":\"" + AppUtils.getAppVersion() + "\","
+                + "\"version\":\"" + AppUtils.getAppVersionCode() + "\","
                 + "\"uid\":\"" + UserSP.getInstance().getUid() + "\","
                 + "\"pass\":\"" +UserSP.getInstance().getPass() + "\","
                 + "\"packagename\":\"com.shuhai.bookos\","

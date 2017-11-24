@@ -7,12 +7,14 @@ import shuhai.readercore.api.BookApis;
 import shuhai.readercore.bean.ChapterBean;
 import shuhai.readercore.bean.ChapterEntity;
 import shuhai.readercore.bean.MessageBean;
-import shuhai.readercore.manager.ChapterLoader;
+import shuhai.readercore.manager.ChapterCacheManager;
 import shuhai.readercore.manager.DataBaseManager;
 import shuhai.readercore.net.callback.ApiCallback;
 import shuhai.readercore.net.exception.ApiException;
 import shuhai.readercore.ui.sharedp.UserSP;
 import shuhai.readercore.utils.FastJsonUtils;
+import shuhai.readercore.utils.NetworkUtils;
+import shuhai.readercore.utils.Utils;
 import shuhai.readercore.view.readview.displayview.OnChapterLoadStatusListener;
 import shuhai.readercore.view.readview.status.BookStatus;
 import shuhai.readercore.view.readview.status.FlipStatus;
@@ -32,7 +34,9 @@ public class ChapterLoadManager {
     private static OnChapterLoadStatusListener chapterLoadStatusListener;
     private static ChapterDataSource dataSource;
 
-    private ChapterLoadManager(){}
+    private ChapterLoadManager(){
+
+    }
 
     private static class ChapterLoadManagerHolder{
         private static final ChapterLoadManager INSTANCE = new ChapterLoadManager();
@@ -128,6 +132,11 @@ public class ChapterLoadManager {
         if(null != model){
             return model;
         }
+
+        if(!NetworkUtils.isAvailable(Utils.getAppContext())){
+            chapterLoadStatusListener.onPageStatus(BookStatus.LOAD_NET_WORT_ERROR);
+            return null;
+        }
         obtainChapter(mChapterEntity.getArticleId(),mChapterEntity.getChapterId(),mChapterEntity.getChapterOrder(),FlipStatus.ON_PRE_CHAPTER_LAST_PAGE);
         return null;
 
@@ -174,6 +183,10 @@ public class ChapterLoadManager {
         if(null != model){
             return model;
         }else{
+            if(!NetworkUtils.isAvailable(Utils.getAppContext())){
+                chapterLoadStatusListener.onPageStatus(BookStatus.LOAD_NET_WORT_ERROR);
+                return null;
+            }
             obtainChapter(mChapterEntity.getArticleId(),mChapterEntity.getChapterId(),mChapterEntity.getChapterOrder(),FlipStatus.ON_FLIP_CUR);
         }
         return null;
@@ -195,10 +208,14 @@ public class ChapterLoadManager {
         if(null != model){
             return model;
         }
+
+        if(!NetworkUtils.isAvailable(Utils.getAppContext())){
+            chapterLoadStatusListener.onPageStatus(BookStatus.LOAD_NET_WORT_ERROR);
+            return null;
+        }
         obtainChapter(mChapterEntity.getArticleId(),mChapterEntity.getChapterId(),mChapterEntity.getChapterOrder(),FlipStatus.ON_NEXT_CHAPTER_FIRST_PAGE);
         return null;
     }
-
 
     /**
      *
@@ -259,6 +276,10 @@ public class ChapterLoadManager {
         return pageCount;
     }
 
+    public ChapterEntity getChapterEntity(){
+        return mChapterEntity;
+    }
+
     public void setPageCount(int ps){
         pageSize = ps;
     }
@@ -296,7 +317,6 @@ public class ChapterLoadManager {
             @Override
             public void onNext(MessageBean messageBean)  {
                 String code = messageBean.getCode();
-
                 switch (code) {
                     case Constants.RESPONSE_CODE.LOAD_SUCCESS:
                         storageChapter(messageBean, articleId, status);
@@ -308,6 +328,10 @@ public class ChapterLoadManager {
 
                     case Constants.RESPONSE_CODE.NO_PRE_PAGE:
                         chapterLoadStatusListener.onPageStatus(BookStatus.NO_PRE_PAGE);
+                        break;
+
+                    case Constants.RESPONSE_CODE.NEED_BUY_CHAPTER:
+                        chapterLoadStatusListener.onPageStatus(BookStatus.NEED_BUY_CHAPTER);
                         break;
                     default:
                         chapterLoadStatusListener.onPageStatus(BookStatus.LOAD_ERROR);
@@ -326,7 +350,7 @@ public class ChapterLoadManager {
             chapterEntity.setArticleId(articleId);
             String chapterStr = chapterEntity.getContent();
             if(!TextUtils.isEmpty(chapterStr)){
-                ChapterLoader.put(articleId,chapterEntity.getChapterId(),chapterStr);
+                ChapterCacheManager.getInstance().put(articleId,chapterEntity.getChapterId(),chapterStr);
             }
             DataBaseManager.getInstance().insertChapterInfo(chapterEntity);
 

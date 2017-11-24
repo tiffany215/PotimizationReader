@@ -2,13 +2,12 @@ package shuhai.readercore.view.readview.strategy;
 
 import android.graphics.Paint;
 import android.text.TextUtils;
-import android.util.Log;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
-import shuhai.readercore.manager.ChapterLoader;
+import shuhai.readercore.manager.ChapterCacheManager;
 import shuhai.readercore.utils.StringUtils;
 
 
@@ -229,7 +228,7 @@ public class HorizontalComposing implements ComposingStrategy{
     @Override
     public boolean characterTypesetting(int chapterId,String key) {
         boolean isComplete = false;
-        Map<Integer,Vector<String>> chapterMapData = autoSplitPage(ChapterLoader.getChapter(key));
+        Map<Integer,Vector<String>> chapterMapData = autoSplitPage(ChapterCacheManager.getInstance().getChapter(key));
         if(null != chapterMapData && chapterMapData.size() > 0){
             chapterList.put(chapterId,chapterMapData);
             isComplete = true;
@@ -269,6 +268,7 @@ public class HorizontalComposing implements ComposingStrategy{
     @Override
     public void setTextSize(int textSize) {
         this.mFontSize = textSize;
+        mPaint.setTextSize(mFontSize);
     }
 
 

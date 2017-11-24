@@ -37,4 +37,14 @@ public class HorizontalScrollChapterLoader implements ChapterLoaderStrategyImpl 
         return mComposingStrategy.hasChapter(articleId,chapterId);
     }
 
+    @Override
+    public void setFontSize(int fontSize) {
+        mComposingStrategy.setTextSize(fontSize);
+    }
+
+    @Override
+    public void characterTypesetting(int chapterId, String key) {
+        mComposingStrategy.characterTypesetting(chapterId,key);
+    }
+
 }
