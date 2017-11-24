@@ -1,4 +1,4 @@
-package shuhai.readercore;
+package shuhai.readercore.common;
 
 import android.app.Application;
 

@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.TextView;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import shuhai.readercore.Constants;
+import shuhai.readercore.common.Constants;
 import shuhai.readercore.R;
 import shuhai.readercore.base.BaseActivity;
 import shuhai.readercore.utils.ActivityUtils;

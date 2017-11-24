@@ -16,13 +16,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Vector;
 
-import shuhai.readercore.Constants;
+import shuhai.readercore.common.Constants;
 import shuhai.readercore.R;
 import shuhai.readercore.bean.ChapterEntity;
-import shuhai.readercore.manager.DataBaseManager;
 import shuhai.readercore.manager.ThemeManager;
 import shuhai.readercore.ui.sharedp.UserSP;
-import shuhai.readercore.utils.NetworkUtils;
 import shuhai.readercore.utils.ScreenUtils;
 import shuhai.readercore.utils.StringUtils;
 import shuhai.readercore.view.readview.dataloader.ChapterLoadManager;
@@ -278,9 +276,9 @@ public class PageFactory extends Factory {
         if(chapterLoadManager.hasLocalData() && mChapterLoaderStrategy.hasChapter(mArticleId,mChapterId)){
                 return BookStatus.LOAD_SUCCESS;
         }
-        if(!NetworkUtils.isAvailable(mContext)){
-            return BookStatus.LOAD_NET_WORT_ERROR;
-        }
+//        if(!NetworkUtils.isAvailable(mContext)){
+//            return BookStatus.LOAD_NET_WORT_ERROR;
+//        }
         chapterLoadManager.obtainChapter(mArticleId,mChapterId,mChapterOrder,FlipStatus.ON_FLIP_CUR);
         return BookStatus.LOAD_START;
     }
@@ -503,11 +501,12 @@ public class PageFactory extends Factory {
         UserSP.getInstance().setLastReaderPage(mArticleId,getPageSize());
     }
 
+
     @Override
     public void setTheme(int theme) {
         setBgBitmap(ThemeManager.getThemeDrawable(theme));
         if(null != mOnReaderLoadingListener){
-            mOnReaderLoadingListener.postInvalidatePage();
+            mOnReaderLoadingListener.postOnDrawableInvalidatePage();
         }
     }
 

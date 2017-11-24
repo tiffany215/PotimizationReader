@@ -16,7 +16,7 @@ import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-import shuhai.readercore.Constants;
+import shuhai.readercore.common.Constants;
 import shuhai.readercore.net.callback.ApiCallback;
 import shuhai.readercore.net.func.ApiErrorFunc;
 import shuhai.readercore.net.func.ApiFunc;

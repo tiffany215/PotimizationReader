@@ -278,6 +278,11 @@ public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements 
         }
 
         @Override
+        public void postOnDrawableInvalidatePage() {
+
+        }
+
+        @Override
         public void onStartLoading() {
             if(null != mLoadService){
                 mLoadService.showCallback(LoadingCallback.class);

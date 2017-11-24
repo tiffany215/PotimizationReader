@@ -3,12 +3,10 @@ package shuhai.readercore.utils;
 import android.net.Uri;
 import android.text.TextUtils;
 
-import org.w3c.dom.Text;
-
 import java.net.URLEncoder;
 import java.util.Set;
 
-import shuhai.readercore.Constants;
+import shuhai.readercore.common.Constants;
 import shuhai.readercore.ui.sharedp.UserSP;
 
 /**

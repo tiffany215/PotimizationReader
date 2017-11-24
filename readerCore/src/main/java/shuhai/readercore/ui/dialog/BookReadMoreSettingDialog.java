@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import shuhai.readercore.R;
+import shuhai.readercore.common.Constants;
 import shuhai.readercore.manager.ThemeManager;
 import shuhai.readercore.ui.sharedp.ReaderSP;
 import shuhai.readercore.utils.ToastUtils;
@@ -67,6 +68,14 @@ public class BookReadMoreSettingDialog extends Dialog implements View.OnClickLis
         findViewById(R.id.theme_more).setOnClickListener(this);
         findViewById(R.id.read_size_decrease).setOnClickListener(this);
         findViewById(R.id.read_size_add).setOnClickListener(this);
+
+        findViewById(R.id.no_effect_flip).setOnClickListener(this);
+        findViewById(R.id.hor_scroller_flip).setOnClickListener(this);
+        findViewById(R.id.cover_scroller_flip).setOnClickListener(this);
+        findViewById(R.id.gl_real_flip).setOnClickListener(this);
+
+
+
         //初始化主题模式、、日见夜间护眼等模式
         readThemeIds = new int[] { R.id.read_style_day_text,
                 R.id.read_style_blue_text, R.id.read_style_eye_text,
@@ -112,6 +121,22 @@ public class BookReadMoreSettingDialog extends Dialog implements View.OnClickLis
                 break;
             case R.id.theme_more:
                 new BookReadThemeSettingDialog(mContext,mPageFactory).show();
+                dismiss();
+                break;
+            case R.id.gl_real_flip:
+                ReaderSP.getInstance().setFlipModel(Constants.FLIP_CONFIG.LEVEL_REAL_FLIP);
+                dismiss();
+                break;
+            case R.id.hor_scroller_flip:
+                ReaderSP.getInstance().setFlipModel(Constants.FLIP_CONFIG.LEVEL_SCROLLER_FLIP);
+                dismiss();
+                break;
+            case R.id.cover_scroller_flip:
+                ReaderSP.getInstance().setFlipModel(Constants.FLIP_CONFIG.LEVEL_COVER_FLIP);
+                dismiss();
+                break;
+            case R.id.no_effect_flip:
+                ReaderSP.getInstance().setFlipModel(Constants.FLIP_CONFIG.LEVEL_NO_FLIP);
                 dismiss();
                 break;
         }

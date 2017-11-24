@@ -4,10 +4,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import shuhai.readercore.manager.ThemeManager;
-import shuhai.readercore.utils.AppUtils;
 import shuhai.readercore.utils.Utils;
 
-import static shuhai.readercore.Constants.FLIP_CONFIG.LEVEL_COVER_FLIP;
+import static shuhai.readercore.common.Constants.FLIP_CONFIG.LEVEL_COVER_FLIP;
 
 /**
  * @author 55345364

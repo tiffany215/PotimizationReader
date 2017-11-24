@@ -3,19 +3,16 @@ package shuhai.readercore.ui.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v4.app.NavUtils;
-import android.support.v4.app.TaskStackBuilder;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.JavascriptInterface;
 import android.widget.Toast;
 
-import shuhai.readercore.Constants;
+import shuhai.readercore.common.Constants;
 import shuhai.readercore.R;
 import shuhai.readercore.base.BaseWVActivity;
 import shuhai.readercore.utils.ActivityUtils;
-import shuhai.readercore.utils.AppUtils;
 import shuhai.readercore.utils.UrlUtils;
 
 /**

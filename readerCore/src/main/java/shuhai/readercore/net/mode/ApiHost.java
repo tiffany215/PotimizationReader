@@ -1,6 +1,6 @@
 package shuhai.readercore.net.mode;
 
-import shuhai.readercore.Constants;
+import shuhai.readercore.common.Constants;
 
 /**
  * @author 55345364

@@ -4,7 +4,7 @@ import android.view.View;
 import android.widget.Button;
 
 import butterknife.InjectView;
-import shuhai.readercore.Constants;
+import shuhai.readercore.common.Constants;
 import shuhai.readercore.R;
 import shuhai.readercore.base.BaseActivity;
 import shuhai.readercore.ui.sharedp.ReaderSP;

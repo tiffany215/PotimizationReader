@@ -177,9 +177,14 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
 
         @Override
         public void postInvalidatePage() {
-//            factory.onDraw(mPrePageCanvas);
-//            factory.onDraw(mCurPageCanvas);
-//            factory.onDraw(mNextPageCanvas);
+            postInvalidate();
+        }
+
+        @Override
+        public void postOnDrawableInvalidatePage() {
+            factory.onDraw(mPrePageCanvas);
+            factory.onDraw(mCurPageCanvas);
+            factory.onDraw(mNextPageCanvas);
             postInvalidate();
         }
 

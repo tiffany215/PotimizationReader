@@ -18,7 +18,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okio.Buffer;
-import shuhai.readercore.Constants;
+import shuhai.readercore.common.Constants;
 
 /**
  * @author 55345364
