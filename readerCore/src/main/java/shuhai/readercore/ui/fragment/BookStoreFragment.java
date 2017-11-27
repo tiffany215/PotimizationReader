@@ -17,6 +17,7 @@ import shuhai.readercore.ui.activity.ReadActivity;
 import shuhai.readercore.ui.adapter.BookStoreAdapter;
 import shuhai.readercore.ui.contract.BookStoreContract;
 import shuhai.readercore.ui.presenter.BookStorePresenter;
+import shuhai.readercore.utils.NetworkUtils;
 import shuhai.readercore.utils.ToastUtils;
 
 public class BookStoreFragment extends BaseRVFragment<BookStorePresenter,Object> implements BookStoreContract.View{
@@ -90,7 +91,15 @@ public class BookStoreFragment extends BaseRVFragment<BookStorePresenter,Object>
                     ToastUtils.showSingleToast("2");
                     break;
                 case R.id.bookstore_menu_cloud_bookshelf:
-                    ToastUtils.showSingleToast("4");
+//                    ToastUtils.showSingleToast("4");
+
+                    if(NetworkUtils.isConnected(mContext)){
+                        ToastUtils.showToast("有网络");
+                    }else{
+                        ToastUtils.showToast("没有网络");
+                    }
+
+
                     break;
                 case R.id.bookstore_menu_about_ours:
                     startActivity(new Intent().setClass(mContext,AppSettingsActivity.class));

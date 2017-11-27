@@ -21,6 +21,7 @@ import shuhai.readercore.R;
 import shuhai.readercore.bean.ChapterEntity;
 import shuhai.readercore.manager.ThemeManager;
 import shuhai.readercore.ui.sharedp.UserSP;
+import shuhai.readercore.utils.NetworkUtils;
 import shuhai.readercore.utils.ScreenUtils;
 import shuhai.readercore.utils.StringUtils;
 import shuhai.readercore.view.readview.dataloader.ChapterLoadManager;
@@ -276,9 +277,9 @@ public class PageFactory extends Factory {
         if(chapterLoadManager.hasLocalData() && mChapterLoaderStrategy.hasChapter(mArticleId,mChapterId)){
                 return BookStatus.LOAD_SUCCESS;
         }
-//        if(!NetworkUtils.isAvailable(mContext)){
-//            return BookStatus.LOAD_NET_WORT_ERROR;
-//        }
+        if(!NetworkUtils.isConnected(mContext)){
+            return BookStatus.LOAD_NET_WORT_ERROR;
+        }
         chapterLoadManager.obtainChapter(mArticleId,mChapterId,mChapterOrder,FlipStatus.ON_FLIP_CUR);
         return BookStatus.LOAD_START;
     }

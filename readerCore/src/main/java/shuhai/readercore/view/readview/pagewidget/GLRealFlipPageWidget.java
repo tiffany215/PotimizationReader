@@ -21,7 +21,6 @@ import static android.content.ContentValues.TAG;
  */
 
 public class GLRealFlipPageWidget extends GLHorizontalBaseReadView implements OnPageFlipListener {
-
     public GLRealFlipPageWidget(Context context,LoadService loadService) {
         super(context,loadService);
         mPageFlip.setListener(this);

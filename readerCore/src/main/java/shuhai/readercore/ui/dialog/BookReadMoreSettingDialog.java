@@ -2,6 +2,7 @@ package shuhai.readercore.ui.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.DisplayMetrics;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 import shuhai.readercore.R;
 import shuhai.readercore.common.Constants;
 import shuhai.readercore.manager.ThemeManager;
+import shuhai.readercore.ui.activity.AppSettingsActivity;
 import shuhai.readercore.ui.sharedp.ReaderSP;
 import shuhai.readercore.utils.ToastUtils;
 import shuhai.readercore.view.readview.factory.PageFactory;
@@ -73,6 +75,7 @@ public class BookReadMoreSettingDialog extends Dialog implements View.OnClickLis
         findViewById(R.id.hor_scroller_flip).setOnClickListener(this);
         findViewById(R.id.cover_scroller_flip).setOnClickListener(this);
         findViewById(R.id.gl_real_flip).setOnClickListener(this);
+        findViewById(R.id.set_more).setOnClickListener(this);
 
 
 
@@ -139,6 +142,13 @@ public class BookReadMoreSettingDialog extends Dialog implements View.OnClickLis
                 ReaderSP.getInstance().setFlipModel(Constants.FLIP_CONFIG.LEVEL_NO_FLIP);
                 dismiss();
                 break;
+
+            case R.id.set_more:
+                mContext.startActivity(new Intent(mContext, AppSettingsActivity.class));
+                dismiss();
+                break;
+
+
         }
     }
 

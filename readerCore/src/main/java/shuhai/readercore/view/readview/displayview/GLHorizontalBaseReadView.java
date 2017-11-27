@@ -72,6 +72,11 @@ public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements 
 
     private Context mContext;
 
+    private float moveLength;
+
+    private float lastX;
+
+
     public GLHorizontalBaseReadView(Context context, LoadService loadService) {
         super(context);
 
@@ -151,6 +156,9 @@ public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements 
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()){
             case MotionEvent.ACTION_DOWN:
+
+                lastX = event.getX();
+
                 try
                 {
                     if (vt == null)
@@ -171,12 +179,13 @@ public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements 
                 vt.addMovement(event);
                 vt.computeCurrentVelocity(500);
                 speed = vt.getXVelocity();
+                moveLength = event.getX() - lastX;
                 onFingerMove(event.getX(), event.getY());
                 break;
             case MotionEvent.ACTION_UP:
                 if (Math.abs(speed) < speed_shake)
                     speed = 0;
-                if(getTouchLocal(event.getX(),event.getY()) == SETTING_AREA && Math.abs(speed) < 100 ){
+                if(getTouchLocal(event.getX(),event.getY()) == SETTING_AREA && speed == 0 && Math.abs(moveLength) < speed_shake ){
                     new BookReadSettingDialog(mContext,factory).show();
                     return true;
                 }
@@ -266,20 +275,18 @@ public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements 
      * 阅读章节加载状态监听器
      */
     private class GLOnReaderLoadingListener implements OnReaderLoadingListener{
-
-
-
         @Override
         public void postInvalidatePage() {
-            factory.onDraw(mPrePageCanvas);
-            factory.onDraw(mCurPageCanvas);
-            factory.onDraw(mNextPageCanvas);
             requestRender();
         }
 
         @Override
         public void postOnDrawableInvalidatePage() {
-
+            factory.onDraw(mPrePageCanvas);
+            factory.onDraw(mCurPageCanvas);
+            factory.onDraw(mNextPageCanvas);
+            mDrawCommand = DRAW_FULL_PAGE;
+            requestRender();
         }
 
         @Override

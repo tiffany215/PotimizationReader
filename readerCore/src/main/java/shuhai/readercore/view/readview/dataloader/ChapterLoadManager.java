@@ -13,6 +13,8 @@ import shuhai.readercore.net.callback.ApiCallback;
 import shuhai.readercore.net.exception.ApiException;
 import shuhai.readercore.ui.sharedp.UserSP;
 import shuhai.readercore.utils.FastJsonUtils;
+import shuhai.readercore.utils.NetworkUtils;
+import shuhai.readercore.utils.Utils;
 import shuhai.readercore.view.readview.displayview.OnChapterLoadStatusListener;
 import shuhai.readercore.view.readview.status.BookStatus;
 import shuhai.readercore.view.readview.status.FlipStatus;
@@ -131,10 +133,10 @@ public class ChapterLoadManager {
             return model;
         }
 
-//        if(!NetworkUtils.isAvailable(Utils.getAppContext())){
-//            chapterLoadStatusListener.onPageStatus(BookStatus.LOAD_NET_WORT_ERROR);
-//            return null;
-//        }
+        if(!NetworkUtils.isConnected(Utils.getAppContext())){
+            chapterLoadStatusListener.onPageStatus(BookStatus.LOAD_NET_WORT_ERROR);
+            return null;
+        }
         obtainChapter(mChapterEntity.getArticleId(),mChapterEntity.getChapterId(),mChapterEntity.getChapterOrder(),FlipStatus.ON_PRE_CHAPTER_LAST_PAGE);
         return null;
 
@@ -181,10 +183,10 @@ public class ChapterLoadManager {
         if(null != model){
             return model;
         }else{
-//            if(!NetworkUtils.isAvailable(Utils.getAppContext())){
-//                chapterLoadStatusListener.onPageStatus(BookStatus.LOAD_NET_WORT_ERROR);
-//                return null;
-//            }
+            if(!NetworkUtils.isConnected(Utils.getAppContext())){
+                chapterLoadStatusListener.onPageStatus(BookStatus.LOAD_NET_WORT_ERROR);
+                return null;
+            }
             obtainChapter(mChapterEntity.getArticleId(),mChapterEntity.getChapterId(),mChapterEntity.getChapterOrder(),FlipStatus.ON_FLIP_CUR);
         }
         return null;
@@ -207,10 +209,10 @@ public class ChapterLoadManager {
             return model;
         }
 
-//        if(!NetworkUtils.isAvailable(Utils.getAppContext())){
-//            chapterLoadStatusListener.onPageStatus(BookStatus.LOAD_NET_WORT_ERROR);
-//            return null;
-//        }
+        if(!NetworkUtils.isConnected(Utils.getAppContext())){
+            chapterLoadStatusListener.onPageStatus(BookStatus.LOAD_NET_WORT_ERROR);
+            return null;
+        }
         obtainChapter(mChapterEntity.getArticleId(),mChapterEntity.getChapterId(),mChapterEntity.getChapterOrder(),FlipStatus.ON_NEXT_CHAPTER_FIRST_PAGE);
         return null;
     }

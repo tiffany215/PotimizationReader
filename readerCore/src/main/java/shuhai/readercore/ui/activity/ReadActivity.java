@@ -89,7 +89,6 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View{
         mPageWidget.openBook(mBookId,mChapterId,mChapterOrder,FlipStatus.ON_FLIP_CUR);
     }
 
-
     /**
      * 将阅读内容绘制好的View添加到当前容器
      */

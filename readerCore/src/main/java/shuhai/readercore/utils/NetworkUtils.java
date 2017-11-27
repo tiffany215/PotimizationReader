@@ -191,20 +191,9 @@ public class NetworkUtils {
         ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivity != null) {
             NetworkInfo in = connectivity.getActiveNetworkInfo();
-//            ViseLog.i("getActiveNetworkInfo: " + in);
             NetworkInfo[] info = connectivity.getAllNetworkInfo();
             if (info != null) {
-                for (int i = 0; i < info.length; i++) {
-                    // if (info[i].getType() == ConnectivityManager.TYPE_WIFI) {
-//                    ViseLog.i("NetworkInfo[" + i + "]isAvailable : " + info[i].isAvailable());
-//                    ViseLog.i("NetworkInfo[" + i + "]isConnected : " + info[i].isConnected());
-//                    ViseLog.i("NetworkInfo[" + i + "]isConnectedOrConnecting : " + info[i].isConnectedOrConnecting());
-//                    ViseLog.i("NetworkInfo[" + i + "]: " + info[i]);
-                    // }
-                }
-//                ViseLog.i("\n");
             } else {
-//                ViseLog.i("getAllNetworkInfo is null");
             }
         }
         return false;
@@ -221,7 +210,6 @@ public class NetworkUtils {
     public static int getConnectedTypeINT(Context context) {
         NetworkInfo net = getConnectivityManager(context).getActiveNetworkInfo();
         if (net != null) {
-//            ViseLog.i("NetworkInfo: " + net.toString());
             return net.getType();
         }
         return -1;

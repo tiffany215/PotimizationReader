@@ -67,7 +67,7 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
 
     private float lastX;
 
-    // 手指滑动的距离
+//     手指滑动的距离
     public  float moveLength;
 
     /**
@@ -232,12 +232,15 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
                 case LOAD_ERROR:
                     ToastUtils.showToast("章节加载失败！");
                     break;
-
                 case NO_PRE_PAGE:
                     ToastUtils.showToast("没有上一章了！");
                     break;
                 case NEED_BUY_CHAPTER:
                     ToastUtils.showToast("此章节需要付费！");
+                    break;
+                case LOAD_NET_WORT_ERROR:
+                    ToastUtils.showToast("网络连接失败，请稍后再试！");
+                    mBookStatus = BookStatus.NO_NEXT_PAGE;
                     break;
             }
             if(null != mLoadService){
