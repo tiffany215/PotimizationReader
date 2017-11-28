@@ -3,6 +3,7 @@ package shuhai.readercore.ui.sharedp;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import shuhai.readercore.common.Constants;
 import shuhai.readercore.manager.ThemeManager;
 import shuhai.readercore.utils.Utils;
 
@@ -54,25 +55,80 @@ public class ReaderSP {
     }
 
 
-
+    /**
+     * 获取阅读主题
+     * @return
+     */
     public int getReaderTheme(){
         return sp.getInt("read_theme", ThemeManager.READ_STYLE_THEME_15);
     }
 
+    /**
+     * 设置阅读主题
+     * @param theme
+     */
     public void setReaderTheme(int theme){
         ed.putInt("read_theme",theme);
         ed.commit();
     }
 
 
+    /**
+     * 获取夜间阅读模式
+     * @return
+     */
     public boolean getReaderDayOrNight(){
         return sp.getBoolean("read_theme_day_or_night",true);
     }
 
+    /**
+     * 设置夜间阅读模式
+     * @param status
+     */
     public void setReaderDayOrNight(boolean status){
         ed.putBoolean("read_theme_day_or_night",status);
         ed.commit();
     }
+
+
+    /**
+     * 获取行间距
+     * @return
+     */
+    public float getLineSpace(){
+        return sp.getFloat("read_line_space", Constants.LINE_SPACE.COMMON_LINE_AMONG);
+    }
+
+
+    /**
+     * 设置行间距
+     * @param space
+     */
+    public void setLineSpace(float space){
+        ed.putFloat("read_line_space",space);
+        ed.commit();
+    }
+
+
+    /**
+     * 获取字体大小
+     * @return
+     */
+    public int getTextSize(){
+        return sp.getInt("read_text_size",34);
+    }
+
+    /**
+     * 设置字体大小
+     * @param textSize
+     */
+    public void setTextSize(int textSize){
+        ed.putInt("read_text_size",textSize);
+        ed.commit();
+
+    }
+
+
 
 
 }

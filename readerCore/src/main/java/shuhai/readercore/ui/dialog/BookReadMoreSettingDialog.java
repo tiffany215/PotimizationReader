@@ -37,8 +37,7 @@ public class BookReadMoreSettingDialog extends Dialog implements View.OnClickLis
 
     private ImageView[] lineSpaceView;
     private int[] lineSpaceId;
-
-    private int[] textSize;
+    private float[] lineSpaceParams;
 
     private int size = 32; // 字体大小
 
@@ -56,6 +55,7 @@ public class BookReadMoreSettingDialog extends Dialog implements View.OnClickLis
     protected BookReadMoreSettingDialog(Context context,PageFactory pageFactory) {
         this(context, R.style.dialog_from_bottom);
         this.mPageFactory = pageFactory;
+        size = ReaderSP.getInstance().getTextSize();
     }
 
     @Override
@@ -66,18 +66,24 @@ public class BookReadMoreSettingDialog extends Dialog implements View.OnClickLis
         initView();
     }
 
+
+
+    private void initValues() {
+        Window window = getWindow();
+        WindowManager.LayoutParams lp = window.getAttributes();
+        DisplayMetrics dms = mContext.getResources().getDisplayMetrics();
+        lp.width = dms.widthPixels;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        lp.gravity = Gravity.BOTTOM;
+        window.setAttributes(lp);
+    }
+
+
     private void initView() {
         findViewById(R.id.theme_more).setOnClickListener(this);
         findViewById(R.id.read_size_decrease).setOnClickListener(this);
         findViewById(R.id.read_size_add).setOnClickListener(this);
-
-        findViewById(R.id.no_effect_flip).setOnClickListener(this);
-        findViewById(R.id.hor_scroller_flip).setOnClickListener(this);
-        findViewById(R.id.cover_scroller_flip).setOnClickListener(this);
-        findViewById(R.id.gl_real_flip).setOnClickListener(this);
         findViewById(R.id.set_more).setOnClickListener(this);
-
-
 
         //初始化主题模式、、日见夜间护眼等模式
         readThemeIds = new int[] { R.id.read_style_day_text,
@@ -100,16 +106,10 @@ public class BookReadMoreSettingDialog extends Dialog implements View.OnClickLis
         //初始换行间距
         lineSpaceId = new int[] {R.id.line_spacing_big,R.id.line_spacing_among,R.id.line_spacing_small};
         lineSpaceView = new ImageView[lineSpaceId.length];
+        lineSpaceParams = new float[]{Constants.LINE_SPACE.LINE_SPACE_SMALL, Constants.LINE_SPACE.COMMON_LINE_AMONG, Constants.LINE_SPACE.LOOSE_LINE_BIG};
         for (int i = 0; i < lineSpaceId.length; i++) {
             lineSpaceView[i] = findViewById(lineSpaceId[i]);
             lineSpaceView[i].setOnClickListener(new LineSpaceOnClickListener());
-        }
-        textSize = new int[]{45,25,10};
-        for (int i = 0; i < textSize.length; i++) {
-//            if(textSize[i] == readSetting.getLineSpace()){
-//                lineSpaceView[i].setSelected(true);
-//                setLineSpace(textSize[i]);
-//            }
         }
     }
 
@@ -142,13 +142,57 @@ public class BookReadMoreSettingDialog extends Dialog implements View.OnClickLis
                 ReaderSP.getInstance().setFlipModel(Constants.FLIP_CONFIG.LEVEL_NO_FLIP);
                 dismiss();
                 break;
-
             case R.id.set_more:
                 mContext.startActivity(new Intent(mContext, AppSettingsActivity.class));
                 dismiss();
                 break;
 
 
+        }
+    }
+
+
+    /**
+     * 设置字体大小
+     * @param isAdd
+     */
+    private void setFontSize(boolean isAdd) {
+        if(isAdd){
+            if (size > mContext.getResources().getDimension(
+                    R.dimen.chapter_font_max_size)) {
+                Toast.makeText(mContext,R.string.max_imun, Toast.LENGTH_SHORT);
+                return;
+            }
+            size += 2;
+        }else{
+            if (size < mContext.getResources().getDimension(R.dimen.chapter_font_mix_size)) {
+                Toast.makeText(mContext,R.string.mix_imun, Toast.LENGTH_SHORT);
+                return;
+            }
+            size -= 2;
+        }
+        ReaderSP.getInstance().setTextSize(size);
+        mPageFactory.setTextSize(size);
+    }
+
+
+    /**
+     * 行间距按钮点击监听事件
+     * @author Wangxu
+     *
+     */
+    private class LineSpaceOnClickListener implements android.view.View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            for (int i = 0; i < lineSpaceId.length; i++) {
+                if(v == lineSpaceView[i]){
+                    lineSpaceView[i].setSelected(true);
+                    ReaderSP.getInstance().setLineSpace(lineSpaceParams[i]);
+                }else{
+                    lineSpaceView[i].setSelected(false);
+                }
+            }
+            mPageFactory.setLineSpace(ReaderSP.getInstance().getLineSpace());
         }
     }
 
@@ -174,70 +218,6 @@ public class BookReadMoreSettingDialog extends Dialog implements View.OnClickLis
         }
     }
 
-
-    private void initValues() {
-        Window window = getWindow();
-        WindowManager.LayoutParams lp = window.getAttributes();
-        DisplayMetrics dms = mContext.getResources().getDisplayMetrics();
-        lp.width = dms.widthPixels;
-        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        lp.gravity = Gravity.BOTTOM;
-        window.setAttributes(lp);
-    }
-
-
-
-    /**
-     * 设置行间距
-     * @param size
-     */
-    private void setLineSpace(int size){
-//        readSetting.setLineSpace(size);
-//        pageFactory.setLineSpacing(size);
-
-    }
-
-    /**
-     * 设置字体大小
-     * @param isAdd
-     */
-    private void setFontSize(boolean isAdd) {
-        if(isAdd){
-            if (size > mContext.getResources().getDimension(
-                    R.dimen.chapter_font_max_size)) {
-                Toast.makeText(mContext,R.string.max_imun, Toast.LENGTH_SHORT);
-                return;
-            }
-            size += 2;
-        }else{
-            if (size < mContext.getResources().getDimension(R.dimen.chapter_font_mix_size)) {
-                Toast.makeText(mContext,R.string.mix_imun, Toast.LENGTH_SHORT);
-                return;
-            }
-            size -= 2;
-        }
-        mPageFactory.setTextSize(size);
-    }
-
-
-    /**
-     * 行间距按钮点击监听事件
-     * @author Wangxu
-     *
-     */
-    private class LineSpaceOnClickListener implements android.view.View.OnClickListener {
-        @Override
-        public void onClick(View v) {
-            for (int i = 0; i < lineSpaceId.length; i++) {
-                if(v == lineSpaceView[i]){
-                    lineSpaceView[i].setSelected(true);
-                    setLineSpace(textSize[i]);
-                }else{
-                    lineSpaceView[i].setSelected(false);
-                }
-            }
-        }
-    }
 
 
 }

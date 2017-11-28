@@ -1,6 +1,7 @@
 package shuhai.readercore.view.readview.displayview;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -13,9 +14,9 @@ import android.view.VelocityTracker;
 import android.view.ViewConfiguration;
 import android.widget.Toast;
 
+import com.dyhdyh.widget.loading.dialog.LoadingDialog;
 import com.eschao.android.widget.pageflip.PageFlip;
 import com.eschao.android.widget.pageflip.PageFlipException;
-import com.kingja.loadsir.core.LoadService;
 
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -28,7 +29,6 @@ import shuhai.readercore.ui.dialog.LoadingCallback;
 import shuhai.readercore.utils.ScreenUtils;
 import shuhai.readercore.utils.ToastUtils;
 import shuhai.readercore.view.readview.dataloader.HorizontalScrollChapterLoader;
-import shuhai.readercore.view.readview.factory.Factory;
 import shuhai.readercore.view.readview.factory.PageFactory;
 import shuhai.readercore.view.readview.status.BookStatus;
 import shuhai.readercore.view.readview.status.FlipStatus;
@@ -68,7 +68,8 @@ public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements 
     protected int mDrawCommand;
 
     protected PageFactory factory;
-    private LoadService mLoadService;
+
+    private Dialog mLoadingDialog;
 
     private Context mContext;
 
@@ -77,10 +78,10 @@ public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements 
     private float lastX;
 
 
-    public GLHorizontalBaseReadView(Context context, LoadService loadService) {
+    public GLHorizontalBaseReadView(Context context, Dialog loadingDialog) {
         super(context);
 
-        this.mLoadService = loadService;
+        this.mLoadingDialog = loadingDialog;
         newHandler();
         mPageFlip = new PageFlip(context);
         mPageFlip.setSemiPerimeterRatio(0.8f)
@@ -130,9 +131,8 @@ public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements 
                 Toast.makeText(getContext(),"开始加载本书！",Toast.LENGTH_LONG).show();
                 break;
             case LOAD_SUCCESS:
-                if(null != mLoadService){
-                    mLoadService.showSuccess();
-                }
+                LoadingDialog.cancel();
+                mLoadingDialog.cancel();
                 factory.prePage(mPrePageCanvas);
                 factory.curPage(mCurPageCanvas);
                 factory.nextPage(mNextPageCanvas);
@@ -290,16 +290,21 @@ public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements 
         }
 
         @Override
+        public void InvalidatePage() {
+
+        }
+
+        @Override
         public void onStartLoading() {
-            if(null != mLoadService){
-                mLoadService.showCallback(LoadingCallback.class);
+            if(null != mLoadingDialog){
+                mLoadingDialog.show();
             }
         }
 
         @Override
         public void onEndLoading() {
-            if(null != mLoadService){
-                mLoadService.showSuccess();
+            if(null != mLoadingDialog){
+                mLoadingDialog.cancel();
             }
         }
 
@@ -340,8 +345,8 @@ public abstract class GLHorizontalBaseReadView extends GLSurfaceView implements 
                     ToastUtils.showToast("此章节需要付费！");
                     break;
             }
-            if(null != mLoadService){
-                mLoadService.showSuccess();
+            if(null != mLoadingDialog){
+                mLoadingDialog.cancel();
             }
         }
     }

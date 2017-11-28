@@ -1,5 +1,6 @@
 package shuhai.readercore.view.readview.pagewidget;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Message;
 import android.util.Log;
@@ -7,9 +8,7 @@ import android.util.Log;
 import com.eschao.android.widget.pageflip.OnPageFlipListener;
 import com.eschao.android.widget.pageflip.Page;
 import com.eschao.android.widget.pageflip.PageFlipState;
-import com.kingja.loadsir.core.LoadService;
 
-import shuhai.readercore.utils.ScreenUtils;
 import shuhai.readercore.view.readview.displayview.GLHorizontalBaseReadView;
 import shuhai.readercore.view.readview.status.BookStatus;
 
@@ -21,7 +20,7 @@ import static android.content.ContentValues.TAG;
  */
 
 public class GLRealFlipPageWidget extends GLHorizontalBaseReadView implements OnPageFlipListener {
-    public GLRealFlipPageWidget(Context context,LoadService loadService) {
+    public GLRealFlipPageWidget(Context context,Dialog loadService) {
         super(context,loadService);
         mPageFlip.setListener(this);
     }

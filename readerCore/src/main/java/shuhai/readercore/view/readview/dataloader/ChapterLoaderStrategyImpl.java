@@ -1,5 +1,7 @@
 package shuhai.readercore.view.readview.dataloader;
 
+import android.graphics.Paint;
+
 import java.util.Vector;
 
 import shuhai.readercore.view.readview.strategy.ComposingStrategy;
@@ -31,9 +33,10 @@ public interface ChapterLoaderStrategyImpl {
 
     boolean hasChapter(int articleId, int chapterId);
 
-    void setFontSize(int fontSize);
+    void setFontSize(int fontSize,int fontHeight);
+
+    void setLineSpace(int lineSpaceHeight);
 
     void characterTypesetting(int chapterId,String key);
-
 
 }

@@ -20,6 +20,7 @@ import shuhai.readercore.common.Constants;
 import shuhai.readercore.R;
 import shuhai.readercore.bean.ChapterEntity;
 import shuhai.readercore.manager.ThemeManager;
+import shuhai.readercore.ui.sharedp.ReaderSP;
 import shuhai.readercore.ui.sharedp.UserSP;
 import shuhai.readercore.utils.NetworkUtils;
 import shuhai.readercore.utils.ScreenUtils;
@@ -34,6 +35,8 @@ import shuhai.readercore.view.readview.dataloader.HorizontalScrollChapterLoader;
 import shuhai.readercore.view.readview.status.FlipStatus;
 import shuhai.readercore.view.readview.strategy.ComposingStrategy;
 import shuhai.readercore.view.readview.strategy.HorizontalComposing;
+
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
 
 /**
  * @author 55345364
@@ -60,6 +63,12 @@ public class PageFactory extends Factory {
      */
     private static int mFontSize,mNumFontSize;
 
+
+    /**
+     * 文字高度
+     */
+    private static int mFontHeight,mNumFontHeight;
+
     /**
      * 行间距
      */
@@ -77,7 +86,10 @@ public class PageFactory extends Factory {
     private ChapterLoaderModel mChapterModel;
 
     private static Paint mPaint;
+    private static Rect textBounds = new Rect();
     private static Paint mTitlePaint;
+    private static Rect titleBounds = new Rect();
+
 
     private Bitmap mBookPageBg;
     private static int textColor;
@@ -105,6 +117,16 @@ public class PageFactory extends Factory {
         appNameLen = (int) mTitlePaint.measureText("书海阅读");
         timeLen = (int) mTitlePaint.measureText("00:00");
         percentLen = (int) mTitlePaint.measureText("00.00%");
+
+        mPaint.getTextBounds("书海阅读",0,1,textBounds);
+        mFontHeight = textBounds.height();
+
+        mTitlePaint.getTextBounds("书海阅读",0,1,titleBounds);
+        mNumFontHeight = titleBounds.height();
+
+
+        mChapterLoaderStrategy.setComposingStrategy(new HorizontalComposing(mWidth,mHeight,mMarginWidth,mMarginHeight,mFontHeight,mNumFontHeight,mLineSpace,mPaint));
+
     }
 
     public static final class Builder{
@@ -130,6 +152,8 @@ public class PageFactory extends Factory {
             mTitlePaint.setStyle(Paint.Style.FILL);//设置填充样式
             mTitlePaint.setStrokeWidth(1);//设置画笔宽度
             mTitlePaint.setColor(ContextCompat.getColor(context, R.color.primary_text));
+
+
 
         }
 
@@ -184,8 +208,8 @@ public class PageFactory extends Factory {
          * 设置正文行间距
          * @return
          */
-        public PageFactory.Builder setLineSpace(int lineSpace){
-            mLineSpace = lineSpace;
+        public PageFactory.Builder setLineSpace(float lineSpace){
+            mLineSpace = (int)(mFontSize * lineSpace);
             return this;
         }
 
@@ -225,7 +249,7 @@ public class PageFactory extends Factory {
             }
 
             if(mFontSize == 0){
-                mFontSize =  34;
+                mFontSize =  ReaderSP.getInstance().getTextSize();
             }
 
             if(mNumFontSize == 0){
@@ -241,7 +265,7 @@ public class PageFactory extends Factory {
             }
 
             if(mLineSpace == 0){
-                mLineSpace = mFontSize / 5 * 4;
+                mLineSpace = (int)(mFontSize  * Constants.LINE_SPACE.COMMON_LINE_AMONG);
             }
 
             if(TextUtils.isEmpty(mFontPath)){
@@ -252,7 +276,6 @@ public class PageFactory extends Factory {
                 textColor = ContextCompat.getColor(mContext, R.color.primary_text);
             }
 
-            mChapterLoaderStrategy.setComposingStrategy(new HorizontalComposing(mWidth,mHeight,mMarginWidth,mMarginHeight,mFontSize,mNumFontSize,mLineSpace,mPaint));
             return new PageFactory();
         }
 
@@ -453,7 +476,7 @@ public class PageFactory extends Factory {
     @Override
     public synchronized void onDraw(Canvas canvas){
         if(null != mChapterModel && mChapterModel.getPageContent().size() > 0){
-            int y = mMarginHeight + mNumFontSize;
+            int y = mMarginHeight + mNumFontHeight;
             if(null == mBookPageBg){
                 canvas.drawColor(Color.WHITE);
             }else{
@@ -463,16 +486,16 @@ public class PageFactory extends Factory {
             String titleName = mChapterModel.getChapterName();
             canvas.drawText(TextUtils.isEmpty(titleName) ? "" : titleName,mMarginWidth,y,mTitlePaint);
             canvas.drawText("书海阅读",mWidth - mMarginWidth - appNameLen,y,mTitlePaint);
-            y += mLineSpace;
+            y += mMarginHeight;
             canvas.drawLine(mMarginWidth, y, mWidth - mMarginWidth, y, mTitlePaint);
-            y += mFontSize;
+            y += mMarginHeight;
             Vector<String> lines =  mChapterModel.getPageContent();
             if(null !=  lines && lines.size() > 0){
                 for (String line : lines)
                 {
-                    y += mLineSpace;
+                    y += mFontHeight;
                     canvas.drawText(line,mMarginWidth,y,mPaint);
-                    y += mFontSize;
+                    y += mLineSpace;
                 }
             }
             if(null != batteryBitmap){
@@ -520,9 +543,31 @@ public class PageFactory extends Factory {
     public void setTextSize(int size) {
         ChapterEntity chapterEntity = chapterLoadManager.getChapterEntity();
         if(null != mChapterLoaderStrategy && null != chapterEntity){
-            mFontSize = size;
-            mPaint.setTextSize(mFontSize);
-            mChapterLoaderStrategy.setFontSize(mFontSize);
+            mPaint.setTextSize(size);
+            mPaint.getTextBounds("书海阅读",0,1,textBounds);
+
+            mFontHeight = textBounds.height();
+            mChapterLoaderStrategy.setFontSize(size,mFontHeight);
+
+            mLineSpace = (int)(mFontHeight * ReaderSP.getInstance().getLineSpace());
+            mChapterLoaderStrategy.setLineSpace(mLineSpace);
+
+            mOnReaderLoadingListener.InvalidatePage();
+
+            mChapterLoaderStrategy.characterTypesetting(mArticleId, StringUtils.cacheKeyCreate(mArticleId,chapterEntity.getChapterId()));
+        }
+
+        if(null != mOnReaderLoadingListener){
+            mOnReaderLoadingListener.onDrawPositionPage(FlipStatus.ON_FLIP_CUR);
+        }
+    }
+
+    @Override
+    public void setLineSpace(float space) {
+        ChapterEntity chapterEntity = chapterLoadManager.getChapterEntity();
+        if(null != mChapterLoaderStrategy && null != chapterEntity){
+            mLineSpace = (int)(mFontHeight * space);
+            mChapterLoaderStrategy.setLineSpace(mLineSpace);
             mChapterLoaderStrategy.characterTypesetting(mArticleId, StringUtils.cacheKeyCreate(mArticleId,chapterEntity.getChapterId()));
         }
 

@@ -1,15 +1,19 @@
 package shuhai.readercore.base;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import com.kingja.loadsir.core.LoadService;
+
+import com.dyhdyh.widget.loading.bar.LoadingBar;
+import com.dyhdyh.widget.loading.dialog.LoadingDialog;
 
 import butterknife.ButterKnife;
 import shuhai.readercore.R;
+import shuhai.readercore.ui.dialog.LoadingCallback;
 
 /**
  * @author 55345364
@@ -20,10 +24,9 @@ public abstract class BaseActivity extends AppCompatActivity{
 
     public Context mContext;
 
+    public Dialog loadingDialog;
+
     public Toolbar mCommonToolbar;
-
-    public LoadService loadService;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,6 +39,10 @@ public abstract class BaseActivity extends AppCompatActivity{
             initToolBar();
             setSupportActionBar(mCommonToolbar);
         }
+
+        loadingDialog = LoadingDialog.make(this,new LoadingCallback()).create();
+        loadingDialog.setCancelable(false);
+        loadingDialog.setCanceledOnTouchOutside(false);
         initData();
         configViews();
     }
@@ -44,6 +51,7 @@ public abstract class BaseActivity extends AppCompatActivity{
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        LoadingBar.release();
     }
 
     public abstract int getLayoutId();

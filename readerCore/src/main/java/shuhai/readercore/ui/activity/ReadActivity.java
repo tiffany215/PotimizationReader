@@ -5,8 +5,7 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 
-import com.kingja.loadsir.callback.Callback;
-import com.kingja.loadsir.core.LoadSir;
+import com.dyhdyh.widget.loading.dialog.LoadingDialog;
 
 import javax.inject.Inject;
 
@@ -76,13 +75,6 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View{
     public void configViews() {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        loadService = LoadSir.getDefault().register(mContext, new Callback.OnReloadListener() {
-            @Override
-            public void onReload(View v) {
-//              loadService.showCallback(LoadingCallback.class);
-//              loadService.showSuccess();
-            }
-        });
         mFlipMark = 0;
         initPagerWidget();
         mPresenter.attachView(this);
@@ -95,16 +87,16 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View{
     private void initPagerWidget(){
         switch (ReaderSP.getInstance().getFlipModel()) {
             case Constants.FLIP_CONFIG.LEVEL_NO_FLIP:
-                mPageWidget = new NoEffectFlipPageWidget(this,loadService);
+                mPageWidget = new NoEffectFlipPageWidget(this,loadingDialog);
                 break;
             case Constants.FLIP_CONFIG.LEVEL_COVER_FLIP:
-                mPageWidget = new LevelCoverFlipPageWidget(this,loadService);
+                mPageWidget = new LevelCoverFlipPageWidget(this,loadingDialog);
                 break;
             case Constants.FLIP_CONFIG.LEVEL_SCROLLER_FLIP:
-                mPageWidget = new LevelScrollFlipPageWidget(this,loadService);
+                mPageWidget = new LevelScrollFlipPageWidget(this,loadingDialog);
                 break;
             case Constants.FLIP_CONFIG.LEVEL_REAL_FLIP:
-                mPageWidget = new GLRealFlipPageWidget(this,loadService);
+                mPageWidget = new GLRealFlipPageWidget(this,loadingDialog);
                 break;
         }
         mPageWidget.init(ReaderSP.getInstance().getReaderTheme());
@@ -136,9 +128,7 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View{
 
     @Override
     public void showError() {
-        if(null != loadService){
-            loadService.showSuccess();
-        }
+        LoadingDialog.cancel();
     }
 
     @Override

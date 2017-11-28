@@ -23,6 +23,10 @@ public interface OnReaderLoadingListener {
      */
     void postOnDrawableInvalidatePage();
 
+
+
+    void InvalidatePage();
+
     /**
      * 吊起加载页面
      */

@@ -1,6 +1,5 @@
 package shuhai.readercore.view.readview.strategy;
 
-
 import java.util.Vector;
 
 /**
@@ -44,7 +43,12 @@ public class VerticalComposing implements ComposingStrategy{
     }
 
     @Override
-    public void setTextSize(int textSize) {
+    public void setTextSize(int textSize, int textHeight) {
+
+    }
+
+    @Override
+    public void setLineSpace(int space) {
 
     }
 }

@@ -16,8 +16,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 
-import com.kingja.loadsir.callback.Callback;
-import com.kingja.loadsir.core.LoadSir;
+import com.dyhdyh.widget.loading.dialog.LoadingDialog;
 
 import butterknife.InjectView;
 import shuhai.readercore.R;
@@ -65,14 +64,6 @@ public abstract  class BaseWVActivity extends BaseActivity {
 
     @Override
     public void configViews() {
-        loadService = LoadSir.getDefault().register(swipeRefreshLayout, new Callback.OnReloadListener() {
-            @Override
-            public void onReload(View v) {
-
-            }
-        });
-
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -113,7 +104,8 @@ public abstract  class BaseWVActivity extends BaseActivity {
 
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
-            loadService.showCallback(LoadingCallback.class);
+
+            loadingDialog.show();
 
         }
 
@@ -129,7 +121,7 @@ public abstract  class BaseWVActivity extends BaseActivity {
 
             }
             swipeRefreshLayout.setRefreshing(false);
-            loadService.showSuccess();
+            LoadingDialog.cancel();
         }
 
         @SuppressWarnings("deprecation")
@@ -137,7 +129,7 @@ public abstract  class BaseWVActivity extends BaseActivity {
         public void onReceivedError(WebView view, int errorCode,
                                     String description, String failingUrl) {
             super.onReceivedError(view, errorCode, description, failingUrl);
-            loadService.showSuccess();
+            LoadingDialog.cancel();
             webView.loadUrl("file:///android_asset/repair/repair.html");
             webView.getSettings().setLayoutAlgorithm( WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
             return;

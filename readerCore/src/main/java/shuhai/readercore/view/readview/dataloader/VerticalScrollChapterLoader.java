@@ -1,5 +1,6 @@
 package shuhai.readercore.view.readview.dataloader;
 
+
 import java.util.Vector;
 
 import shuhai.readercore.view.readview.strategy.ComposingStrategy;
@@ -34,7 +35,12 @@ public class VerticalScrollChapterLoader implements ChapterLoaderStrategyImpl {
     }
 
     @Override
-    public void setFontSize(int fontSize) {
+    public void setFontSize(int fontSize,int fontHeight) {
+
+    }
+
+    @Override
+    public void setLineSpace(int lineSpaceHeight) {
 
     }
 
@@ -42,4 +48,5 @@ public class VerticalScrollChapterLoader implements ChapterLoaderStrategyImpl {
     public void characterTypesetting(int chapterId, String key) {
 
     }
+
 }

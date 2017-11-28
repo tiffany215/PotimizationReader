@@ -1,9 +1,9 @@
 package shuhai.readercore.view.readview.pagewidget;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Canvas;
 
-import com.kingja.loadsir.core.LoadService;
 
 import shuhai.readercore.view.readview.displayview.HorizontalBaseReadView;
 import shuhai.readercore.view.readview.status.FlipStatus;
@@ -20,7 +20,7 @@ public class LevelScrollFlipPageWidget extends HorizontalBaseReadView {
 
     private static final String TAG = "LevelScrollFlipPageWidget";
 
-    public LevelScrollFlipPageWidget(Context context, LoadService loadService) {
+    public LevelScrollFlipPageWidget(Context context, Dialog loadService) {
         super(context,loadService);
     }
 

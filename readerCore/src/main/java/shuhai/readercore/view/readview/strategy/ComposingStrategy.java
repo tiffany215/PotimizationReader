@@ -1,5 +1,7 @@
 package shuhai.readercore.view.readview.strategy;
 
+import android.graphics.Paint;
+
 import java.util.Vector;
 
 /**
@@ -38,8 +40,9 @@ public interface ComposingStrategy {
 
     boolean hasChapter(int articleId,int chapterId);
 
-    void setTextSize(int textSize);
+    void setTextSize(int textSize,int textHeight);
 
+    void setLineSpace(int space);
 
 
 }

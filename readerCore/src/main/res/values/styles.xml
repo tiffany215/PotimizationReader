@@ -82,21 +82,6 @@
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
-    <declare-styleable name="LoadingView">
-        <attr name="loadding_color" format="color" />
-        <attr name="ring_style" format="enum">
-            <enum name="square" value="0" />
-            <enum name="round" value="1" />
-        </attr>
-        <attr name="progress_style" format="enum">
-            <enum name="material" value="0" />
-            <enum name="linear" value="1" />
-        </attr>
-
-        <attr name="ring_width" format="dimension" />
-        <attr name="ring_radius" format="dimension" />
-    </declare-styleable>
-
 
 
     <style name="menu_read_setting_btn">
@@ -144,5 +129,12 @@
         <item name="android:windowEnterAnimation">@anim/dialog_from_bottom_in</item>
         <item name="android:windowExitAnimation">@anim/dialog_from_bottom_out</item>
     </style>
+
+
+    <style name="dialog_fade_away" parent="@android:style/Animation.Dialog">
+        <item name="android:windowEnterAnimation">@anim/dialog_alpha_enter</item>
+        <item name="android:windowExitAnimation">@anim/dialog_alpha_exit</item>
+    </style>
+
 
 </resources>

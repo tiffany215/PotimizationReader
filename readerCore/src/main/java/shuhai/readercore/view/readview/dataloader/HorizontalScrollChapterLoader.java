@@ -1,4 +1,6 @@
 package shuhai.readercore.view.readview.dataloader;
+import android.graphics.Paint;
+
 import java.util.Vector;
 
 import shuhai.readercore.view.readview.strategy.ComposingStrategy;
@@ -38,13 +40,19 @@ public class HorizontalScrollChapterLoader implements ChapterLoaderStrategyImpl 
     }
 
     @Override
-    public void setFontSize(int fontSize) {
-        mComposingStrategy.setTextSize(fontSize);
+    public void setFontSize(int fontSize,int fontHeight) {
+        mComposingStrategy.setTextSize(fontSize,fontHeight);
+    }
+
+    @Override
+    public void setLineSpace(int lineSpaceHeight) {
+        mComposingStrategy.setLineSpace(lineSpaceHeight);
     }
 
     @Override
     public void characterTypesetting(int chapterId, String key) {
         mComposingStrategy.characterTypesetting(chapterId,key);
     }
+
 
 }

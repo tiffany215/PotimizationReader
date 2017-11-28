@@ -1,9 +1,9 @@
 package shuhai.readercore.view.readview.pagewidget;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Canvas;
 
-import com.kingja.loadsir.core.LoadService;
 
 import shuhai.readercore.view.readview.displayview.HorizontalBaseReadView;
 import shuhai.readercore.view.readview.status.FlipStatus;
@@ -21,7 +21,7 @@ import shuhai.readercore.view.readview.factory.Factory;
 public class NoEffectFlipPageWidget extends HorizontalBaseReadView {
 
 
-    public NoEffectFlipPageWidget(Context context,LoadService loadService) {
+    public NoEffectFlipPageWidget(Context context,Dialog loadService) {
         super(context,loadService);
         scrollerSpeed = 100;
     }

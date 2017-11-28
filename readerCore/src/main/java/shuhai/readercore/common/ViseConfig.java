@@ -23,4 +23,10 @@ public class ViseConfig {
     public static final int DEFAULT_MAX_IDLE_CONNECTIONS = 5;//默认空闲连接数
     public static final long DEFAULT_KEEP_ALIVE_DURATION = 8;//默认心跳间隔时长
     public static final long CACHE_MAX_SIZE = 10 * 1024 * 1024;//默认最大缓存大小
+
+
+
+
+
+
 }

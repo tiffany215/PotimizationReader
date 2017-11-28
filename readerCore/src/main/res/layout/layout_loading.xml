@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/ll_loading"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/trans"
-              android:gravity="center">
+    android:id="@+id/ll_loading"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/trans"
+    android:gravity="center"
+    android:orientation="vertical">
 
     <ProgressBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
+        android:indeterminateDrawable="@drawable/loading_dialog"
+        android:background="@drawable/general_shared_loading_circle_background"
+        android:padding="20dp"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center" />
 </LinearLayout>

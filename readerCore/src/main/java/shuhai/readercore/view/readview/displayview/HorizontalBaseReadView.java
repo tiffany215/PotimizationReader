@@ -1,5 +1,6 @@
 package shuhai.readercore.view.readview.displayview;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -11,11 +12,11 @@ import android.view.ViewConfiguration;
 import android.widget.Scroller;
 import android.widget.Toast;
 
-import com.kingja.loadsir.core.LoadService;
 
 import shuhai.readercore.manager.ThemeManager;
 import shuhai.readercore.ui.dialog.BookReadSettingDialog;
 import shuhai.readercore.ui.dialog.LoadingCallback;
+import shuhai.readercore.ui.sharedp.ReaderSP;
 import shuhai.readercore.utils.ScreenUtils;
 import shuhai.readercore.utils.ToastUtils;
 import shuhai.readercore.view.readview.dataloader.HorizontalScrollChapterLoader;
@@ -87,13 +88,13 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
 
     private BookStatus mBookStatus;
 
-    private LoadService mLoadService;
+    private Dialog mLoadingDialog;
 
 
-    public HorizontalBaseReadView(Context context,LoadService loadService) {
+    public HorizontalBaseReadView(Context context,Dialog dialog) {
         super(context);
         this.scrollerSpeed = 500;
-        this.mLoadService = loadService;
+        this.mLoadingDialog = dialog;
         mScreenWidth = ScreenUtils.getScreenWidth();
         mScreenHeight = ScreenUtils.getScreenHeight();
 
@@ -109,7 +110,8 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
 
         factory = new PageFactory.Builder(context)
                 .setLoadStrategy(HorizontalScrollChapterLoader.class)
-//                .setComposingStrategy(new HorizontalComposing())
+                .setTextPartFontSize(ReaderSP.getInstance().getTextSize())
+                .setLineSpace(ReaderSP.getInstance().getLineSpace())
                 .setOnReaderLoadingListener(new MyOnReaderLoadingListener())
                 .builder();
 
@@ -150,14 +152,14 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
                 break;
             case LOAD_NET_WORT_ERROR:
                 ToastUtils.getSingleToast("网络异常，请稍后重试！",Toast.LENGTH_SHORT).show();
-                if(null != mLoadService){
-                    mLoadService.showSuccess();
+                if(null != mLoadingDialog){
+                    mLoadingDialog.cancel();
                 }
                 break;
 
             case LOAD_SUCCESS:
-                if(null != mLoadService){
-                    mLoadService.showSuccess();
+                if(null != mLoadingDialog){
+                    mLoadingDialog.cancel();
                 }
                 factory.prePage(mPrePageCanvas);
                 factory.curPage(mCurPageCanvas);
@@ -189,16 +191,21 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
         }
 
         @Override
+        public void InvalidatePage() {
+            invalidate();
+        }
+
+        @Override
         public void onStartLoading() {
-            if(null != mLoadService){
-                mLoadService.showCallback(LoadingCallback.class);
+            if(null != mLoadingDialog){
+                mLoadingDialog.show();
             }
         }
 
         @Override
         public void onEndLoading() {
-            if(null != mLoadService){
-                mLoadService.showSuccess();
+            if(null != mLoadingDialog){
+                mLoadingDialog.cancel();
             }
         }
 
@@ -243,8 +250,8 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
                     mBookStatus = BookStatus.NO_NEXT_PAGE;
                     break;
             }
-            if(null != mLoadService){
-                mLoadService.showSuccess();
+            if(null != mLoadingDialog){
+                mLoadingDialog.cancel();
             }
         }
     }

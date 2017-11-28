@@ -91,6 +91,9 @@ public abstract class Factory {
     public abstract void setTextSize(int size);
 
 
+    public abstract void setLineSpace(float space);
+
+
 
 
 

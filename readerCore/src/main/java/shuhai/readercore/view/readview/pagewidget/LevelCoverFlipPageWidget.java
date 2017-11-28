@@ -1,5 +1,6 @@
 package shuhai.readercore.view.readview.pagewidget;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.LinearGradient;
@@ -7,7 +8,6 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.Shader;
 
-import com.kingja.loadsir.core.LoadService;
 
 import shuhai.readercore.view.readview.displayview.HorizontalBaseReadView;
 import shuhai.readercore.view.readview.status.FlipStatus;
@@ -25,7 +25,7 @@ public class LevelCoverFlipPageWidget extends HorizontalBaseReadView {
 
     private static final String TAG = "LevelCoverFlipPageWidget";
 
-    public LevelCoverFlipPageWidget(Context context, LoadService loadService) {
+    public LevelCoverFlipPageWidget(Context context, Dialog loadService) {
        super(context,loadService);
     }
 
