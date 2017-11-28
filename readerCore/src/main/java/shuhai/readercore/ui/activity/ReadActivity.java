@@ -55,6 +55,15 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View{
         return R.layout.activity_read;
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initPagerWidget();
+        mPresenter.attachView(this);
+        mPageWidget.openBook(mBookId,mChapterId,mChapterOrder,FlipStatus.ON_FLIP_CUR);
+    }
+
     @Override
     public void initData() {
         mBookId = getIntent().getIntExtra("read.book.id",0);
@@ -76,9 +85,6 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View{
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         mFlipMark = 0;
-        initPagerWidget();
-        mPresenter.attachView(this);
-        mPageWidget.openBook(mBookId,mChapterId,mChapterOrder,FlipStatus.ON_FLIP_CUR);
     }
 
     /**

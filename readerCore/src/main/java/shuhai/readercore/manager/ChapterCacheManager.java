@@ -89,4 +89,12 @@ public class ChapterCacheManager {
         }
             return false;
     }
+
+
+    public long getCacheSize(){
+        if(null != diskLruCache){
+            return diskLruCache.getCacheSize();
+        }
+        return 0;
+    }
 }

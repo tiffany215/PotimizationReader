@@ -124,6 +124,10 @@ public class DiskCache  {
         }
     }
 
+    public long getCacheSize(){
+        return cache.size();
+    }
+
     public DiskCache setCacheTime(long cacheTime) {
         this.cacheTime = cacheTime;
         return this;

@@ -126,22 +126,6 @@ public class BookReadMoreSettingDialog extends Dialog implements View.OnClickLis
                 new BookReadThemeSettingDialog(mContext,mPageFactory).show();
                 dismiss();
                 break;
-            case R.id.gl_real_flip:
-                ReaderSP.getInstance().setFlipModel(Constants.FLIP_CONFIG.LEVEL_REAL_FLIP);
-                dismiss();
-                break;
-            case R.id.hor_scroller_flip:
-                ReaderSP.getInstance().setFlipModel(Constants.FLIP_CONFIG.LEVEL_SCROLLER_FLIP);
-                dismiss();
-                break;
-            case R.id.cover_scroller_flip:
-                ReaderSP.getInstance().setFlipModel(Constants.FLIP_CONFIG.LEVEL_COVER_FLIP);
-                dismiss();
-                break;
-            case R.id.no_effect_flip:
-                ReaderSP.getInstance().setFlipModel(Constants.FLIP_CONFIG.LEVEL_NO_FLIP);
-                dismiss();
-                break;
             case R.id.set_more:
                 mContext.startActivity(new Intent(mContext, AppSettingsActivity.class));
                 dismiss();

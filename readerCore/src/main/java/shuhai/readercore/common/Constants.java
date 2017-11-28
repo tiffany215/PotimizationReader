@@ -10,6 +10,8 @@ public class Constants {
 
 
 
+    public static final String BASE_WEB_URL = API_BASE_URL + "/app/";
+
     public static final long MAX_DISK_CACHE_SIZE = 10 * 1024 * 1024 * 50;
 
     public static final int MAX_MEMORY_CACHE_SIZE = (int) (Runtime.getRuntime().maxMemory() / 4);
@@ -31,10 +33,10 @@ public class Constants {
 
 
     public static final class FLIP_CONFIG{
-        public final static int LEVEL_COVER_FLIP = 0;
+        public final static int LEVEL_NO_FLIP = 0;
         public final static int LEVEL_SCROLLER_FLIP = 1;
-        public final static int LEVEL_REAL_FLIP = 2;
-        public final static int LEVEL_NO_FLIP = 3;
+        public final static int LEVEL_COVER_FLIP = 2;
+        public final static int LEVEL_REAL_FLIP = 3;
     }
 
     /**

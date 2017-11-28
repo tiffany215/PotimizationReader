@@ -7,12 +7,17 @@ import android.support.v7.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import butterknife.InjectView;
 import butterknife.OnClick;
 import shuhai.readercore.common.Constants;
 import shuhai.readercore.R;
 import shuhai.readercore.base.BaseActivity;
+import shuhai.readercore.manager.ChapterCacheManager;
+import shuhai.readercore.ui.sharedp.ReaderSP;
 import shuhai.readercore.utils.ActivityUtils;
 import shuhai.readercore.utils.AppUtils;
 import shuhai.readercore.utils.UrlUtils;
@@ -34,6 +39,10 @@ public class AppSettingsActivity extends BaseActivity implements View.OnClickLis
     @InjectView(R.id.action_settings_ctc)
     public  TextView action_settings_ctc;
 
+    @InjectView(R.id.action_settings_crc_text)
+    public TextView action_settings_crc_text;
+
+
     @InjectView(R.id.action_settings_rs)
     public TextView action_settings_rs;
 
@@ -50,6 +59,21 @@ public class AppSettingsActivity extends BaseActivity implements View.OnClickLis
     @InjectView(R.id.action_settings_ts)
     public TextView action_settings_ts;
 
+    @InjectView(R.id.action_settings_flip)
+    public TextView action_settings_flip;
+
+    @InjectView(R.id.action_settings_flip_text)
+    public TextView action_settings_flip_text;
+
+
+    final String[] arrayFlip = new String[] { "无效果", "平移翻页", "覆盖翻页", "仿真翻页" };
+    final int[] arrayFlipModel = new int[]{ Constants.FLIP_CONFIG.LEVEL_NO_FLIP,
+            Constants.FLIP_CONFIG.LEVEL_SCROLLER_FLIP,
+            Constants.FLIP_CONFIG.LEVEL_COVER_FLIP,
+            Constants.FLIP_CONFIG.LEVEL_REAL_FLIP
+    };
+
+
 
     @Override
     public int getLayoutId() {
@@ -59,6 +83,12 @@ public class AppSettingsActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void initData() {
         action_settings_rs.setOnClickListener(this);
+        for (int i = 0; i < arrayFlip.length; i++) {
+            if(ReaderSP.getInstance().getFlipModel() == arrayFlipModel[i]){
+                action_settings_flip_text.setText(arrayFlip[i]);
+            }
+        }
+        action_settings_crc_text.setText(ChapterCacheManager.getInstance().getCacheSize() / 1024 + "MB");
     }
 
 
@@ -102,6 +132,25 @@ public class AppSettingsActivity extends BaseActivity implements View.OnClickLis
     }
 
 
+    /**
+     * 设置阅读翻页方式
+     */
+    @OnClick(R.id.action_settings_flip)
+    public void OnClickReaderFlip(){
+        new AlertDialog.Builder(mContext).setItems(arrayFlip, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ReaderSP.getInstance().setFlipModel(arrayFlipModel[which]);
+                action_settings_flip_text.setText(arrayFlip[which]);
+
+            }
+        }).create().show();
+    }
+
+
+
+
+
     @OnClick(R.id.action_settings_crc)
     public void OnClickCleanReaderCache(){
         new AlertDialog.Builder(mContext).setTitle("清除阅读缓存")
@@ -114,8 +163,6 @@ public class AppSettingsActivity extends BaseActivity implements View.OnClickLis
                             @Override
                             public void run() {
                                 //开启线程清理缓存数据
-
-
                                 //切换至UI线程
                                 runOnUiThread(new Runnable() {
                                     @Override
@@ -175,7 +222,7 @@ public class AppSettingsActivity extends BaseActivity implements View.OnClickLis
 
     @OnClick(R.id.action_settings_as)
     public void OnClickAboutShuhai(){
-        new AlertDialog.Builder(mContext).setTitle("书海V" + AppUtils.getPackageName())
+        new AlertDialog.Builder(mContext).setTitle("书海 V" + AppUtils.getAppVersionCode())
                 .setMessage(R.string.about_shuhai_prompt)
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
