@@ -38,7 +38,6 @@ public abstract class BaseWbView {
 
     public SwipeRefreshLayout swipeRefreshLayout;
 
-    private ProgressBar progressBar;
     private LinearLayout errorLayout;
 
 
@@ -65,7 +64,6 @@ public abstract class BaseWbView {
 
             }
         });
-        progressBar = layout.findViewById(R.id.web_progressbar);
         errorLayout = layout.findViewById(R.id.view_load_fail);
         mWebView = layout.findViewById(R.id.web_view);
         webSetting();

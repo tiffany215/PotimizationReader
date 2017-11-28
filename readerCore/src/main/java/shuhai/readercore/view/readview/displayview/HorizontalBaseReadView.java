@@ -314,6 +314,11 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
         }
     }
 
+
+
+
+
+
     /**
      * 手指触摸屏幕事件处理
      * @param event

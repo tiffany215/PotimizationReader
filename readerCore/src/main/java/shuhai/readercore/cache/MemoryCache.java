@@ -3,6 +3,8 @@ package shuhai.readercore.cache;
 import android.text.TextUtils;
 import android.util.LruCache;
 
+import shuhai.readercore.common.Constants;
+
 
 /**
  * @Description: 内存缓存
@@ -14,10 +16,7 @@ public class MemoryCache{
     private static MemoryCache instance;
 
     private MemoryCache() {
-        int maxMemory = (int) Runtime.getRuntime().maxMemory();
-        int cacheSize = maxMemory / 8;
-        cache = new LruCache(cacheSize);
-
+        cache = new LruCache(Constants.MAX_MEMORY_CACHE_SIZE);
     }
 
     public static MemoryCache getInstance() {

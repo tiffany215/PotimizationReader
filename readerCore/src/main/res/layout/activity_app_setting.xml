@@ -61,10 +61,6 @@
                 style="@style/app_setting_content_btn"
                 android:background="@color/read_theme_white"
                 android:text="@string/settings_sm" />
-
-
-
-
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
