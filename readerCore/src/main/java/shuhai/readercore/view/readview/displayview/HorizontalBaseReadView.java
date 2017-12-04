@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.support.v4.view.ViewConfigurationCompat;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.Scroller;
 import android.widget.Toast;
 
 
+import shuhai.readercore.common.Constants;
 import shuhai.readercore.manager.ThemeManager;
 import shuhai.readercore.ui.dialog.BookReadSettingDialog;
 import shuhai.readercore.ui.dialog.LoadingCallback;
@@ -24,6 +26,7 @@ import shuhai.readercore.view.readview.status.BookStatus;
 import shuhai.readercore.view.readview.factory.Factory;
 import shuhai.readercore.view.readview.factory.PageFactory;
 import shuhai.readercore.view.readview.status.FlipStatus;
+import shuhai.readercore.view.readview.status.ScrollStatus;
 
 /**
  * @author 55345364
@@ -41,44 +44,39 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
     protected Bitmap mPrePageBitmap,mCurPageBitmap,mNextPageBitmap;
     protected Canvas mPrePageCanvas,mCurPageCanvas,mNextPageCanvas;
 
-    // 页面状态
-    public static final int STATE_MOVE = 0;
-    public static final int STATE_STOP = 1;
-    public int state;
-
-    // 点击页面区域
-    private static final int PREVIOUS_AREA = 1;
-    private static final int NEXT_AREA = 2;
-    private static final int SETTING_AREA = 3;
-
     // 前一页，当前页，下一页的左边位置
-    public int prePageLeft = 0, currPageLeft = 0;
+    public int currPageLeft = 0, currPageRight = 0;
 
     //获取滑动速度
     private VelocityTracker vt;
     //当前的滑动速度
-    private float speed;
-    //防止抖动
-    private float speed_shake;
+    private int mSpeed;
 
-    public int scrollerSpeed = 0;
+    //判定为拖动的最小移动像素数
+    private int mTouchSlop;
 
-    // 正在滑动的页面右边位置，用于绘制阴影
-    public float right;
+    //手指滑动的距离
+    private  int moveLength;
 
-    private float lastX;
+    /**
+     * 手机按下时的屏幕坐标
+     */
+    private int mXDown;
 
-//     手指滑动的距离
-    public  float moveLength;
+    /**
+     * 手机当时所处的屏幕坐标
+     */
+    private int mXMove;
+
+    /**
+     * 上次触发ACTION_MOVE事件时的屏幕坐标
+     */
+    private int mXLastMove;
 
     /**
      * 过滤多点触碰的控制变量
      */
     private int mEvents;
-
-
-    // 滑动的时候存在两页可滑动，要判断是哪一页在滑动
-    private boolean isPreMoving = true, isCurrMoving = true;
 
     private PageFactory factory;
 
@@ -88,12 +86,13 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
 
     private BookStatus mBookStatus;
 
+    private ScrollStatus mScrollStatus;
+
     private Dialog mLoadingDialog;
 
 
     public HorizontalBaseReadView(Context context,Dialog dialog) {
         super(context);
-        this.scrollerSpeed = 500;
         this.mLoadingDialog = dialog;
         mScreenWidth = ScreenUtils.getScreenWidth();
         mScreenHeight = ScreenUtils.getScreenHeight();
@@ -116,8 +115,7 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
                 .builder();
 
         ViewConfiguration configuration = ViewConfiguration.get(context);
-        speed_shake = ViewConfigurationCompat.getScaledPagingTouchSlop(configuration);
-
+        mTouchSlop = ViewConfigurationCompat.getScaledPagingTouchSlop(configuration);
         initParams();
 
     }
@@ -129,7 +127,6 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
     private void initParams(){
         mFlipStatus = FlipStatus.ON_FLIP_CUR;
         mBookStatus = BookStatus.LOAD_START;
-        prePageLeft = -mScreenWidth;
         currPageLeft = 0;
     }
 
@@ -164,7 +161,7 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
                 factory.prePage(mPrePageCanvas);
                 factory.curPage(mCurPageCanvas);
                 factory.nextPage(mNextPageCanvas);
-                state = STATE_STOP;
+                mScrollStatus = ScrollStatus.STATE_STOP;
                 mFlipStatus = status;
                 postInvalidate();
                 break;
@@ -212,7 +209,7 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
 
         @Override
         public void onDrawPositionPage(FlipStatus flipStatus) {
-            state = STATE_STOP;
+            mScrollStatus = ScrollStatus.STATE_STOP;
             switch (flipStatus) {
                 case ON_FLIP_PRE:
                     factory.postInvalidatePage(mPrePageCanvas,flipStatus);
@@ -258,65 +255,6 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
 
 
 
-    /**
-     * 手指抬起时页面滚动执行此方法。
-     * @param status
-     * @param curX
-     */
-    private void updatePageArea(FlipStatus status,int curX){
-
-        if(state != STATE_MOVE){
-            return;
-        }
-
-        //向左滑动
-        if(prePageLeft > -mScreenWidth && speed <= 0){
-            moveRight(status,curX);
-        }
-        else if(currPageLeft < 0 && speed >= 0){
-            moveLeft(status,curX);
-        }
-
-        //手指向左滑动
-        else if(speed < 0 ) {
-            moveLeft(status, curX);
-            if (currPageLeft == -mScreenWidth) {
-                factory.autoIncrease();
-                factory.prePage(mPrePageCanvas);
-                factory.curPage(mCurPageCanvas);
-                if(factory.nextPage(mNextPageCanvas)){
-                    mBookStatus = BookStatus.LOAD_SUCCESS;
-                }
-                factory.nextPage(mNextPageCanvas);
-                mFlipStatus = FlipStatus.ON_FLIP_NEXT;
-            }
-        }
-
-        //手指向右滑动
-        else if(speed > 0 ){
-            moveRight(status,curX);
-            if(prePageLeft == 0){
-                factory.autoReduce();
-                factory.nextPage(mNextPageCanvas);
-                factory.curPage(mCurPageCanvas);
-                if( factory.prePage(mPrePageCanvas)){
-                    mBookStatus = BookStatus.LOAD_SUCCESS;
-                }
-                mFlipStatus = FlipStatus.ON_FLIP_PRE;
-            }
-        }
-        if(right == 0 || right == mScreenWidth){
-            state = STATE_STOP;
-            prePageLeft = -mScreenWidth;
-            currPageLeft = 0;
-            releaseMoving();
-            postInvalidate();
-        }
-    }
-
-
-
-
 
 
     /**
@@ -328,21 +266,18 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
-                if(state == STATE_MOVE){
+                if(mScrollStatus == ScrollStatus.STATE_MOVE){
                     return false;
                 }
-                lastX = event.getX();
-                try
-                {
-                    if (vt == null)
-                    {
+                mXDown = (int) event.getRawX();
+                mXLastMove = mXDown;
+                try {
+                    if(vt == null){
                         vt = VelocityTracker.obtain();
-                    } else
-                    {
+                    }else{
                         vt.clear();
                     }
-                } catch (Exception e)
-                {
+                }catch (Exception e){
                     e.printStackTrace();
                 }
                 vt.addMovement(event);
@@ -351,79 +286,103 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
             case MotionEvent.ACTION_POINTER_DOWN:
             case MotionEvent.ACTION_POINTER_UP:
                 mEvents = -1;
-                break;
             case MotionEvent.ACTION_MOVE:
                 vt.addMovement(event);
-                vt.computeCurrentVelocity(scrollerSpeed);
-                speed = vt.getXVelocity();
-                moveLength = event.getX() - lastX;
-                //右滑
-                if((moveLength > 0 || !isCurrMoving) && isPreMoving && mEvents == 0){
+                vt.computeCurrentVelocity(600);
+                mSpeed = (int) vt.getXVelocity();
+                mXMove = (int) event.getRawX();
+                moveLength = mXMove - mXLastMove;
+                if(moveLength > 0 && mEvents == 0){
                     mFlipStatus = FlipStatus.ON_FLIP_PRE;
-                    isPreMoving = true;
-                    isCurrMoving = false;
-                    if(mBookStatus == BookStatus.NO_PRE_PAGE){
-                        state = STATE_STOP;
-                        releaseMoving();
-                    }else{
-                        prePageLeft  += moveLength;
-                        if(prePageLeft > 0){
-                            prePageLeft = 0;
-                        }else if(prePageLeft < -mScreenWidth){
-                            prePageLeft = -mScreenWidth;
-                            releaseMoving();
-                        }
-                        right = prePageLeft + mScreenWidth;
-                        state = STATE_MOVE;
-                    }
-
-                }
-                //左滑
-                else if((moveLength < 0 || !isPreMoving) && isCurrMoving && mEvents == 0){
+                }else if(moveLength < 0 && mEvents == 0){
                     mFlipStatus = FlipStatus.ON_FLIP_NEXT;
-                    isPreMoving = false;
-                    isCurrMoving = true;
-                    if(mBookStatus == BookStatus.NO_NEXT_PAGE){
-                        state = STATE_STOP;
-                        releaseMoving();
-                    }else{
-                        currPageLeft += moveLength;
-                        if(currPageLeft < -mScreenWidth){
-                            currPageLeft = -mScreenWidth;
-                        }else if(currPageLeft > 0){
-                            currPageLeft = 0;
-                            releaseMoving();
-                        }
-                        right = mScreenWidth + currPageLeft;
-                        state = STATE_MOVE;
-                    }
-                }else {
-                    mEvents = 0;
                 }
-                lastX = event.getX();
+                if(Math.abs(moveLength) > mTouchSlop){
+                    mScrollStatus = ScrollStatus.STATE_MOVE;
+                }
+                currPageLeft = moveLength;
                 postInvalidate();
                 break;
+
             case MotionEvent.ACTION_UP:
-                if (Math.abs(speed) < speed_shake)
-                    speed = 0;
-                startScroller(speed);
-                if(getTouchLocal(event.getX(),event.getY()) == SETTING_AREA && Math.abs(speed) < 100 && state != STATE_MOVE){
+                //判断是否弹出阅读设置框，判断条件为 滑动距离小于最小拖动小像素 && 点击区域是否在页面中心 && 滑动速度小于最小拖动像素
+                if(getTouchArea(event.getRawX(),event.getRawY()) == Constants.PAGE_TOUCH_AREA.SETTING_AREA
+                        && Math.abs(moveLength) < mTouchSlop && mScrollStatus != ScrollStatus.STATE_MOVE){
                     new BookReadSettingDialog(getContext(), factory).show();
                     return true;
                 }
-                postInvalidate();
+                if(Math.abs(mSpeed) <= mTouchSlop){
+                    mSpeed = 0;
+                }
+                startPageScroller(moveLength,event);
                 try
                 {
                     vt.clear();
                     vt.recycle();
-                } catch (Exception e)
-                {
+                } catch (Exception e){
                     e.printStackTrace();
                 }
                 break;
-
         }
         return true;
+    }
+
+
+    /**
+     * 开始页面滚动
+     * mSpeed为正数 表明手指快速向右甩动
+     * moveLength 为正数 表明手指向右滑动
+     *
+     */
+    private void startPageScroller(int startX,MotionEvent event){
+        int scrollDistance = 0;
+        if(mSpeed > 0){
+            //手指向右移动
+            if(moveLength < 0){
+                scrollDistance = Math.abs(moveLength);
+            }else if(moveLength > 0){
+                scrollDistance = mScreenWidth - Math.abs(moveLength);
+            }
+            //向右滚动
+        }else if(mSpeed == 0){
+            //此状态为在页面点击状态
+            if(mScrollStatus == ScrollStatus.STATE_STOP || Math.abs(startX) < mTouchSlop){
+                if(getTouchArea(event.getRawX(),event.getRawY()) == Constants.PAGE_TOUCH_AREA.NEXT_AREA){
+                    startX = 0;
+                    scrollDistance = -mScreenWidth;
+                    mFlipStatus = FlipStatus.ON_FLIP_NEXT;
+                }else if(getTouchArea(event.getRawX(),event.getRawY()) == Constants.PAGE_TOUCH_AREA.PREVIOUS_AREA){
+                    startX = 0;
+                    scrollDistance = mScreenWidth;
+                    mFlipStatus = FlipStatus.ON_FLIP_PRE;
+                }
+            }else if(Math.abs(moveLength) > mScreenWidth / 2 && moveLength > 0){
+                //向右滚动
+                scrollDistance = mScreenWidth - Math.abs(moveLength);
+            }else if(Math.abs(moveLength) < mScreenWidth / 2 && moveLength > 0){
+                //向左回弹
+                scrollDistance = -Math.abs(moveLength);
+            }else if(Math.abs(moveLength) > mScreenWidth / 2 && moveLength < 0){
+                //向左滚动
+                scrollDistance = -(mScreenWidth - Math.abs(moveLength));
+            }else if(Math.abs(moveLength) < mScreenWidth / 2 && moveLength < 0){
+                //向右回弹
+                scrollDistance = Math.abs(moveLength);
+            }
+        }else if(mSpeed < 0){
+            //手指向右移动
+            if(moveLength > 0){
+                scrollDistance = -Math.abs(moveLength);
+            }else if(moveLength < 0){
+                scrollDistance = -(mScreenWidth - Math.abs(moveLength));
+            }
+            //向左滚动
+        }
+        /**
+         * startX 为负值向左滚动
+         */
+        mScroller.startScroll(startX,0,scrollDistance,0,600);
+        postInvalidate();
     }
 
 
@@ -434,47 +393,14 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
      * @param y
      * @return
      */
-    private int getTouchLocal(float x, float y) {
+    private int getTouchArea(float x, float y) {
         if (x > mScreenWidth / 4 && x < mScreenWidth * 3 / 4
                 && y > mScreenHeight / 4 && y < mScreenHeight * 3 / 4) {
-            return SETTING_AREA;
+            return Constants.PAGE_TOUCH_AREA.SETTING_AREA;
         } else if (x > mScreenWidth / 2) {
-            return NEXT_AREA;
+            return Constants.PAGE_TOUCH_AREA.NEXT_AREA;
         }
-        return PREVIOUS_AREA;
-    }
-
-    /** 手指抬起 页面滚动状态设置
-     * @param speed
-     */
-    private void startScroller(float speed){
-        if(speed == 0)
-        {
-            if(isCurrMoving){
-                if(right < mScreenWidth / 2){
-                    //当前页向左滚动
-                    mScroller.startScroll((int)right,0,-(int)right,scrollerSpeed);
-                }else if(right > mScreenWidth / 2){
-                    //当前页向右滚动
-                    mScroller.startScroll((int)right,0,mScreenWidth - (int)right,scrollerSpeed);
-                }
-            }else if(isPreMoving){
-                if(right < mScreenWidth / 2){
-                    //当前页向右滚动
-                    mScroller.startScroll((int)right,0, - (int)right,0,scrollerSpeed);
-                }else if(right > mScreenWidth / 2){
-                    //当前页向左滚动
-                    mScroller.startScroll((int)right,0,mScreenWidth - (int)right,0,scrollerSpeed);
-                }
-            }
-        }else if(speed < 0){
-            //向左滑动
-            mScroller.startScroll((int)right,0,-(int)right,0,scrollerSpeed);
-        }else if(speed > 0){
-            //向右滑动
-            mScroller.startScroll((int)right,0,mScreenWidth - (int)right,0,scrollerSpeed);
-        }
-
+        return Constants.PAGE_TOUCH_AREA.PREVIOUS_AREA;
     }
 
 
@@ -490,70 +416,46 @@ public abstract class HorizontalBaseReadView extends View implements BaseReadVie
     protected abstract void fadePageArea(Factory factory);
 
 
-
-    /**
-     * 释放动作，不限制手滑动方向
-     */
-
-    private void releaseMoving()
-    {
-        isPreMoving = true;
-        isCurrMoving = true;
-    }
-
-    /**
-     * 手指左滑坐标计算
-     * @param status
-     * @param curX
-     */
-    private void moveLeft(FlipStatus status,int curX){
-        switch (status) {
-            case ON_FLIP_PRE:
-                prePageLeft = curX;
-                if (curX < - mScreenWidth)
-                    prePageLeft = - mScreenWidth;
-                right = mScreenWidth + prePageLeft;
-                break;
-
-            case ON_FLIP_NEXT:
-                currPageLeft = -(mScreenWidth - curX);
-                if (currPageLeft < -mScreenWidth)
-                    currPageLeft = -mScreenWidth;
-                right = mScreenWidth + currPageLeft;
-                break;
-        }
-    }
-
-    /**
-     * 手指右滑坐标计算
-     * @param status
-     * @param curX
-     */
-    private void moveRight(FlipStatus status,int curX){
-        switch (status) {
-            case ON_FLIP_PRE:
-                prePageLeft = -(mScreenWidth - curX);
-                if (prePageLeft > 0)
-                    prePageLeft = 0;
-                right = mScreenWidth + prePageLeft;
-                break;
-            case ON_FLIP_NEXT:
-                currPageLeft = curX;
-                if (currPageLeft > 0)
-                    currPageLeft = 0;
-                right = mScreenWidth + currPageLeft;
-                break;
-        }
-    }
-
-
     @Override
     public void computeScroll() {
         if(mScroller.computeScrollOffset()) {
-            updatePageArea(mFlipStatus, mScroller.getCurrX());
+            currPageLeft = mScroller.getCurrX();
+            if(Math.abs(currPageLeft) == mScreenWidth || Math.abs(currPageLeft) == 0){
+                drawablePage();
+            }
             postInvalidate();
-}
+
+        }
     }
+
+
+    /**
+     * 翻页完成重新绘制页面
+     */
+    private void drawablePage(){
+        if(mScroller.getCurrX() < 0){
+            factory.autoIncrease();
+            factory.prePage(mPrePageCanvas);
+            factory.curPage(mCurPageCanvas);
+            if(factory.nextPage(mNextPageCanvas)){
+                mBookStatus = BookStatus.LOAD_SUCCESS;
+            }
+            factory.nextPage(mNextPageCanvas);
+            mFlipStatus = FlipStatus.ON_FLIP_NEXT;
+        }else if(mScroller.getCurrX() > 0){
+            factory.autoReduce();
+            factory.nextPage(mNextPageCanvas);
+            factory.curPage(mCurPageCanvas);
+            if( factory.prePage(mPrePageCanvas)){
+                mBookStatus = BookStatus.LOAD_SUCCESS;
+            }
+            mFlipStatus = FlipStatus.ON_FLIP_PRE;
+        }
+        currPageLeft = 0;
+        mScrollStatus = ScrollStatus.STATE_STOP;
+        mScroller.abortAnimation();
+    }
+
 
     @Override
     public void closeBook() {

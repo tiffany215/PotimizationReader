@@ -13,6 +13,7 @@ import android.widget.ImageView;
 
 import shuhai.readercore.R;
 import shuhai.readercore.ui.sharedp.ReaderSP;
+import shuhai.readercore.ui.widget.ReaderThemeButton;
 import shuhai.readercore.view.readview.factory.PageFactory;
 
 /**
@@ -26,7 +27,7 @@ public class BookReadThemeSettingDialog extends Dialog{
     private Context mContext;
     private PageFactory mPageFactory;
 
-    private ImageView[] themeStyleViews;
+    private ReaderThemeButton[] themeStyleViews;
     private int[] themeStyleIds;
 
     public BookReadThemeSettingDialog(@NonNull Context context, int themeResId) {
@@ -59,7 +60,7 @@ public class BookReadThemeSettingDialog extends Dialog{
                                   R.id.read_style_theme_15,R.id.read_style_theme_16,R.id.read_style_theme_17,
         };
 
-        themeStyleViews = new ImageView[themeStyleIds.length];
+        themeStyleViews = new ReaderThemeButton[themeStyleIds.length];
         for (int i = 0; i < themeStyleIds.length; i++) {
             themeStyleViews[i] = findViewById(themeStyleIds[i]);
             themeStyleViews[i].setOnClickListener(new ReadThemeStyleOnClickListener());

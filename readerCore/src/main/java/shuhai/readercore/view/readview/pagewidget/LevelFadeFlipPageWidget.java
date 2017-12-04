@@ -31,7 +31,7 @@ public class LevelFadeFlipPageWidget extends HorizontalBaseReadView {
         switch (status) {
             case ON_FLIP_PRE:
                 canvas.drawBitmap(mCurPageBitmap,0,0,null);
-                canvas.drawBitmap(mPrePageBitmap,prePageLeft,0,null);
+                canvas.drawBitmap(mPrePageBitmap,currPageLeft,0,null);
                 break;
 
             case ON_FLIP_CUR:
@@ -47,12 +47,12 @@ public class LevelFadeFlipPageWidget extends HorizontalBaseReadView {
 
     @Override
     protected void drawPageShadow(Canvas canvas, FlipStatus status) {
-        if (right == 0 || right == mScreenWidth)
+        if (currPageLeft == 0 || currPageLeft == mScreenWidth)
             return;
-        RectF rectF = new RectF(right, 0, mScreenWidth, mScreenHeight);
+        RectF rectF = new RectF(currPageLeft, 0, mScreenWidth, mScreenHeight);
         Paint paint = new Paint();
         paint.setAntiAlias(true);
-        LinearGradient linearGradient = new LinearGradient(right, 0,right + 26, 0, 0xffaaaaaa, 0x00aaaaaa, Shader.TileMode.CLAMP);
+        LinearGradient linearGradient = new LinearGradient(currPageLeft, 0,currPageLeft + 26, 0, 0xffaaaaaa, 0x00aaaaaa, Shader.TileMode.CLAMP);
         paint.setShader(linearGradient);
         paint.setStyle(Paint.Style.FILL);
         canvas.drawRect(rectF, paint);
@@ -67,13 +67,13 @@ public class LevelFadeFlipPageWidget extends HorizontalBaseReadView {
 //
 //
 //
-        Log.e(TAG, "currPageLeft---------------->: " +   Math.abs(currPageLeft));
+//        Log.e(TAG, "currPageLeft---------------->: " +   Math.abs(currPageLeft));
 //        Log.e(TAG, "mScreenWidth---------------->: " +   mScreenWidth );
 //
 //        Log.e(TAG, "percent---------------->: " +   percent );
 //        if(percent == 0){
 //            percent = 1;
 //        }
-        factory.setAlpha(Math.abs(currPageLeft));
+//        factory.setAlpha(Math.abs(currPageLeft));
     }
 }

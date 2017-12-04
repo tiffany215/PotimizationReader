@@ -20,6 +20,7 @@ import shuhai.readercore.manager.ChapterCacheManager;
 import shuhai.readercore.ui.sharedp.ReaderSP;
 import shuhai.readercore.utils.ActivityUtils;
 import shuhai.readercore.utils.AppUtils;
+import shuhai.readercore.utils.ToastUtils;
 import shuhai.readercore.utils.UrlUtils;
 
 public class AppSettingsActivity extends BaseActivity implements View.OnClickListener{
@@ -66,6 +67,11 @@ public class AppSettingsActivity extends BaseActivity implements View.OnClickLis
     public TextView action_settings_flip_text;
 
 
+
+    public LinearLayout linearLayout;
+
+
+
     final String[] arrayFlip = new String[] { "无效果", "平移翻页", "覆盖翻页", "仿真翻页" };
     final int[] arrayFlipModel = new int[]{ Constants.FLIP_CONFIG.LEVEL_NO_FLIP,
             Constants.FLIP_CONFIG.LEVEL_SCROLLER_FLIP,
@@ -95,6 +101,16 @@ public class AppSettingsActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void initToolBar() {
         mCommonToolbar.setTitleTextColor(Color.WHITE);
+
+        linearLayout = (LinearLayout) findViewById(R.id.action_test);
+        linearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ToastUtils.showToast("tttt");
+            }
+        });
+
+
     }
 
     @Override
@@ -147,6 +163,11 @@ public class AppSettingsActivity extends BaseActivity implements View.OnClickLis
         }).create().show();
     }
 
+
+    @OnClick(R.id.action_test)
+    public void OnClickTest(){
+        Toast.makeText(mContext,"66666",Toast.LENGTH_SHORT).show();
+    }
 
 
 

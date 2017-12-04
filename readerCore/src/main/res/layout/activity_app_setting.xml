@@ -25,6 +25,30 @@
                 android:layout_marginTop="10dp"
                 android:text="@string/settings_rd" />
 
+            <LinearLayout
+                android:id="@+id/action_test"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:orientation="horizontal" >
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    style="@style/app_setting_content_btn"
+                    android:drawableRight="@color/trans"
+                    android:text="测试" />
+
+                <TextView
+                    android:drawableRight="@color/trans"
+                    android:layout_width="wrap_content"
+                    style="@style/app_setting_content_btn"
+                    android:textColor="@color/read_theme_gray"
+                    />
+
+            </LinearLayout>
+
+
+
 
             <LinearLayout
                 android:layout_width="fill_parent"

@@ -23,7 +23,6 @@ public class NoEffectFlipPageWidget extends HorizontalBaseReadView {
 
     public NoEffectFlipPageWidget(Context context,Dialog loadService) {
         super(context,loadService);
-        scrollerSpeed = 100;
     }
 
     @Override

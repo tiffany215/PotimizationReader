@@ -7,6 +7,7 @@ import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.Shader;
+import android.util.Log;
 
 
 import shuhai.readercore.view.readview.displayview.HorizontalBaseReadView;
@@ -25,17 +26,21 @@ public class LevelCoverFlipPageWidget extends HorizontalBaseReadView {
 
     private static final String TAG = "LevelCoverFlipPageWidget";
 
+    private Paint paintShadow;
+
     public LevelCoverFlipPageWidget(Context context, Dialog loadService) {
        super(context,loadService);
+        paintShadow = new Paint();
+        paintShadow.setAntiAlias(true);
+        paintShadow.setStyle(Paint.Style.FILL);
     }
 
     @Override
     protected void drawPageArea(Canvas canvas, FlipStatus status) {
         switch (status) {
             case ON_FLIP_PRE:
-                canvas.drawBitmap(mNextPageBitmap,0,0,null);
                 canvas.drawBitmap(mCurPageBitmap,0,0,null);
-                canvas.drawBitmap(mPrePageBitmap,prePageLeft,0,null);
+                canvas.drawBitmap(mPrePageBitmap,-mScreenWidth + currPageLeft,0,null);
                 break;
 
             case ON_FLIP_CUR:
@@ -43,7 +48,6 @@ public class LevelCoverFlipPageWidget extends HorizontalBaseReadView {
                 break;
 
             case ON_FLIP_NEXT:
-                canvas.drawBitmap(mPrePageBitmap,-mScreenWidth,0,null);
                 canvas.drawBitmap(mNextPageBitmap,0,0,null);
                 canvas.drawBitmap(mCurPageBitmap,currPageLeft,0,null);
                 break;
@@ -52,15 +56,23 @@ public class LevelCoverFlipPageWidget extends HorizontalBaseReadView {
 
     @Override
     protected void drawPageShadow(Canvas canvas, FlipStatus status) {
-        if (right == 0 || right == mScreenWidth)
+
+        int pageShadow = 0;
+        switch (status) {
+            case ON_FLIP_NEXT:
+                pageShadow = mScreenWidth + currPageLeft;
+                break;
+            case ON_FLIP_PRE:
+                pageShadow = currPageLeft;
+                break;
+        }
+        if (pageShadow == 0 || pageShadow == mScreenWidth)
             return;
-        RectF rectF = new RectF(right, 0, mScreenWidth, mScreenHeight);
-        Paint paint = new Paint();
-        paint.setAntiAlias(true);
-        LinearGradient linearGradient = new LinearGradient(right, 0,right + 26, 0, 0xff555555, 0x00aaaaaa, Shader.TileMode.CLAMP);
-        paint.setShader(linearGradient);
-        paint.setStyle(Paint.Style.FILL);
-        canvas.drawRect(rectF, paint);
+        Log.e(TAG, "---------->>" + pageShadow );
+        RectF rectF = new RectF(pageShadow, 0, mScreenWidth, mScreenHeight);
+        LinearGradient linearGradient = new LinearGradient(pageShadow, 0,pageShadow + 26, 0, 0xff555555, 0x00aaaaaa, Shader.TileMode.CLAMP);
+        paintShadow.setShader(linearGradient);
+        canvas.drawRect(rectF, paintShadow);
     }
 
     @Override

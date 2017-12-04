@@ -67,6 +67,12 @@ public class Constants {
         public final static float LOOSE_LINE_BIG = 1.2F;
     }
 
+    public static final class PAGE_TOUCH_AREA{
+        public static final int PREVIOUS_AREA = 1;
+        public static final int NEXT_AREA = 2;
+        public static final int SETTING_AREA = 3;
+    }
+
 
 
 
